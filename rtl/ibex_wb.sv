@@ -110,7 +110,7 @@ module ibex_wb
    assign rst_n       = ~wb.rst;
    assign data_gnt    = ~wb.stall;
    assign data_rvalid = wb.ack;
-   assign data_err    = 1'b0;
+   assign data_err    = wb.err;
    assign data_rdata  = wb.dat_i;
    assign wb.cyc      = data_req | wb.ack | wb.stall;
    assign wb.stb      = data_req;
