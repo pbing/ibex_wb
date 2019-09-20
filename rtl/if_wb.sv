@@ -14,6 +14,7 @@ interface if_wb
 
    parameter adr_width = 32;
    parameter dat_width = 32;
+   parameter sel_width = 4;
 
    logic                     ack;
    logic [adr_width - 1 : 0] adr;
@@ -21,6 +22,7 @@ interface if_wb
    logic                     stall;
    logic                     stb;
    logic                     we;
+   logic [sel_width - 1 : 0] sel;
    logic [dat_width - 1 : 0] dat_m; // channel from master
    logic [dat_width - 1 : 0] dat_s; // channel from slave
 
@@ -33,6 +35,7 @@ interface if_wb
       input  stall,
       output stb,
       output we,
+      output sel,
 `ifdef NO_MODPORT_EXPRESSIONS
       input  dat_s,
       output dat_m
@@ -51,6 +54,7 @@ interface if_wb
       output stall,
       input  stb,
       input  we,
+      input  sel,
 `ifdef NO_MODPORT_EXPRESSIONS
       input  dat_m,
       output dat_s
@@ -69,6 +73,7 @@ interface if_wb
       input  stall,
       input  stb,
       input  we,
+      input  sel,
       input  dat_m,
       input  dat_s);
 endinterface: if_wb
