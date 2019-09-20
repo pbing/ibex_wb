@@ -12,19 +12,19 @@ interface if_wb
   (input logic rst,
    input logic clk);
 
-   parameter adr_width = 32;
-   parameter dat_width = 32;
-   parameter sel_width = 4;
+   typdef logic [31:0] adr_t;
+   typdef logic [31:0] dat_t;
+   typdef logic [3:0]  sel_t;
 
-   logic                     ack;
-   logic [adr_width - 1 : 0] adr;
-   logic                     cyc;
-   logic                     stall;
-   logic                     stb;
-   logic                     we;
-   logic [sel_width - 1 : 0] sel;
-   logic [dat_width - 1 : 0] dat_m; // channel from master
-   logic [dat_width - 1 : 0] dat_s; // channel from slave
+   logic ack;
+   adr_t adr;
+   logic cyc;
+   logic stall;
+   logic stb;
+   logic we;
+   sel_t sel;
+   dat_t dat_m; // channel from master
+   dat_t dat_s; // channel from slave
 
    modport master
      (input  clk,
