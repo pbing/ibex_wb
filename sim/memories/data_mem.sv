@@ -24,6 +24,7 @@ module data_mem
    /* Wishbone control */
    assign valid    = wb.cyc & wb.stb;
    assign wb.stall = 1'b0;
+   assign wb.err   = 1'b0;
 
    always_ff @(posedge wb.clk)
      if (wb.rst)
