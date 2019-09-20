@@ -23,6 +23,7 @@ interface if_wb
    logic stb;
    logic we;
    sel_t sel;
+   logic err;
    dat_t dat_m; // channel from master
    dat_t dat_s; // channel from slave
 
@@ -36,6 +37,7 @@ interface if_wb
       output stb,
       output we,
       output sel,
+      input  err,
 `ifdef NO_MODPORT_EXPRESSIONS
       input  dat_s,
       output dat_m
@@ -55,6 +57,7 @@ interface if_wb
       input  stb,
       input  we,
       input  sel,
+      output err,
 `ifdef NO_MODPORT_EXPRESSIONS
       input  dat_m,
       output dat_s
@@ -74,6 +77,7 @@ interface if_wb
       input  stb,
       input  we,
       input  sel,
+      input  err,
       input  dat_m,
       input  dat_s);
 endinterface: if_wb
