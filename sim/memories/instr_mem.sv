@@ -26,9 +26,9 @@ module instr_mem
 
    assign gnt = req;
 
-   always @(posedge clk)
+   always_ff @(posedge clk)
      if (req)
-       rdata <= 32'h00000013;
+       rdata <= mem[waddr];
 
    assign err = 0;
 endmodule

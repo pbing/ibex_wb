@@ -23,7 +23,6 @@ module data_mem
 
    /* Wishbone control */
    assign valid    = wb.cyc & wb.stb;
-   assign wb.dat_o = wb.cyc && wb.ack && !wb.we ? ram_q :'x; // pessimistic simulation
    assign wb.stall = 1'b0;
 
    always_ff @(posedge wb.clk)
@@ -31,6 +30,12 @@ module data_mem
        wb.ack <= 1'b0;
      else
        wb.ack <= valid & ~wb.stall;
+
+   always_comb
+     if (wb.cyc && wb.ack && !wb.we)
+       wb.dat_o = ram_q;
+     else
+       wb.dat_o = 'x; // pessimistic simulation
 endmodule
 
 `resetall

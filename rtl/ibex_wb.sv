@@ -104,14 +104,8 @@ module ibex_wb
       .fetch_enable_i (fetch_enable),
       .core_sleep_o   (core_sleep));
 
-   assign clk   =  wb.clk;
-   assign rst_n = ~wb.rst;
 
-   assign data_gnt    = ~wb.stall;
-   assign data_rvalid = wb.ack;
-   assign data_err    = 1'b0;
-   assign data_rdata  = wb.dat_i;
-
+   /* Wishbone */
    logic data_req1;
    always_ff @(posedge wb.clk or posedge wb.rst)
      if (wb.rst)
@@ -119,12 +113,18 @@ module ibex_wb
      else
        data_req1 <= data_req;
 
-   assign wb.cyc   = data_req | data_req1;
-   assign wb.stb   = data_req;
-   assign wb.adr   = data_addr;
-   assign wb.dat_o = data_wdata;
-   assign wb.we    = data_we;
-   // FIXME wb.??? = wb.be;
+   assign clk         =  wb.clk;
+   assign rst_n       = ~wb.rst;
+   assign data_gnt    = ~wb.stall;
+   assign data_rvalid = wb.ack;
+   assign data_err    = 1'b0;
+   assign data_rdata  = wb.dat_i;
+   assign wb.cyc      = data_req | data_req1;
+   assign wb.stb      = data_req;
+   assign wb.adr      = data_addr;
+   assign wb.dat_o    = data_wdata;
+   assign wb.we       = data_we;
+   // FIXME wb.???    = wb.be;
 endmodule
 
 `resetall

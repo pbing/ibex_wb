@@ -51,6 +51,9 @@ module tb;
 
    initial
      begin:main
+        $timeformat(-9, 3, " ns");
+        $readmemh("instr_mem.vmem", tb.rom.mem);
+
         repeat (3) @(negedge clk);
         rst = 1'b0;
 
