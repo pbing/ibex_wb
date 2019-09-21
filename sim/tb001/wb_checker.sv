@@ -103,7 +103,7 @@ module wb_checker (if_wb.monitor wb);
       .end_event   (!wb.stall));
 
    assert_win_unchange
-     #(.width (wb.adr_width),
+     #(.width ($bits(wb.adr)),
        .msg   ("ADR must not change during STALL"))
    unchange_adr
      (.clk         (wb.clk),
@@ -113,12 +113,22 @@ module wb_checker (if_wb.monitor wb);
       .end_event   (!wb.stall));
 
    assert_win_unchange
-     #(.width (wb.dat_width),
-       .msg   ("DAT_O must not change during STALL"))
+     #(.width ($bits(wb.dat_m)),
+       .msg   ("Master DAT_O must not change during STALL"))
    unchange_dat_m
      (.clk         (wb.clk),
       .reset_n     (~wb.rst),
       .start_event (wb.cyc && wb.stb && wb.we && wb.stall),
       .test_expr   (wb.dat_m),
+      .end_event   (!wb.stall));
+
+   assert_win_unchange
+     #(.width ($bits(wb.sel)),
+       .msg   ("SEL must not change during STALL"))
+   unchange_sel
+     (.clk         (wb.clk),
+      .reset_n     (~wb.rst),
+      .start_event (wb.cyc && wb.stb && wb.we && wb.stall),
+      .test_expr   (wb.sel),
       .end_event   (!wb.stall));
 endmodule

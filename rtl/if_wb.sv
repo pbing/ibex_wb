@@ -12,9 +12,9 @@ interface if_wb
   (input logic rst,
    input logic clk);
 
-   typdef logic [31:0] adr_t;
-   typdef logic [31:0] dat_t;
-   typdef logic [3:0]  sel_t;
+   typedef logic [31:0] adr_t;
+   typedef logic [31:0] dat_t;
+   typedef logic [3:0]  sel_t;
 
    logic ack;
    adr_t adr;

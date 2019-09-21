@@ -1,7 +1,7 @@
 `default_nettype none
 
 module data_mem
-  #(parameter size = 'h400)
+  #(parameter size = 'h4000)
    (if_wb.slave wb);
 
    localparam addr_width = $clog2(size) - 2;

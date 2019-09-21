@@ -57,7 +57,7 @@ module tb;
         repeat (3) @(negedge clk);
         rst = 1'b0;
 
-        repeat (30) @(negedge clk);
+        repeat (350) @(negedge clk);
         $finish;
      end:main
 endmodule

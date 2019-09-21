@@ -1,7 +1,7 @@
 `default_nettype none
 
 module instr_mem
-  #(parameter size = 'h400)
+  #(parameter size = 'hC000)
   (input  logic        clk,
    input  logic        rst,
    input  logic        req,
