@@ -6,70 +6,116 @@
 `default_nettype none
 
 module wb_interconnect_sharedbus
-  (if_wb.slave  wbm[2],  // 0:CPU data, 1:CPU instructions
-   if_wb.master wbs[2]); // 0:ROM, 1:RAM
-   logic        clk, rst, cyc, stb, we, ack, err, stall;
-   logic [3:0]  sel;
-   logic [1:0]  gnt;
-   logic [1:0]  ss, ss1;
-   logic [31:0] adr;
-   logic [31:0] wbm_dat_o, wbs_dat_o;
-
-   assign clk = wbm[0].clk;
-   assign rst = wbm[0].rst;
-
-   /* priority arbiter */
-   assign gnt[0] = wbm[0].cyc;
-   assign gnt[1] = !wbm[0].cyc & wbm[1].cyc;
+  #(parameter numm = 2,        // number of masters
+    parameter nums = 2,        // number of slaves
+    parameter base_addr[nums], // base addresses of slaves
+    parameter size[nums])      // address size of slaves
+   (if_wb.slave  wbm[numm],    // Wishbone master interfaces
+    if_wb.master wbs[nums]);   // Wishbone slave interfaces
+   logic               clk, rst, cyc, stb, we, ack, err, stall;
+   logic [numm - 1:0]  gnt;
+   logic [nums - 1:0]  ss, ss1;
+   logic [31:0]        adr;
+   logic [3:0]         sel;
+   logic [31:0]        wbm_dat_o, wbs_dat_o;
 
    /* slave address select */
-   assign ss[0] = (adr[31:14] == 32'h00000000 >> 14) | // ROM: 0x00000000...0x0000c000
-                  (adr[31:14] == 32'h00004000 >> 14) | // ROM: 0x00004000...0x00007fff
-                  (adr[31:14] == 32'h00008000 >> 14);  // ROM: 0x00008000...0x0000bfff
-   assign ss[1] = (adr[31:14] == 32'h0000c000 >> 14);  // RAM: 0x0000c000...0x0000ffff
+   for (int i; i < nums; i++)
+     ss[i] = (adr >= base_addr[i]) && (adr < base_addr[i] + size[i]);
 
-   always_ff @(posedge clk or posedge rst)
+   always_ff @(posedge wbs[0].clk or posedge wbs[0].rst)
      if (rst)
        ss1 <= '0;
      else
        ss1 <= ss;
    
+   /* priority arbiter */
+   always_comb
+     for (int i = 0; i < numm; i++)
+       begin
+          gnt[i] = 1'b0;
+          if (wbm[i].cyc)
+            begin
+               gnt[i] = 1'b1;
+               break;
+            end
+       end
+
    /* shared bus signals */
-   assign adr    = (wbm[0].adr & {32{gnt[0]}}) | (wbm[1].adr & {32{gnt[1]}});
-   assign cyc    = wbm[0].cyc | wbm[1].cyc;
-   assign stb    = (wbm[0].stb & gnt[0]) | (wbm[1].stb & gnt[1]);
-   assign we     = (wbm[0].we & gnt[0]) | (wbm[1].we & gnt[1]);
-   assign sel    = (wbm[0].sel & {4{gnt[0]}}) | (wbm[1].sel & {4{gnt[1]}});
-   assign dat_wr = (wbm[0].dat_i & {32{gnt[0]}}) | (wbm[1].dat_i & {32{gnt[1]}});
-   assign ack    = wbs[0].ack | wbs[1].ack;
-   assign err    = wbs[0].err | wbs[1].err;
-   assign stall  = wbs[0].stall | wbs[1].stall;
-   assign dat_rd = (wbs[0].dat_i & {32{ss1[0]}}) | (wbs[1].dat_i & {32{ss1[1]}});
+   always_comb
+     begin
+        cyc    = 1'b0;
+        adr    = '0;
+        stb    = 1'b0;
+        we     = 1'b0;
+        sel    = '0;
+        dat_wr = '0;
+        for (int i = 0; i < numm; i++)
+          begin
+             cyc |= wbm[i].cyc;
+             if (gnt[i])
+               begin
+                  adr    = wbm[i].adr;
+                  stb    = wbm[i].stb;
+                  we     = wbm[i].we;
+                  sel    = wbm[i].sel;
+                  dat_wr = wbm[i].dat_wr;
+               end
+          end
+     end
+
+   always_comb
+     begin
+        ack    = 1'b0;
+        err    = 1'b0;
+        stall  = 1'b0;
+        dat_rd = '0;
+        for (int i = 0; i < nums; i++)
+          begin
+             ack   |= wbs[i].ack;
+             err   |= wbs[i].err;
+             stall |= wbs[i].stall;
+             if (ss1[i])
+               dat_rd = wbs[i].dat_i;
+          end
+     end
 
    /* interconnect */
-   assign wbm[0].ack   = ack & gnt[0];
-   assign wbm[0].err   = err & gnt[0];
-   assign wbm[0].stall = (stall & gnt[0]) | (wbm[0].cyc & ~gnt[0]);
-   assign wbm[0].dat_o = dat_rd;
+   always_comb
+     begin
+        for (int i = 0; i < numm; i++)
+          begin
+             wbm[i].ack   = 1'b0;
+             wbm[i].err   = 1'b0;
+             wbm[i].stall = 1'b0;
+             wbm[i].dat_o = '0;
+             if (gnt[i])
+               begin
+                  wbm[i].ack   = ack;
+                  wbm[i].err   = err;
+                  wbm[i].stall = stall;
+                  wbm[i].dat_o = dat_rd;
+               end
+          end
+     end
 
-   assign wbm[1].ack   = ack & gnt[1];
-   assign wbm[1].err   = err & gnt[1];
-   assign wbm[1].stall = (stall & gnt[1]) | (wbm[1].cyc & ~gnt[1]);
-   assign wbm[1].dat_o = dat_rd;
-
-   assign wbs[0].adr   = adr;
-   assign wbs[0].cyc   = cyc;
-   assign wbs[0].stb   = cyc & stb & ss[0];
-   assign wbs[0].we    = we;
-   assign wbs[0].sel   = sel;
-   assign wbs[0].dat_o = dat_wr;
-
-   assign wbs[1].adr   = adr;
-   assign wbs[1].cyc   = cyc;
-   assign wbs[1].stb   = cyc & stb & ss[1];
-   assign wbs[1].we    = we;
-   assign wbs[1].sel   = sel;
-   assign wbs[1].dat_o = dat_wr;
+   always_comb
+     for (int i = 0; i < nums; i++)
+       begin
+          wbs[i].cyc   = cyc;
+          wbs[i].adr   = '0;
+          wbs[i].stb   = 1'b0;
+          wbs[i].we    = we;
+          wbs[i].sel   = '0;
+          wbs[i].dat_o = '0;
+          if (ss[i])
+            begin
+               wbs[i].adr   = adr;
+               wbs[i].stb   = cyc & stb;
+               wbs[i].sel   = sel;
+               wbs[i].dat_o = dat_wr;
+            end
+       end
 endmodule
 
 `resetall
