@@ -12,14 +12,8 @@ module ibex_wb
     parameter bit          RV32M            = 1,            // M(ultiply) extension enable
     parameter int unsigned DmHaltAddr       = 32'h1A110800, // Address to jump to when entering debug mode
     parameter int unsigned DmExceptionAddr  = 32'h1A110808) // Address to jump to when an exception occurs while in debug mode
-   (if_wb.master        wb,           // Wishbone interface
-
-    output logic        instr_req,    // Request valid, must stay high until instr_gnt is high for one cycle
-    input  logic        instr_gnt,    // The other side accepted the request. instr_req may be deasserted in the next cycle.
-    input  logic        instr_rvalid, // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
-    output logic [31:0] instr_addr,   // Address, word aligned
-    input  logic [31:0] instr_rdata,  // Data read from memory
-    input  logic        instr_err,    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
+   (if_wb.master        instr_wb,     // Wishbone interface for instruction memory
+    if_wb.master        data_wb,      // Wishbone interface for data memory
 
     input  logic        test_en,      // Test input, enables clock
 
@@ -41,12 +35,12 @@ module ibex_wb
    logic       clk;          // Clock signal
    logic       rst_n;        // Active-low asynchronous reset
 
-   //   wire        instr_req;    // Request valid, must stay high until instr_gnt is high for one cycle
-   //   wire        instr_gnt;    // The other side accepted the request. instr_req may be deasserted in the next cycle.
-   //   wire        instr_rvalid; // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
-   //   wire [31:0] instr_addr;   // Address, word aligned
-   //   wire [31:0] instr_rdata;  // Data read from memory
-   //   wire        instr_err;    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
+   wire        instr_req;    // Request valid, must stay high until instr_gnt is high for one cycle
+   wire        instr_gnt;    // The other side accepted the request. instr_req may be deasserted in the next cycle.
+   wire        instr_rvalid; // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
+   wire [31:0] instr_addr;   // Address, word aligned
+   wire [31:0] instr_rdata;  // Data read from memory
+   wire        instr_err;    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
    wire        data_req;     // Request valid, must stay high until data_gnt is high for one cycle
    wire        data_gnt;     // The other side accepted the request. data_req may be deasserted in the next cycle.
@@ -106,18 +100,30 @@ module ibex_wb
 
 
    /* Wishbone */
-   assign clk         =  wb.clk;
-   assign rst_n       = ~wb.rst;
-   assign data_gnt    = ~wb.stall;
-   assign data_rvalid = wb.ack;
-   assign data_err    = wb.err;
-   assign data_rdata  = wb.dat_i;
-   assign wb.cyc      = data_req | wb.ack | wb.stall;
-   assign wb.stb      = data_req;
-   assign wb.adr      = data_addr;
-   assign wb.dat_o    = data_wdata;
-   assign wb.we       = data_we;
-   assign wb.sel      = data_be;
+   assign clk            =  instr_wb.clk;
+   assign rst_n          = ~instr_wb.rst;
+
+   assign instr_gnt      = ~instr_wb.stall;
+   assign instr_rvalid   = instr_wb.ack;
+   assign instr_err      = instr_wb.err;
+   assign instr_rdata    = instr_wb.dat_i;
+   assign instr_wb.cyc   = instr_req | instr_wb.ack | instr_wb.stall;
+   assign instr_wb.stb   = instr_req;
+   assign instr_wb.adr   = instr_addr;
+   assign instr_wb.dat_o = 32'h0;
+   assign instr_wb.we    = 1'b0;
+   assign instr_wb.sel   = 4'b1111;
+
+   assign data_gnt       = ~data_wb.stall;
+   assign data_rvalid    = data_wb.ack;
+   assign data_err       = data_wb.err;
+   assign data_rdata     = data_wb.dat_i;
+   assign data_wb.cyc    = data_req | data_wb.ack | data_wb.stall;
+   assign data_wb.stb    = data_req;
+   assign data_wb.adr    = data_addr;
+   assign data_wb.dat_o  = data_wdata;
+   assign data_wb.we     = data_we;
+   assign data_wb.sel    = data_be;
 endmodule
 
 `resetall
