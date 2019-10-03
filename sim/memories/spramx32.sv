@@ -1,7 +1,9 @@
+/* Single port 32 bit RAM */
+
 `default_nettype none
 
-module data_mem
-  #(parameter size = 'h4000)
+module spramx32
+  #(parameter size)
    (wb_if.slave wb);
 
    localparam addr_width = $clog2(size) - 2;
@@ -26,17 +28,13 @@ module data_mem
    assign wb.stall = 1'b0;
    assign wb.err   = 1'b0;
 
-   always_ff @(posedge wb.clk)
+   always_ff @(posedge wb.clk or posedge wb.rst)
      if (wb.rst)
        wb.ack <= 1'b0;
      else
        wb.ack <= valid & ~wb.stall;
 
-   always_comb
-     if (wb.cyc && wb.ack && !wb.we)
-       wb.dat_o = ram_q;
-     else
-       wb.dat_o = 'x; // pessimistic simulation
+   assign wb.dat_o = ram_q;
 endmodule
 
 `resetall

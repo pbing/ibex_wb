@@ -12,15 +12,14 @@ module ibex_wb
     parameter bit          RV32M            = 1,            // M(ultiply) extension enable
     parameter int unsigned DmHaltAddr       = 32'h1A110800, // Address to jump to when entering debug mode
     parameter int unsigned DmExceptionAddr  = 32'h1A110808) // Address to jump to when an exception occurs while in debug mode
-   (if_wb.master        instr_wb,     // Wishbone interface for instruction memory
-    if_wb.master        data_wb,      // Wishbone interface for data memory
+   (wb_if.master        instr_wb,     // Wishbone interface for instruction memory
+    wb_if.master        data_wb,      // Wishbone interface for data memory
 
     input  logic        test_en,      // Test input, enables clock
 
     input  logic [31:0] hart_id,      // Hart ID, usually static, can be read from Hardware Thread ID (mhartid) CSR
     input  logic [31:0] boot_addr,    // First program counter after reset = boot_addr + 0x80
 
-                                      // Interrupt inputs
     input  logic        irq_software, // Connected to memory-mapped (inter-processor) interrupt register
     input  logic        irq_timer,    // Connected to timer module
     input  logic        irq_external, // Connected to platform-level interrupt controller
@@ -52,16 +51,20 @@ module ibex_wb
    wire [31:0] data_rdata;   // Data read from memory
    wire        data_err;     // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
-   ibex_core 
-     #(.PMPEnable        (PMPEnable),
-       .PMPGranularity   (PMPGranularity),
-       .PMPNumRegions    (PMPNumRegions),
-       .MHPMCounterNum   (MHPMCounterNum),
-       .MHPMCounterWidth (MHPMCounterWidth),
-       .RV32E            (RV32E),                    
-       .RV32M            (RV32M),
-       .DmHaltAddr       (DmHaltAddr),
-       .DmExceptionAddr  (DmExceptionAddr))
+`ifdef USE_TRACER
+   ibex_core_tracing
+`else
+     ibex_core
+`endif
+       #(.PMPEnable        (PMPEnable),
+         .PMPGranularity   (PMPGranularity),
+         .PMPNumRegions    (PMPNumRegions),
+         .MHPMCounterNum   (MHPMCounterNum),
+         .MHPMCounterWidth (MHPMCounterWidth),
+         .RV32E            (RV32E),                    
+         .RV32M            (RV32M),
+         .DmHaltAddr       (DmHaltAddr),
+         .DmExceptionAddr  (DmExceptionAddr))
    inst_ibex_core
      (.clk_i          (clk),
       .rst_ni         (rst_n),
@@ -98,32 +101,33 @@ module ibex_wb
       .fetch_enable_i (fetch_enable),
       .core_sleep_o   (core_sleep));
 
-
    /* Wishbone */
-   assign clk            =  instr_wb.clk;
-   assign rst_n          = ~instr_wb.rst;
+   assign clk   =  instr_wb.clk;
+   assign rst_n = ~instr_wb.rst;
 
-   assign instr_gnt      = ~instr_wb.stall;
-   assign instr_rvalid   = instr_wb.ack;
-   assign instr_err      = instr_wb.err;
-   assign instr_rdata    = instr_wb.dat_i;
-   assign instr_wb.cyc   = instr_req | instr_wb.ack | instr_wb.stall;
-   assign instr_wb.stb   = instr_req;
-   assign instr_wb.adr   = instr_addr;
-   assign instr_wb.dat_o = 32'h0;
-   assign instr_wb.we    = 1'b0;
-   assign instr_wb.sel   = 4'b1111;
+   protocol_converter instr_protocol_converter
+     (.req    (instr_req),
+      .gnt    (instr_gnt),
+      .rvalid (instr_rvalid),
+      .we     (1'b0),
+      .be     (4'b1111),
+      .addr   (instr_addr),
+      .wdata  (32'h0),
+      .rdata  (instr_rdata),
+      .err    (instr_err),
+      .wb     (instr_wb));
 
-   assign data_gnt       = ~data_wb.stall;
-   assign data_rvalid    = data_wb.ack;
-   assign data_err       = data_wb.err;
-   assign data_rdata     = data_wb.dat_i;
-   assign data_wb.cyc    = data_req | data_wb.ack | data_wb.stall;
-   assign data_wb.stb    = data_req;
-   assign data_wb.adr    = data_addr;
-   assign data_wb.dat_o  = data_wdata;
-   assign data_wb.we     = data_we;
-   assign data_wb.sel    = data_be;
+   protocol_converter data_protocol_converter
+     (.req    (data_req),
+      .gnt    (data_gnt),
+      .rvalid (data_rvalid),
+      .we     (data_we),
+      .be     (data_be),
+      .addr   (data_addr),
+      .wdata  (data_wdata),
+      .rdata  (data_rdata),
+      .err    (data_err),
+      .wb     (data_wb));
 endmodule
 
 `resetall

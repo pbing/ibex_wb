@@ -8,7 +8,7 @@
 
 `default_nettype none
 
-interface if_wb
+interface wb_if
   (input logic rst,
    input logic clk);
 
@@ -80,6 +80,6 @@ interface if_wb
       input  err,
       input  dat_m,
       input  dat_s);
-endinterface: if_wb
+endinterface: wb_if
 
 `resetall

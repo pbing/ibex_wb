@@ -2,7 +2,7 @@
 
 module instr_mem
   #(parameter size = 'hC000)
-   (if_wb.slave wb);
+   (wb_if.slave wb);
 
    localparam addr_width = $clog2(size) - 2;
 
