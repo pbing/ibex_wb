@@ -52,8 +52,14 @@ module tb;
 
    initial
      begin:main
+        string filename;
+        int    status;
+
         $timeformat(-9, 3, " ns");
-        $readmemh("fib.vmem", tb.ram.mem);
+
+        status = $value$plusargs("filename=%s", filename);
+        assert(status) else $fatal("No memory file provided. Please use './simv '+filename=<file.vmem>");
+        $readmemh(filename, tb.ram.mem);
 
         repeat (3) @(negedge clk);
         rst = 1'b0;

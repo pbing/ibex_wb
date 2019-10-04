@@ -1,5 +1,6 @@
 *.do
 *.key
+*.log
 *.sh
 *.tcl
 *.vpd
