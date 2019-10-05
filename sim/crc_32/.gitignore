@@ -1,0 +1,12 @@
+*.do
+*.key
+*.log
+*.sh
+*.tcl
+*.vpd
+DVEfiles/
+README
+csrc/
+logs/
+simv*
+vcs.args
