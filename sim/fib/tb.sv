@@ -42,11 +42,9 @@ module tb;
 
    spramx32 #(ram_size) ram (wbs);
 
-`ifdef ASSERT_ON
    wb_checker wbm0_checker(wbm[0]);
    wb_checker wbm1_checker(wbm[1]);
    wb_checker wbs0_checker(wbs[0]);
-`endif
 
    always #(tclk / 2) clk = ~clk;
 

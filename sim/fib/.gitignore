@@ -9,4 +9,5 @@ README
 csrc/
 logs/
 simv*
+vc_hdrs.h
 vcs.args

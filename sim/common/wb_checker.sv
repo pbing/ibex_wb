@@ -39,6 +39,14 @@ module wb_checker (wb_if.monitor wb);
       .consequent_expr (!$isunknown(wb.ack)));
 
    assert_implication
+     #(.msg ("ERR must not be X or Z"))
+   unkown_err
+     (.clk             (wb.clk),
+      .reset_n         (~wb.rst),
+      .antecedent_expr (wb.cyc),
+      .consequent_expr (!$isunknown(wb.err)));
+
+   assert_implication
      #(.msg ("ADR must not be X or Z"))
    unkown_adr
      (.clk             (wb.clk),
@@ -47,12 +55,12 @@ module wb_checker (wb_if.monitor wb);
       .consequent_expr (!$isunknown(wb.adr)));
 
    assert_implication
-     #(.msg ("DAT_O from master must not be X or Z"))
-   unkown_dat_m
+     #(.msg ("SEL must not be X or Z"))
+   unkown_sel
      (.clk             (wb.clk),
       .reset_n         (~wb.rst),
       .antecedent_expr (wb.cyc && wb.stb),
-      .consequent_expr (!$isunknown(wb.dat_m)));
+      .consequent_expr (!$isunknown(wb.sel)));
 
    assert_implication
      #(.msg ("WE must not be X or Z"))
@@ -63,11 +71,19 @@ module wb_checker (wb_if.monitor wb);
       .consequent_expr (!$isunknown(wb.we)));
 
    assert_implication
+     #(.msg ("DAT_O from master must not be X or Z"))
+   unkown_dat_m
+     (.clk             (wb.clk),
+      .reset_n         (~wb.rst),
+      .antecedent_expr (wb.cyc && wb.we && wb.stb),
+      .consequent_expr (!$isunknown(wb.dat_m)));
+
+   assert_implication
      #(.msg ("DAT_I to master must not be X or Z"))
    unkown_dat_s
      (.clk             (wb.clk),
       .reset_n         (~wb.rst),
-      .antecedent_expr (wb.cyc && !wb.we && wb.ack),
+      .antecedent_expr (wb.cyc && !wb.we && (wb.ack || wb.err)),
       .consequent_expr (!$isunknown(wb.dat_s)));
 
    /************************************************************************
@@ -80,7 +96,7 @@ module wb_checker (wb_if.monitor wb);
    handshake
      (.clk         (wb.clk),
       .reset_n     (~wb.rst),
-      .start_event (wb.cyc && wb.stb && wb.stall),
+      .start_event (wb.cyc && wb.stb && !wb.stall),
       .test_expr   (wb.ack || wb.err));
 
    /************************************************************************
@@ -88,7 +104,7 @@ module wb_checker (wb_if.monitor wb);
     ************************************************************************/
    assert_window
      #(.msg ("CYC must not change during STALL"))
-   unchange_cyc
+   unchange_stall_cyc
      (.clk         (wb.clk),
       .reset_n     (~wb.rst),
       .start_event (wb.cyc && wb.stb && wb.stall),
@@ -97,7 +113,7 @@ module wb_checker (wb_if.monitor wb);
 
    assert_window
      #(.msg ("STB must not change during STALL"))
-   unchange_stb
+   unchange_stall_stb
      (.clk         (wb.clk),
       .reset_n     (~wb.rst),
       .start_event (wb.cyc && wb.stb && wb.stall),
@@ -107,7 +123,7 @@ module wb_checker (wb_if.monitor wb);
    assert_win_unchange
      #(.width ($bits(wb.adr)),
        .msg   ("ADR must not change during STALL"))
-   unchange_adr
+   unchange_stall_adr
      (.clk         (wb.clk),
       .reset_n     (~wb.rst),
       .start_event (wb.cyc && wb.stb && wb.stall),
@@ -117,7 +133,7 @@ module wb_checker (wb_if.monitor wb);
    assert_win_unchange
      #(.width ($bits(wb.dat_m)),
        .msg   ("Master DAT_O must not change during STALL"))
-   unchange_dat_m
+   unchange_stall_dat_m
      (.clk         (wb.clk),
       .reset_n     (~wb.rst),
       .start_event (wb.cyc && wb.stb && wb.we && wb.stall),
@@ -127,7 +143,7 @@ module wb_checker (wb_if.monitor wb);
    assert_win_unchange
      #(.width ($bits(wb.sel)),
        .msg   ("SEL must not change during STALL"))
-   unchange_sel
+   unchange_stall_sel
      (.clk         (wb.clk),
       .reset_n     (~wb.rst),
       .start_event (wb.cyc && wb.stb && wb.we && wb.stall),
