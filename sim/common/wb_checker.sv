@@ -1,5 +1,7 @@
 /* Classic pipelined Wishbone B4 protocol checker */
 
+`default_nettype none
+
 module wb_checker (wb_if.monitor wb);
    localparam MAXWAITS = 16; // max. cycles after which ACK or ERR must be valid
 
@@ -150,3 +152,5 @@ module wb_checker (wb_if.monitor wb);
       .test_expr   (wb.sel),
       .end_event   (!wb.stall));
 endmodule
+
+`resetall
