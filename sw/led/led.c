@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #include <stdint.h>
-#define CLK_FIXED_FREQ_HZ (50ULL * 1000 * 1000)
+#define CLK_FIXED_FREQ_HZ (100ULL * 1000 * 1000)
 
 /**
  * Delay loop executing within 8 cycles on ibex
@@ -35,13 +35,12 @@ static int usleep(unsigned long usec) {
 }
 
 int main(int argc, char **argv) {
-  // Any data written to the stack segment will connect the lowest four bits to
-  // the board leds
-  volatile uint32_t *var = (volatile uint32_t *) 0x0000c010;
-  *var = 0xa;
+  volatile uint32_t *var = (volatile uint32_t *) 0x10000000;
+  *var = 0;
 
   while (1) {
-    usleep(1000 * 1000); // 1000 ms
+    //usleep(1000 * 1000); // 1000 ms
+    usleep(1 * 1000); // 1 ms
     *var = ~(*var);
   }
 }
