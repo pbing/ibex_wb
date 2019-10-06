@@ -74,7 +74,8 @@ module wb_interconnect_sharedbus
      if (wbs[0].rst)
        ss1 <= '0;
      else
-       ss1 <= ss;
+       if (cyc && stb)
+         ss1 <= ss;
    
    /* priority arbiter */
    always_comb
