@@ -26,7 +26,7 @@ module ibex_wb
     input  logic [14:0] irq_fast,     // 15 fast, local interrupts
     input  logic        irq_nm,       // Non-maskable interrupt (NMI)
 
-    input  logic        debug_req,    //Request to enter debug mode 
+    input  logic        debug_req,    // Request to enter debug mode 
 
     input  logic        fetch_enable, // Enable the core, won’t fetch when 0
     output logic        core_sleep);  // Core in WFI with no outstanding data or instruction accesses.
