@@ -1,4 +1,4 @@
-/* Testbecnh */
+/* Testbench */
 
 `default_nettype none
 
@@ -40,7 +40,7 @@ module tb;
    wb_intercon
      (.*);
 
-   spramx32 #(ram_size) ram (wbs);
+   spramx32 #(ram_size) ram(.wb(wbs[0]));
 
    wb_checker wbm0_checker(wbm[0]);
    wb_checker wbm1_checker(wbm[1]);

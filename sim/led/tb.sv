@@ -1,4 +1,4 @@
-/* Testbecnh */
+/* Testbench */
 
 `default_nettype none
 
@@ -51,6 +51,7 @@ module tb;
    wb_checker wbm0_checker(wbm[0]);
    wb_checker wbm1_checker(wbm[1]);
    wb_checker wbs0_checker(wbs[0]);
+   wb_checker wbs1_checker(wbs[1]);
 
    always #(tclk / 2) clk = ~clk;
 
