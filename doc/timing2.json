@@ -1,0 +1,30 @@
+{"signal":
+ [
+     {"name": "clk", "wave": "p......"},
+     ["Ibex",
+      {"name": "data_req_o", "wave": "01.0..."},
+      {"name": "data_addr_o", "wave": "x==xxxx", "data": ["Addr1", "Addr2"]},
+      {"name": "data_we_o", "wave": "x==xxxx", "data": ["WE1", "WE2"]},
+      {"name": "data_be_o", "wave": "x==xxxx", "data": ["BE1", "BE2"]},
+      {"name": "data_wdata_o", "wave": "x==xxxx", "data": ["WData1", "Wdata2"]},
+      {"name": "data_gnt_i", "wave": "01.0..."},
+      {"name": "data_rvalid_i", "wave": "0.1.0.."},
+      {"name": "data_err_i", "wave": "xx==xxx", "data": ["Err1", "Err2"]},
+      {"name": "data_rdata_i", "wave": "xx==xxx", "data": ["RData1", "RData2"]}
+     ],
+     {},
+     ["Wishbone",
+      {"name": "CYC", "wave": "01..0.."},
+      {"name": "STB", "wave": "01.0..."},
+      {"name": "ADR", "wave": "x==xxxx", "data": ["Addr1", "Addr2"]},
+      {"name": "SEL", "wave": "x==xxxx", "data": ["BE1", "BE2"]},
+      {"name": "WE", "wave": "x==xxxx", "data": ["WE1", "WE2"]},
+      {"name": "DAT_O", "wave": "x==xxxx", "data": ["WData1", "WData2"]},
+      {"name": "STALL", "wave": "x0.xxxx"},
+      {"name": "ACK", "wave": "xx==xxx", "data": ["Ack1", "Ack2"]},
+      {"name": "ERR", "wave": "xx==xxx", "data": ["Err1", "Err2"]},
+      {"name": "DAT_I", "wave": "xx==xxx", "data": ["RData1", "RData2"]}
+     ],
+ ],
+ "config": { "hscale": 2 }
+}

@@ -1,0 +1,30 @@
+{"signal":
+ [
+     ["Ibex",
+      {"name": "clk", "wave": "p......"},
+      {"name": "data_req_o", "wave": "01..0.."},
+      {"name": "data_addr_o", "wave": "x=..xxx", "data": ["Address"]},
+      {"name": "data_we_o", "wave": "x=..xxx", "data": ["WE"]},
+      {"name": "data_be_o", "wave": "x=..xxx", "data": ["BE"]},
+      {"name": "data_wdata_o", "wave": "x=..xxx", "data": ["WData"]},
+      {"name": "data_gnt_i", "wave": "0..10.."},
+      {"name": "data_rvalid_i", "wave": "0....10"},
+      {"name": "data_err_i", "wave": "xxxxx=x", "data": ["Err"]},
+      {"name": "data_rdata_i", "wave": "xxxxx=x", "data": ["RData"]}
+     ],
+     {},
+     ["Wishbone",
+      {"name": "CYC", "wave": "01....0"},
+      {"name": "STB", "wave": "01..0.."},
+      {"name": "ADR", "wave": "x=..xxx", "data": ["Address"]},
+      {"name": "SEL", "wave": "x=..xxx", "data": ["BE"]},
+      {"name": "WE", "wave": "x=..xxx", "data": ["WE"]},
+      {"name": "DAT_O", "wave": "x=..xxx", "data": ["WData"]},
+      {"name": "STALL", "wave": "x1.0xxx"},
+      {"name": "ACK", "wave": "xxxxx=x", "data": ["Ack"]},
+      {"name": "ERR", "wave": "xxxxx=x", "data": ["Err"]},
+      {"name": "DAT_I", "wave": "xxxxx=x", "data": ["RData"]}
+     ],
+ ],
+ "config": { "hscale": 2 }
+}
