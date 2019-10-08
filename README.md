@@ -12,13 +12,13 @@ For better throughput or latency a crossbar interconnect can be considered.
 ## Ibex memory control vs. Wishbone bus
 
 ### Basic Memory Transaction
-<p align="center"><img src="doc/images/timing1.png" width="650"></p>
+<p align="center"><img src="doc/images/timing1.svg" width="650"></p>
 
 ### Back-to-back Memory Transaction
-<p align="center"><img src="doc/images/timing2.png" width="650"></p>
+<p align="center"><img src="doc/images/timing2.svg" width="650"></p>
 
 ### Slow Response Memory Transaction
-<p align="center"><img src="doc/images/timing3.png" width="650"></p>
+<p align="center"><img src="doc/images/timing3.svg" width="650"></p>
 
 
 ## Status
