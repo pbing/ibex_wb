@@ -34,8 +34,8 @@ module ibex_wb
    logic clk;                                               // Clock signal
    logic rst_n;                                             // Active-low asynchronous reset
 
-   core_if instr_core();
-   core_if data_core();
+   core_if instr_core(.*);
+   core_if data_core(.*);
 
 `ifdef USE_TRACER
    ibex_core_tracing

@@ -3,6 +3,9 @@
 `default_nettype none
 
 interface core_if;
+   (input logic clk,
+    input logic rst_n);
+
    logic        req;
    logic        gnt;
    logic        rvalid;
@@ -34,6 +37,17 @@ interface core_if;
       input  wdata,
       output rdata,
       output err);
+
+   modport monitor
+     (input  req,
+      input  gnt,
+      input  rvalid,
+      input  we,
+      input  be,
+      input  addr,
+      input  wdata,
+      input  rdata,
+      input  err);
 endinterface
 
 `resetall
