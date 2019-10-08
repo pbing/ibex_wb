@@ -9,7 +9,7 @@ interconnection between masters (instruction bus, data bus) and slaves (e.g. mem
 For better throughput or latency a crossbar interconnect can be considered.
 
 ## Ibex memory control vs. Wishbone bus
-![Waveform of basic memory transaction](https://github.com/pbing/ibex_wb/tree/master/doc/images/timing1.svg "Basic Memory Transaction")
+![Waveform of basic memory transaction](https://github.com/pbing/ibex_wb/tree/master/doc/images/timing1.png "Basic Memory Transaction")
 ![Waveform of back-to-back transaction](https://github.com/pbing/ibex_wb/tree/master/doc/images/timing1.svg "Back-to-back Memory Transaction")
 ![Waveform of slow response memory transaction](https://github.com/pbing/ibex_wb/tree/master/doc/images/timing1.svg "Slow Response Memory Transaction")
 
