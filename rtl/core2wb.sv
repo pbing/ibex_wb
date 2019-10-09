@@ -3,7 +3,7 @@
 `default_nettype none
 
 module core2wb
-  (core_if.slave core;
+  (core_if.slave core,
    wb_if.master  wb);
 
    assign core.gnt    = core.req & ~wb.stall;
@@ -16,10 +16,10 @@ module core2wb
    assign wb.we       = core.we;
    assign wb.sel      = core.be;
 
-   always_ff @(posedge wb.clk or posedge wb.rst or posedge req)
+   always_ff @(posedge wb.clk or posedge wb.rst or posedge core.req)
      if (wb.rst)
        wb.cyc <= 1'b0;
-     else if (req)
+     else if (core.req)
        wb.cyc <= 1'b1;
      else if (wb.ack)
        wb.cyc <= 1'b0;   

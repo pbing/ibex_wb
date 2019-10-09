@@ -2,9 +2,9 @@
 
 `default_nettype none
 
-interface core_if;
-   (input logic clk,
-    input logic rst_n);
+interface core_if
+  (input logic clk,
+   input logic rst_n);
 
    logic        req;
    logic        gnt;
