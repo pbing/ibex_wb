@@ -29,11 +29,12 @@ module tb;
    wb_if wbs[1](.*);
 
    ibex_wb dut
-     (.instr_wb (wbm[0]),
+     (.rst_n    (~rst),
+      .instr_wb (wbm[0]),
       .data_wb  (wbm[1]),
       .*);
 
-   wb_interconnect_sharedbus 
+   wb_interconnect_sharedbus
      #(.nums      (1),
        .base_addr ({ram_base_addr}),
        .size      ({ram_size}) )
