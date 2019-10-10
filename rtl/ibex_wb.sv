@@ -26,13 +26,10 @@ module ibex_wb
     input  logic [14:0] irq_fast,                           // 15 fast, local interrupts
     input  logic        irq_nm,                             // Non-maskable interrupt (NMI)
 
-    input  logic        debug_req,                          // Request to enter debug mode 
+    input  logic        debug_req,                          // Request to enter debug mode
 
     input  logic        fetch_enable,                       // Enable the core, won’t fetch when 0
     output logic        core_sleep);                        // Core in WFI with no outstanding data or instruction accesses.
-
-   logic clk;                                               // Clock signal
-   logic rst_n;                                             // Active-low asynchronous reset
 
    core_if instr_core(.*);
    core_if data_core(.*);
@@ -47,33 +44,33 @@ module ibex_wb
          .PMPNumRegions    (PMPNumRegions),
          .MHPMCounterNum   (MHPMCounterNum),
          .MHPMCounterWidth (MHPMCounterWidth),
-         .RV32E            (RV32E),                    
+         .RV32E            (RV32E),
          .RV32M            (RV32M),
          .DmHaltAddr       (DmHaltAddr),
          .DmExceptionAddr  (DmExceptionAddr))
    inst_ibex_core
-     (.clk_i          (clk),
-      .rst_ni         (rst_n),
+     (.clk_i          (core.clk),          // Clock signal
+      .rst_ni         (core.rst_n),        // Active-low asynchronous reset
 
       .test_en_i      (test_en),
       .hart_id_i      (hart_id),
       .boot_addr_i    (boot_addr),
 
-      .instr_req_o    (instr_core.req),    // Request valid, must stay high until instr_gnt is high for one cycle                                                 
-      .instr_gnt_i    (instr_core.gnt),    // The other side accepted the request. instr_req may be deasserted in the next cycle.                                 
-      .instr_rvalid_i (instr_core.rvalid), // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request. 
-      .instr_addr_o   (instr_core.addr),   // Address, word aligned                                                                                               
-      .instr_rdata_i  (instr_core.rdata),  // Data read from memory                                                                                               
-      .instr_err_i    (instr_core.err),    // Error response from the bus or the memory: request cannot be handled. High in case of an error.                     
+      .instr_req_o    (instr_core.req),    // Request valid, must stay high until instr_gnt is high for one cycle
+      .instr_gnt_i    (instr_core.gnt),    // The other side accepted the request. instr_req may be deasserted in the next cycle.
+      .instr_rvalid_i (instr_core.rvalid), // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
+      .instr_addr_o   (instr_core.addr),   // Address, word aligned
+      .instr_rdata_i  (instr_core.rdata),  // Data read from memory
+      .instr_err_i    (instr_core.err),    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
-      .data_req_o     (data_core.req),     // Request valid, must stay high until data_gnt is high for one cycle                             
-      .data_gnt_i     (data_core.gnt),     // The other side accepted the request. data_req may be deasserted in the next cycle.             
-      .data_rvalid_i  (data_core.rvalid),  // data_rdata holds valid data when data_rvalid is high.                                          
-      .data_we_o      (data_core.we),      // Write Enable, high for writes, low for reads. Sent together with data_req                      
-      .data_be_o      (data_core.be),      // Byte Enable. Is set for the bytes to write/read, sent together with data_req                   
-      .data_addr_o    (data_core.addr),    // Address, word aligned                                                                          
-      .data_wdata_o   (data_core.wdata),   // Data to be written to memory, sent together with data_req                                      
-      .data_rdata_i   (data_core.rdata),   // Data read from memory                                                                          
+      .data_req_o     (data_core.req),     // Request valid, must stay high until data_gnt is high for one cycle
+      .data_gnt_i     (data_core.gnt),     // The other side accepted the request. data_req may be deasserted in the next cycle.
+      .data_rvalid_i  (data_core.rvalid),  // data_rdata holds valid data when data_rvalid is high.
+      .data_we_o      (data_core.we),      // Write Enable, high for writes, low for reads. Sent together with data_req
+      .data_be_o      (data_core.be),      // Byte Enable. Is set for the bytes to write/read, sent together with data_req
+      .data_addr_o    (data_core.addr),    // Address, word aligned
+      .data_wdata_o   (data_core.wdata),   // Data to be written to memory, sent together with data_req
+      .data_rdata_i   (data_core.rdata),   // Data read from memory
       .data_err_i     (data_core.err),     // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
       .irq_software_i (irq_software),
@@ -88,8 +85,6 @@ module ibex_wb
       .core_sleep_o   (core_sleep));
 
    /* Wishbone */
-   assign clk              =  instr_wb.clk;
-   assign rst_n            = ~instr_wb.rst;
    assign instr_core.we    = 1'b0;
    assign instr_core.be    = '0;
    assign instr_core.wdata = '0;
