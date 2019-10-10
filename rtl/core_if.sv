@@ -17,7 +17,9 @@ interface core_if
    logic        err;
 
    modport master
-     (output req,
+     (input  clk,
+      input  rst_n,
+      output req,
       input  gnt,
       input  rvalid,
       output we,
@@ -28,7 +30,9 @@ interface core_if
       input  err);
 
    modport slave
-     (input  req,
+     (input  clk,
+      input  rst_n,
+      input  req,
       output gnt,
       output rvalid,
       input  we,
@@ -39,7 +43,9 @@ interface core_if
       output err);
 
    modport monitor
-     (input  req,
+     (input  clk,
+      input  rst_n,
+      input  req,
       input  gnt,
       input  rvalid,
       input  we,
