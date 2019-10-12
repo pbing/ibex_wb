@@ -24,6 +24,26 @@ For better throughput or latency a crossbar interconnect can be considered.
 ## Status
 Simulated with Synopsys VCS.
 
+### Timing with uncompressed instructions
+| Program  | Cycles | Instructions   | CPI  |
+|----------|--------|----------------|------|
+| crc_32   | 43277  | 24714          | 1.75 |
+| fib      | 172    | 107            | 1.61 |
+| led      | 509993 | 382481         | 1.33 |
+|----------|--------|----------------|------|
+|          |        | geometric mean | 1.55 |
+
+### Timing with compressed instructions
+| Program  | Cycles | Instructions   | CPI  |
+|----------|--------|----------------|------|
+| crc_32.c | 37105  | 23687          | 1.57 |
+| fib.c    | 165    | 107            | 1.54 |
+| led.c    | 509993 | 382492         | 1.33 |
+|----------|--------|----------------|------|
+|          |        | geometric mean | 1.48 |
+
+
+
 
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)
