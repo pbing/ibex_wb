@@ -45,7 +45,7 @@ module tb;
    wb_intercon
      (.*);
 
-   spramx32 #(ram_size) ram(.wb(wbs[0]));
+   wb_spramx32 #(ram_size) wb_spram(.wb(wbs[0]));
 
    led #(led_size) inst_led(.*, .wb(wbs[1]));
 
@@ -65,7 +65,7 @@ module tb;
 
         status = $value$plusargs("filename=%s", filename);
         assert(status) else $fatal("No memory file provided. Please use './simv '+filename=<file.vmem>");
-        $readmemh(filename, tb.ram.mem);
+        $readmemh(filename, tb.wb_spram.spram.mem);
 
         repeat (3) @(negedge clk);
         rst = 1'b0;
