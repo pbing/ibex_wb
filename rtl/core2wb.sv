@@ -6,6 +6,8 @@ module core2wb
   (core_if.slave core,
    wb_if.master  wb);
 
+   logic cyc;
+
    assign core.gnt    = core.req & ~wb.stall;
    assign core.rvalid = wb.ack;
    assign core.err    = wb.err;
@@ -16,13 +18,16 @@ module core2wb
    assign wb.we       = core.we;
    assign wb.sel      = core.be;
 
-   always_ff @(posedge wb.clk or posedge wb.rst or posedge core.req)
+   always_ff @(posedge wb.clk or posedge wb.rst)
      if (wb.rst)
-       wb.cyc <= 1'b0;
-     else if (core.req)
-       wb.cyc <= 1'b1;
-     else if (wb.ack)
-       wb.cyc <= 1'b0;   
+       cyc <= 1'b0;
+     else
+       if (core.req)
+         cyc <= 1'b1;
+       else if (wb.ack || wb.err)
+           cyc <= 1'b0;
+
+   assign wb.cyc = core.req | cyc;
 endmodule
 
 `resetall
