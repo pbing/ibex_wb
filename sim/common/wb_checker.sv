@@ -85,21 +85,22 @@ module wb_checker (wb_if.monitor wb);
    unkown_dat_s
      (.clk             (wb.clk),
       .reset_n         (~wb.rst),
-      .antecedent_expr (wb.cyc && (wb.ack || wb.err)),
+      .antecedent_expr (wb.cyc && !wb.we && (wb.ack || wb.err)),
       .consequent_expr (!$isunknown(wb.dat_s)));
 
    /************************************************************************
     * There must be exactly one ACK or ERR for each STB.
     ************************************************************************/
-   assert_frame
-     #(.min_cks (1),
-       .max_cks (MAXWAITS),
-       .msg     ("ACK or ERR hast not been triggered after MAXWAITS cycles."))
+   assert_req_ack_unique
+     #(.min_time       (1),
+       .max_time       (MAXWAITS),
+       .max_time_log_2 ($clog2(MAXWAITS)),
+       .msg            ("ACK or ERR hast not been triggered after MAXWAITS cycles."))
    handshake
-     (.clk         (wb.clk),
-      .reset_n     (~wb.rst),
-      .start_event (wb.cyc && wb.stb && !wb.stall),
-      .test_expr   (wb.ack || wb.err));
+     (.clk     (wb.clk),
+      .reset_n (~wb.rst),
+      .req     (wb.cyc && wb.stb && !wb.stall),
+      .ack     (wb.ack || wb.err));
 
    /************************************************************************
     * 3.3 BLOCK READ / WRITE Cycles
