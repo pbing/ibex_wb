@@ -85,7 +85,7 @@ module wb_checker (wb_if.monitor wb);
    unkown_dat_s
      (.clk             (wb.clk),
       .reset_n         (~wb.rst),
-      .antecedent_expr (wb.cyc && !wb.we && (wb.ack || wb.err)),
+      .antecedent_expr (wb.cyc && (wb.ack || wb.err)),
       .consequent_expr (!$isunknown(wb.dat_s)));
 
    /************************************************************************
