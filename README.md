@@ -25,20 +25,22 @@ For better throughput or latency a crossbar interconnect can be considered.
 Simulated with Synopsys VCS.
 
 ### Timing with uncompressed instructions
-| Program  | Cycles | Instructions   | CPI  |
-|----------|--------|----------------|------|
-| crc_32   | 43277  | 24714          | 1.75 |
-| fib      | 172    | 107            | 1.61 |
-| led      | 509993 | 382481         | 1.33 |
-|          |        | mean           | 1.56 |
+| Program    | Cycles | Instructions   | CPI  |
+|------------|--------|----------------|------|
+| crc_32     | 43277  | 24714          | 1.75 |
+| fib        | 172    | 107            | 1.61 |
+| led        | 509993 | 382481         | 1.33 |
+| nettle-aes | 118693 | 63235          | 1.88 |
+|            |        | mean           | 1.64 |
 
 ### Timing with compressed instructions
-| Program  | Cycles | Instructions   | CPI  |
-|----------|--------|----------------|------|
-| crc_32   | 37105  | 23687          | 1.57 |
-| fib      | 165    | 107            | 1.54 |
-| led      | 509993 | 382492         | 1.33 |
-|          |        | mean           | 1.48 |
+| Program    | Cycles | Instructions   | CPI  |
+|------------|--------|----------------|------|
+| crc_32     | 37105  | 23687          | 1.57 |
+| fib        | 165    | 107            | 1.54 |
+| led        | 509993 | 382492         | 1.33 |
+| nettle-aes | 113482 | 63235          | 1.79 |
+|            |        | mean           | 1.56 |
 
 
 
