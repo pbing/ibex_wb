@@ -1,3 +1,9 @@
 [submodule "ibex"]
 	path = ibex
 	url = https://github.com/lowRISC/ibex.git
+[submodule "riscv-dbg"]
+	path = riscv-dbg
+	url = https://github.com/pulp-platform/riscv-dbg.git
+[submodule "common_cells"]
+	path = common_cells
+	url = https://github.com/pulp-platform/common_cells
