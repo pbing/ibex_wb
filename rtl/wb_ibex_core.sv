@@ -2,7 +2,7 @@
 
 `default_nettype none
 
-module ibex_wb
+module wb_ibex_core
   #(parameter bit          PMPEnable        = 0,            // Enable PMP support
     parameter int unsigned PMPGranularity   = 0,            // Minimum granularity of PMP address matching
     parameter int unsigned PMPNumRegions    = 4,            // Number implemented PMP regions (ignored if PMPEnable == 0)

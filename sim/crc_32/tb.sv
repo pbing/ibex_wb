@@ -28,7 +28,7 @@ module tb;
    wb_if wbm[2](.*);
    wb_if wbs[1](.*);
 
-   ibex_wb dut
+   wb_ibex_core dut
      (.rst_n    (~rst),
       .instr_wb (wbm[0]),
       .data_wb  (wbm[1]),

@@ -32,14 +32,15 @@ module tb;
    wb_if wbm[2](.*);
    wb_if wbs[2](.*);
 
-   ibex_wb dut
+   wb_ibex_core dut
      (.rst_n    (~rst),
       .instr_wb (wbm[0]),
       .data_wb  (wbm[1]),
       .*);
 
    wb_interconnect_sharedbus
-     #(.nums      (2),
+     #(.numm      (2),
+       .nums      (2),
        .base_addr ({ram_base_addr, led_base_addr}),
        .size      ({ram_size, led_size}) )
    wb_intercon
