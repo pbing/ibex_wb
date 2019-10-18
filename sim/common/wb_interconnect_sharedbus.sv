@@ -135,7 +135,7 @@ module wb_interconnect_sharedbus
           begin
              wbm_ack[i]   = 1'b0;
              wbm_err[i]   = 1'b0;
-             wbm_stall[i] = 1'b1; // FIXME
+             wbm_stall[i] = 1'b1;
              wbm_dat_o[i] = '0;
              if (gnt[i])
                begin
