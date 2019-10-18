@@ -11,6 +11,8 @@ module tb;
    parameter int                 BusWidth         = 32;
    parameter logic [NrHarts-1:0] SelectableHarts  = 1;
 
+   localparam dm_base_addr  = 'h1A110000;
+   localparam dm_size       = 'h1000;
    localparam ram_base_addr = 'h00000000;
    localparam ram_size      = 'h10000;
 
@@ -61,8 +63,8 @@ module tb;
    wb_interconnect_sharedbus
      #(.numm      (3),
        .nums      (2),
-       .base_addr ({0, ram_base_addr}), // FIXME
-       .size      ({0, ram_size}) ) // FIXME
+       .base_addr ({dm_base_addr, ram_base_addr}),
+       .size      ({dm_size, ram_size}))
    wb_intercon
      (.*);
 
