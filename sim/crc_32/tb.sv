@@ -35,7 +35,8 @@ module tb;
       .*);
 
    wb_interconnect_sharedbus
-     #(.nums      (1),
+     #(.numm      (2),
+       .nums      (1),
        .base_addr ({ram_base_addr}),
        .size      ({ram_size}) )
    wb_intercon

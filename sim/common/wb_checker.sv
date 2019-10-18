@@ -3,6 +3,8 @@
 `default_nettype none
 
 module wb_checker (wb_if.monitor wb);
+   import wb_pkg::*;
+
    localparam MAXWAITS = 16; // max. cycles after which ACK or ERR must be valid
 
    /************************************************************************
@@ -124,7 +126,7 @@ module wb_checker (wb_if.monitor wb);
       .end_event   (!wb.stall));
 
    assert_win_unchange
-     #(.width ($bits(wb.adr)),
+     #(.width ($bits(adr_t)),
        .msg   ("ADR must not change during STALL"))
    unchange_stall_adr
      (.clk         (wb.clk),
@@ -134,7 +136,7 @@ module wb_checker (wb_if.monitor wb);
       .end_event   (!wb.stall));
 
    assert_win_unchange
-     #(.width ($bits(wb.dat_m)),
+     #(.width ($bits(dat_t)),
        .msg   ("Master DAT_O must not change during STALL"))
    unchange_stall_dat_m
      (.clk         (wb.clk),
@@ -144,7 +146,7 @@ module wb_checker (wb_if.monitor wb);
       .end_event   (!wb.stall));
 
    assert_win_unchange
-     #(.width ($bits(wb.sel)),
+     #(.width ($bits(sel_t)),
        .msg   ("SEL must not change during STALL"))
    unchange_stall_sel
      (.clk         (wb.clk),

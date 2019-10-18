@@ -9,12 +9,10 @@
 `default_nettype none
 
 interface wb_if
-  (input logic rst,
-   input logic clk);
+  (input wire rst,
+   input wire clk);
 
-   typedef logic [31:0] adr_t;
-   typedef logic [31:0] dat_t;
-   typedef logic [3:0]  sel_t;
+   import wb_pkg::*;
 
    logic ack;
    adr_t adr;

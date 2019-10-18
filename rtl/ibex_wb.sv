@@ -12,25 +12,25 @@ module ibex_wb
     parameter bit          RV32M            = 1,            // M(ultiply) extension enable
     parameter int unsigned DmHaltAddr       = 32'h1A110800, // Address to jump to when entering debug mode
     parameter int unsigned DmExceptionAddr  = 32'h1A110808) // Address to jump to when an exception occurs while in debug mode
-   (input  logic        clk,                                // Clock signal
-    input  logic        rst_n,                              // Active-low asynchronous reset
+   (input  wire         clk,                                // Clock signal
+    input  wire         rst_n,                              // Active-low asynchronous reset
     wb_if.master        instr_wb,                           // Wishbone interface for instruction memory
     wb_if.master        data_wb,                            // Wishbone interface for data memory
 
-    input  logic        test_en,                            // Test input, enables clock
+    input  wire         test_en,                            // Test input, enables clock
 
-    input  logic [31:0] hart_id,                            // Hart ID, usually static, can be read from Hardware Thread ID (mhartid) CSR
-    input  logic [31:0] boot_addr,                          // First program counter after reset = boot_addr + 0x80
+    input  wire  [31:0] hart_id,                            // Hart ID, usually static, can be read from Hardware Thread ID (mhartid) CSR
+    input  wire  [31:0] boot_addr,                          // First program counter after reset = boot_addr + 0x80
 
-    input  logic        irq_software,                       // Connected to memory-mapped (inter-processor) interrupt register
-    input  logic        irq_timer,                          // Connected to timer module
-    input  logic        irq_external,                       // Connected to platform-level interrupt controller
-    input  logic [14:0] irq_fast,                           // 15 fast, local interrupts
-    input  logic        irq_nm,                             // Non-maskable interrupt (NMI)
+    input  wire         irq_software,                       // Connected to memory-mapped (inter-processor) interrupt register
+    input  wire         irq_timer,                          // Connected to timer module
+    input  wire         irq_external,                       // Connected to platform-level interrupt controller
+    input  wire  [14:0] irq_fast,                           // 15 fast, local interrupts
+    input  wire         irq_nm,                             // Non-maskable interrupt (NMI)
 
-    input  logic        debug_req,                          // Request to enter debug mode
+    input  wire         debug_req,                          // Request to enter debug mode
 
-    input  logic        fetch_enable,                       // Enable the core, won’t fetch when 0
+    input  wire         fetch_enable,                       // Enable the core, won't fetch when 0
     output logic        core_sleep);                        // Core in WFI with no outstanding data or instruction accesses.
 
    core_if instr_core(.*);

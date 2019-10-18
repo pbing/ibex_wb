@@ -5,11 +5,11 @@
 module spramx32
   #(parameter size       = 'h80,
     parameter addr_width = $clog2(size) - 2)
-   (input  logic                    clk,  // clock
-    input  logic [addr_width - 1:0] addr, // address
-    input  logic                    ce,   // chip enable
-    input  logic [3:0]              we,   // write enables
-    input  logic [31:0]             d,    // data input
+   (input  wire                     clk,  // clock
+    input  wire  [addr_width - 1:0] addr, // address
+    input  wire                     ce,   // chip enable
+    input  wire  [3:0]              we,   // write enables
+    input  wire  [31:0]             d,    // data input
     output logic [31:0]             q);   // data output
 
    logic [31:0] mem[size];

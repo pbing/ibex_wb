@@ -3,8 +3,8 @@
 `default_nettype none
 
 interface core_if
-  (input logic clk,
-   input logic rst_n);
+  (input wire clk,
+   input wire rst_n);
 
    logic        req;
    logic        gnt;
