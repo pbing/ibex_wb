@@ -5,50 +5,26 @@
 module tb;
    timeunit 1ns / 1ps;
 
-   const realtime tclk = 1s / 100.0e6;
+   const realtime tclk = 1s / 100.0e6; // CPU clock period
+   const realtime ttck = 1s / 10.0e6;  // JTAG clock period
 
-   localparam ram_base_addr = 'h00000000;
-   localparam ram_size      = 'h10000;
+   bit  clk;
+   bit  rst_n;
+   wire led;
+   bit  trst_n;
+   bit  tck;
+   bit  tms;
+   bit  tdi;
+   wire tdo;
+   wire tdo_oe;
 
-   bit          clk;
-   bit          rst = 1'b1;
-
-   bit          test_en;
-   bit  [31:0]  hart_id;
-   bit  [31:0]  boot_addr;
-   bit          irq_software;
-   bit          irq_timer;
-   bit          irq_external;
-   bit  [14:0]  irq_fast;
-   bit          irq_nm;
-   bit          debug_req;
-   bit          fetch_enable = 1'b1;
-   wire         core_sleep;
-
-   wb_if wbm[2](.*);
-   wb_if wbs[1](.*);
-
-   wb_ibex_core dut
-     (.rst_n    (~rst),
-      .instr_wb (wbm[0]),
-      .data_wb  (wbm[1]),
-      .*);
-
-   wb_interconnect_sharedbus
-     #(.numm      (2),
-       .nums      (1),
-       .base_addr ({ram_base_addr}),
-       .size      ({ram_size}) )
-   wb_intercon
-     (.*);
-
-   wb_spramx32 #(ram_size) wb_spram(.wb(wbs[0]));
-
-   wb_checker wbm0_checker(wbm[0]);
-   wb_checker wbm1_checker(wbm[1]);
-   wb_checker wbs0_checker(wbs[0]);
+   ibex_soc_example dut(.*);
 
    always #(tclk / 2) clk = ~clk;
+
+   always #(ttck / 2) tck = ~tck;
+
+   assign trst_n = rst_n;
 
    initial
      begin:main
@@ -59,10 +35,10 @@ module tb;
 
         status = $value$plusargs("filename=%s", filename);
         assert(status) else $fatal("No memory file provided. Please use './simv '+filename=<file.vmem>");
-        $readmemh(filename, tb.wb_spram.spram.mem);
+        $readmemh(filename, tb.dut.wb_spram.spram.mem);
 
         repeat (3) @(negedge clk);
-        rst = 1'b0;
+        rst_n = 1'b1;
 
         repeat (350) @(negedge clk);
         $finish;

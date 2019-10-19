@@ -7,3 +7,6 @@
 [submodule "common_cells"]
 	path = common_cells
 	url = https://github.com/pulp-platform/common_cells
+[submodule "pulpino"]
+	path = pulpino
+	url = https://github.com/pulp-platform/pulpino.git
