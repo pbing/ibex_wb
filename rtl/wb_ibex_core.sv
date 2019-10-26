@@ -3,35 +3,36 @@
 `default_nettype none
 
 module wb_ibex_core
-  #(parameter bit          PMPEnable        = 0,            // Enable PMP support
-    parameter int unsigned PMPGranularity   = 0,            // Minimum granularity of PMP address matching
-    parameter int unsigned PMPNumRegions    = 4,            // Number implemented PMP regions (ignored if PMPEnable == 0)
-    parameter int unsigned MHPMCounterNum   = 0,            // Number of performance monitor event counters
-    parameter int unsigned MHPMCounterWidth = 40,           // Bit width of performance monitor event counters
-    parameter bit          RV32E            = 0,            // RV32E mode enable (16 integer registers only)
-    parameter bit          RV32M            = 1,            // M(ultiply) extension enable
-    parameter int unsigned DmHaltAddr       = 32'h1A110800, // Address to jump to when entering debug mode
-    parameter int unsigned DmExceptionAddr  = 32'h1A110808) // Address to jump to when an exception occurs while in debug mode
-   (input  wire         clk,                                // Clock signal
-    input  wire         rst_n,                              // Active-low asynchronous reset
-    wb_if.master        instr_wb,                           // Wishbone interface for instruction memory
-    wb_if.master        data_wb,                            // Wishbone interface for data memory
+  #(parameter bit          PMPEnable        = 1'b0,           // Enable PMP support
+    parameter int unsigned PMPGranularity   = 0,              // Minimum granularity of PMP address matching
+    parameter int unsigned PMPNumRegions    = 4,              // Number implemented PMP regions (ignored if PMPEnable == 0)
+    parameter int unsigned MHPMCounterNum   = 0,              // Number of performance monitor event counters
+    parameter int unsigned MHPMCounterWidth = 40,             // Bit width of performance monitor event counters
+    parameter bit          RV32E            = 1'b0,           // RV32E mode enable (16 integer registers only)
+    parameter bit          RV32M            = 1'b1,           // M(ultiply) extension enable
+    parameter string       MultiplierImplementation = "fast", // Multiplicator type, “slow”, or “fast”
+    parameter int unsigned DmHaltAddr       = 32'h1A110800,   // Address to jump to when entering debug mode
+    parameter int unsigned DmExceptionAddr  = 32'h1A110808)   // Address to jump to when an exception occurs while in debug mode
+   (input  wire         clk,                                  // Clock signal
+    input  wire         rst_n,                                // Active-low asynchronous reset
+    wb_if.master        instr_wb,                             // Wishbone interface for instruction memory
+    wb_if.master        data_wb,                              // Wishbone interface for data memory
 
-    input  wire         test_en,                            // Test input, enables clock
+    input  wire         test_en,                              // Test input, enables clock
 
-    input  wire  [31:0] hart_id,                            // Hart ID, usually static, can be read from Hardware Thread ID (mhartid) CSR
-    input  wire  [31:0] boot_addr,                          // First program counter after reset = boot_addr + 0x80
+    input  wire  [31:0] hart_id,                              // Hart ID, usually static, can be read from Hardware Thread ID (mhartid) CSR
+    input  wire  [31:0] boot_addr,                            // First program counter after reset = boot_addr + 0x80
 
-    input  wire         irq_software,                       // Connected to memory-mapped (inter-processor) interrupt register
-    input  wire         irq_timer,                          // Connected to timer module
-    input  wire         irq_external,                       // Connected to platform-level interrupt controller
-    input  wire  [14:0] irq_fast,                           // 15 fast, local interrupts
-    input  wire         irq_nm,                             // Non-maskable interrupt (NMI)
+    input  wire         irq_software,                         // Connected to memory-mapped (inter-processor) interrupt register
+    input  wire         irq_timer,                            // Connected to timer module
+    input  wire         irq_external,                         // Connected to platform-level interrupt controller
+    input  wire  [14:0] irq_fast,                             // 15 fast, local interrupts
+    input  wire         irq_nm,                               // Non-maskable interrupt (NMI)
 
-    input  wire         debug_req,                          // Request to enter debug mode
+    input  wire         debug_req,                            // Request to enter debug mode
 
-    input  wire         fetch_enable,                       // Enable the core, won't fetch when 0
-    output logic        core_sleep);                        // Core in WFI with no outstanding data or instruction accesses.
+    input  wire         fetch_enable,                         // Enable the core, won't fetch when 0
+    output logic        core_sleep);                          // Core in WFI with no outstanding data or instruction accesses.
 
    core_if instr_core(.*);
    core_if data_core(.*);
@@ -41,15 +42,16 @@ module wb_ibex_core
 `else
      ibex_core
 `endif
-       #(.PMPEnable        (PMPEnable),
-         .PMPGranularity   (PMPGranularity),
-         .PMPNumRegions    (PMPNumRegions),
-         .MHPMCounterNum   (MHPMCounterNum),
-         .MHPMCounterWidth (MHPMCounterWidth),
-         .RV32E            (RV32E),
-         .RV32M            (RV32M),
-         .DmHaltAddr       (DmHaltAddr),
-         .DmExceptionAddr  (DmExceptionAddr))
+       #(.PMPEnable                (PMPEnable),
+         .PMPGranularity           (PMPGranularity),
+         .PMPNumRegions            (PMPNumRegions),
+         .MHPMCounterNum           (MHPMCounterNum),
+         .MHPMCounterWidth         (MHPMCounterWidth),
+         .RV32E                    (RV32E),
+         .RV32M                    (RV32M),
+         .MultiplierImplementation (MultiplierImplementation),
+         .DmHaltAddr               (DmHaltAddr),
+         .DmExceptionAddr          (DmExceptionAddr))
    inst_ibex_core
      (.clk_i          (clk),
       .rst_ni         (rst_n),
