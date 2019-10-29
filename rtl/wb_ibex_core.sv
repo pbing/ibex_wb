@@ -10,7 +10,7 @@ module wb_ibex_core
     parameter int unsigned MHPMCounterWidth = 40,             // Bit width of performance monitor event counters
     parameter bit          RV32E            = 1'b0,           // RV32E mode enable (16 integer registers only)
     parameter bit          RV32M            = 1'b1,           // M(ultiply) extension enable
-    parameter bit          MultiplierImplementation = 1'b1,   // Multiplicator type, “slow”, or “fast”
+    parameter              MultiplierImplementation = "fast", // Multiplicator type, “slow”, or “fast”
     parameter int unsigned DmHaltAddr       = 32'h1A110800,   // Address to jump to when entering debug mode
     parameter int unsigned DmExceptionAddr  = 32'h1A110808)   // Address to jump to when an exception occurs while in debug mode
    (input  wire         clk,                                  // Clock signal
