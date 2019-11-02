@@ -36,6 +36,7 @@ module wb_dm_top
    logic [BusWidth-1:0]   slave_wdata;
    logic [BusWidth-1:0]   slave_rdata;
 
+   core_if slave_core(.*);
    core_if master_core(.*);
 
    dm_top
@@ -52,12 +53,12 @@ module wb_dm_top
       .unavailable_i    (unavailable),
       .hartinfo_i       (hartinfo),
 
-      .slave_req_i      (slave_req),
-      .slave_we_i       (slave_we),
-      .slave_addr_i     (slave_addr),
-      .slave_be_i       (slave_be),
-      .slave_wdata_i    (slave_wdata),
-      .slave_rdata_o    (slave_rdata),
+      .slave_req_i      (slave_core.req),
+      .slave_we_i       (slave_core.we),
+      .slave_addr_i     (slave_core.addr),
+      .slave_be_i       (slave_core.be),
+      .slave_wdata_i    (slave_core.wdata),
+      .slave_rdata_o    (slave_core.rdata),
 
       .master_req_o     (master_core.req),
       .master_add_o     (master_core.addr),
@@ -77,20 +78,9 @@ module wb_dm_top
       .dmi_resp_o       (dmi_resp));
 
    /* Wishbone */
-   assign slave_req   = wbs.stb;
-   assign slave_we    = wbs.we;
-   assign slave_addr  = wbs.adr;
-   assign slave_be    = wbs.sel;
-   assign slave_wdata = wbs.dat_i;
-   assign wbs.dat_o   = slave_rdata;
-   assign wbs.stall   = 1'b0;
-   assign wbs.err     = 1'b0;
-
-   always_ff @(posedge wbs.clk or posedge wbs.rst)
-     if (wbs.rst)
-       wbs.ack <= 1'b0;
-     else
-       wbs.ack <= wbs.cyc & wbs.stb;
+   slave2wb slave_core2wb
+     (.slave (slave_core),
+      .wb    (wbs));
 
    core2wb master_core2wb
      (.core (master_core),
