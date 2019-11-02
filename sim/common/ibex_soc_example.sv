@@ -30,7 +30,12 @@ module ibex_soc_example
    logic          dmactive;
    logic          debug_req;
    logic          unavailable = 1'b0;
-   dm::hartinfo_t hartinfo = dm::hartinfo_t'('0);
+   dm::hartinfo_t hartinfo = '{zero1: 0,
+                               nscratch: 2,
+                               zero0: 0,
+                               dataaccess: 1,
+                               datasize: dm::DataCount,
+                               dataaddr: dm::DataAddr};
    logic          dmi_rst_n;
    logic          dmi_req_valid;
    logic          dmi_req_ready;
