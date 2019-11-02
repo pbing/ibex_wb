@@ -30,6 +30,10 @@ module tb;
    dm::dmstatus_t   dmstatus   = '0;
    dm::hartinfo_t   hartinfo   = '0;
    dm::abstractcs_t abstractcs = '0;
+   dm::dmcontrol_t  dmcontrol  = '0;
+   dm::command_t    command    = '0;
+   dm::ac_ar_cmd_t  ac_ar_cmd  = '0;
+   logic [31:0]     data0      = '0;
 
    ibex_soc_example dut(.*);
 
@@ -86,7 +90,7 @@ module tb;
         jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* check dmstatus */
-        $display("%t check dmstatus", $realtime);
+        $display("%t DMI check dmstatus", $realtime);
         dmstatus = dmi_resp.data;
         chk_dmstatus_authenticated   : assert (dmstatus.authenticated   == 1'b1);
         chk_dmstatus_authbusy        : assert (dmstatus.authbusy        == 1'b0);
@@ -95,7 +99,7 @@ module tb;
         chk_dmstatus_version         : assert (dmstatus.version         == dm::DbgVersion013);
 
         /* read abstractcs */
-        $display("%t DMI read hartinfo", $realtime);
+        $display("%t DMI read abstractcs", $realtime);
         dmi_req.addr = dm::AbstractCS;
         dmi_req.op   = dm::DTM_READ;
         dmi_req.data = 32'h0;
@@ -103,24 +107,82 @@ module tb;
         jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* check hartinfo */
-        $display("%t check hartinfo", $realtime);
+        $display("%t DMI check hartinfo", $realtime);
         hartinfo = dmi_resp.data;
         chk_hartinfo_nscratch   : assert (hartinfo.nscratch   == 4'd2);
         chk_hartinfo_dataaccess : assert (hartinfo.dataaccess == 1'b1);
         chk_hartinfo_datasize   : assert (hartinfo.datasize   == dm::DataCount);
         chk_hartinfo_dataaddr   : assert (hartinfo.dataaddr   == dm::DataAddr);
 
-        $display("%t DMI noop", $realtime);
+        /* write dmcontrol */
+        $display("%t DMI write dmcontrol", $realtime);
+        dmcontrol.dmactive  = 1'b1;
+        dmi_req.addr        = dm::DMControl;
+        dmi_req.op          = dm::DTM_WRITE;
+        dmi_req.data        = dmcontrol;
         jtag_run_test_idle(3);
-        jtag_dr_dmi('0, dmi_resp);
+        jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* check abstractcs */
-        $display("%t check abstractcs", $realtime);
+        $display("%t DMI check abstractcs", $realtime);
         abstractcs = dmi_resp.data;
         chk_abstractcs_progbufsize : assert (abstractcs.progbufsize == 5'd8);
         chk_abstractcs_busy        : assert (abstractcs.busy        == 1'b0);
         chk_abstractcs_cmderr      : assert (abstractcs.cmderr      == dm::CmdErrNone);
         chk_abstractcs_datacount   : assert (abstractcs.datacount   == dm::DataCount);
+
+        /* after dmcontrol.dmactive=1 we can halt the hart */
+        $display("%t DMI write dmcontrol", $realtime);
+        dmcontrol.haltreq = 1'b1;
+        dmi_req.addr      = dm::DMControl;
+        dmi_req.op        = dm::DTM_WRITE;
+        dmi_req.data      = dmcontrol;
+        jtag_run_test_idle(3);
+        jtag_dr_dmi(dmi_req, dmi_resp);
+
+        /* read dmcontrol */
+        $display("%t DMI read dmcontrol", $realtime);
+        dmi_req.addr = dm::DMControl;
+        dmi_req.op   = dm::DTM_READ;
+        dmi_req.data = '0;
+        jtag_run_test_idle(3);
+        jtag_dr_dmi(dmi_req, dmi_resp);
+        chk_debug_req: assert (tb.dut.wb_ibex_core.debug_req == 1'b1);
+        $display("%t Hart is halted", $realtime);
+
+        /* check dmcontrol */
+        $display("%t DMI check dmcontrol", $realtime);
+        dmcontrol = dmi_resp.data;
+        chk_dmcontrol_1: assert (dmcontrol.dmactive == 1'b1);
+        chk_dmcontrol_2: assert (dmcontrol.haltreq == 1'b1);
+
+        /* read register x13 with abstract command */
+        $display("%t DMI write command", $realtime);
+        ac_ar_cmd       = '{transfer: 1'b1, write: 1'b0, regno: 16'h100d, default: '0};
+        command.cmdtype = dm::AccessRegister;
+        command.control = ac_ar_cmd;
+        dmi_req.addr    = dm::Command;
+        dmi_req.op      = dm::DTM_WRITE;
+        dmi_req.data    = command;
+        jtag_run_test_idle(3);
+        jtag_dr_dmi(dmi_req, dmi_resp);
+
+        $display("%t DMI read data0", $realtime);
+        dmi_req.addr    = dm::Data0;
+        dmi_req.op      = dm::DTM_READ;
+        dmi_req.data    = '0;
+        jtag_run_test_idle(3);
+        jtag_dr_dmi(dmi_req, dmi_resp);
+
+        $display("%t DMI noop", $realtime);
+        dmi_req = '0;
+        jtag_run_test_idle(3);
+        jtag_dr_dmi(dmi_req, dmi_resp);
+
+        /* check data0 */
+        $display("%t DMI check data0", $realtime);
+        data0 = dmi_resp.data;
+        chk_data0_1: assert (data0 == 32'd55); // result of fib(10)
 
         repeat (10) @(negedge clk);
         $finish;
