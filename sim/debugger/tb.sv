@@ -22,13 +22,14 @@ module tb;
 
 `include "tasks.svh"
 
-   logic [4:0]    ir_resp  = 5'h0;
-   logic [31:0]   idcode   = 32'h0;
-   dtmcs_t        dtmcs    = '0;
-   dmi_req_t      dmi_req  = '0;
-   dmi_resp_t     dmi_resp = '0;
-   dm::dmstatus_t dmstatus = '0;
-   dm::hartinfo_t hartinfo = '0;
+   logic [4:0]      ir_resp    = 5'h0;
+   logic [31:0]     idcode     = 32'h0;
+   dtmcs_t          dtmcs      = '0;
+   dmi_req_t        dmi_req    = '0;
+   dmi_resp_t       dmi_resp   = '0;
+   dm::dmstatus_t   dmstatus   = '0;
+   dm::hartinfo_t   hartinfo   = '0;
+   dm::abstractcs_t abstractcs = '0;
 
    ibex_soc_example dut(.*);
 
@@ -87,12 +88,19 @@ module tb;
         /* check dmstatus */
         $display("%t check dmstatus", $realtime);
         dmstatus = dmi_resp.data;
-        chk_dmstatus_authenticated : assert (dmstatus.authenticated == 1'b1);
-        chk_dmstatus_version       : assert (dmstatus.version       == dm::DbgVersion013);
+        chk_dmstatus_authenticated   : assert (dmstatus.authenticated   == 1'b1);
+        chk_dmstatus_authbusy        : assert (dmstatus.authbusy        == 1'b0);
+        chk_dmstatus_hasresethaltreq : assert (dmstatus.hasresethaltreq == 1'b0);
+        chk_dmstatus_confstrptrvalid : assert (dmstatus.devtreevalid    == 1'b0);
+        chk_dmstatus_version         : assert (dmstatus.version         == dm::DbgVersion013);
 
-        $display("%t DMI noop", $realtime);
+        /* read abstractcs */
+        $display("%t DMI read hartinfo", $realtime);
+        dmi_req.addr = dm::AbstractCS;
+        dmi_req.op   = dm::DTM_READ;
+        dmi_req.data = 32'h0;
         jtag_run_test_idle(3);
-        jtag_dr_dmi('0, dmi_resp);
+        jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* check hartinfo */
         $display("%t check hartinfo", $realtime);
@@ -101,6 +109,18 @@ module tb;
         chk_hartinfo_dataaccess : assert (hartinfo.dataaccess == 1'b1);
         chk_hartinfo_datasize   : assert (hartinfo.datasize   == dm::DataCount);
         chk_hartinfo_dataaddr   : assert (hartinfo.dataaddr   == dm::DataAddr);
+
+        $display("%t DMI noop", $realtime);
+        jtag_run_test_idle(3);
+        jtag_dr_dmi('0, dmi_resp);
+
+        /* check abstractcs */
+        $display("%t check abstractcs", $realtime);
+        abstractcs = dmi_resp.data;
+        chk_abstractcs_progbufsize : assert (abstractcs.progbufsize == 5'd8);
+        chk_abstractcs_busy        : assert (abstractcs.busy        == 1'b0);
+        chk_abstractcs_cmderr      : assert (abstractcs.cmderr      == dm::CmdErrNone);
+        chk_abstractcs_datacount   : assert (abstractcs.datacount   == dm::DataCount);
 
         repeat (10) @(negedge clk);
         $finish;
