@@ -1,32 +1,3 @@
-typedef enum logic [4:0] {BYPASS0   = 'h0,
-                          IDCODE    = 'h1,
-                          DTMCSR    = 'h10,
-                          DMIACCESS = 'h11,
-                          BYPASS1   = 'h1f} ir_t;
-
-typedef struct packed {
-   logic [31:18] zero1;
-   logic         dmihardreset;
-   logic         dmireset;
-   logic         zero0;
-   logic [14:12] idle;
-   logic [11:10] dmistat;
-   logic [9:4]   abits;
-   logic [3:0]   version;
-} dtmcs_t;
-
-typedef struct packed {
-   logic [6:0]  addr;
-   logic [31:0] data;
-   dm::dtm_op_e op;
-} dmi_req_t;
-
-typedef struct packed  {
-   logic [6:0]  addr;
-   logic [31:0] data;
-   logic [1:0]  resp;
-} dmi_resp_t;
-
 task jtag_test_logic_reset();
    tms = 1'b1;
    repeat(5) @(negedge tck);
@@ -133,6 +104,8 @@ task jtag_dr_dmi (input dmi_req_t x = '0, output dmi_resp_t resp);
    const bit [1:3] tms1 = 3'b100;
    const bit [1:2] tms2 = 2'b10;
 
+   jtag_run_test_idle(3);
+
    foreach(tms1[i])
      begin
 	tms <= tms1[i];
@@ -159,4 +132,90 @@ task jtag_dr_dmi (input dmi_req_t x = '0, output dmi_resp_t resp);
      end
 
    chk_dmi_resp: assert (resp.resp == 2'd0);
+endtask
+
+task ac_read_register (input bit [15:0] regno, output [31:0] data);
+   var dm::ac_ar_cmd_t ac_ar_cmd;
+   var dm::command_t   command;
+
+   ac_ar_cmd       = '{transfer: 1'b1, write: 1'b0, regno: regno, default: '0};
+   command.cmdtype = dm::AccessRegister;
+   command.control = ac_ar_cmd;
+
+   dmi_req.addr = dm::Command;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = command;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req.addr = dm::Data0;
+   dmi_req.op   = dm::DTM_READ;
+   dmi_req.data = '0;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req = '0;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+   data = dmi_resp.data;
+endtask
+
+task ac_write_register (input bit [15:0] regno, input [31:0] data);
+   var dm::ac_ar_cmd_t ac_ar_cmd;
+   var dm::command_t   command;
+
+   ac_ar_cmd       = '{transfer: 1'b1, write: 1'b1, regno: regno, default: '0};
+   command.cmdtype = dm::AccessRegister;
+   command.control = ac_ar_cmd;
+
+   dmi_req.addr = dm::Command;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = command;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req.addr = dm::Data0;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = data;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+endtask
+
+task sb_read_memory32 (input bit [31:0] addr, output [31:0] sbdata);
+   var dm::sbcs_t sbcs;
+
+   sbcs         = '{sbreadonaddr: 1'b1, sbaccess: 2, default: '0};
+   dmi_req.addr = dm::SBCS;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = sbcs;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req.addr = dm::SBAddress0;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = addr;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req.addr = dm::SBData0;
+   dmi_req.op   = dm::DTM_READ;
+   dmi_req.data = '0;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req = '0;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+   sbdata = dmi_resp.data;
+endtask
+
+task sb_write_memory32 (input bit [31:0] addr, input [31:0] sbdata);
+   var dm::sbcs_t sbcs;
+
+   sbcs         = '{sbaccess: 2, default: '0};
+   dmi_req.addr = dm::SBCS;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = sbcs;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req.addr = dm::SBAddress0;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = addr;
+   jtag_dr_dmi(dmi_req, dmi_resp);
+
+   dmi_req.addr = dm::SBData0;
+   dmi_req.op   = dm::DTM_WRITE;
+   dmi_req.data = sbdata;
+   jtag_dr_dmi(dmi_req, dmi_resp);
 endtask

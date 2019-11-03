@@ -10,17 +10,44 @@ module tb;
 
    localparam dm_base_addr  = 'h1A110000;
 
-   bit  clk;
-   bit  rst_n;
-   wire led;
-   bit  trst_n;
-   bit  tck;
-   bit  tms;
-   bit  tdi;
-   wire tdo;
-   wire tdo_oe;
+   typedef enum logic [4:0] {BYPASS0   = 'h0,
+                             IDCODE    = 'h1,
+                             DTMCSR    = 'h10,
+                             DMIACCESS = 'h11,
+                             BYPASS1   = 'h1f} ir_t;
 
-`include "tasks.svh"
+   typedef struct packed {
+      logic [31:18] zero1;
+      logic         dmihardreset;
+      logic         dmireset;
+      logic         zero0;
+      logic [14:12] idle;
+      logic [11:10] dmistat;
+      logic [9:4]   abits;
+      logic [3:0]   version;
+   } dtmcs_t;
+
+   typedef struct packed {
+      logic [6:0]  addr;
+      logic [31:0] data;
+      dm::dtm_op_e op;
+   } dmi_req_t;
+
+   typedef struct packed  {
+      logic [6:0]  addr;
+      logic [31:0] data;
+      logic [1:0]  resp;
+   } dmi_resp_t;
+
+   bit              clk;
+   bit              rst_n;
+   wire             led;
+   bit              trst_n;
+   bit              tck;
+   bit              tms;
+   bit              tdi;
+   wire             tdo;
+   wire             tdo_oe;
 
    logic [4:0]      ir_resp    = 5'h0;
    logic [31:0]     idcode     = 32'h0;
@@ -31,9 +58,10 @@ module tb;
    dm::hartinfo_t   hartinfo   = '0;
    dm::abstractcs_t abstractcs = '0;
    dm::dmcontrol_t  dmcontrol  = '0;
-   dm::command_t    command    = '0;
-   dm::ac_ar_cmd_t  ac_ar_cmd  = '0;
    logic [31:0]     data0      = '0;
+   logic [31:0]     sbdata0    = '0;
+
+`include "tasks.svh"
 
    ibex_soc_example dut(.*);
 
@@ -86,7 +114,6 @@ module tb;
         dmi_req.addr = dm::Hartinfo;
         dmi_req.op   = dm::DTM_READ;
         dmi_req.data = 32'h0;
-        jtag_run_test_idle(3);
         jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* check dmstatus */
@@ -103,7 +130,6 @@ module tb;
         dmi_req.addr = dm::AbstractCS;
         dmi_req.op   = dm::DTM_READ;
         dmi_req.data = 32'h0;
-        jtag_run_test_idle(3);
         jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* check hartinfo */
@@ -120,7 +146,6 @@ module tb;
         dmi_req.addr        = dm::DMControl;
         dmi_req.op          = dm::DTM_WRITE;
         dmi_req.data        = dmcontrol;
-        jtag_run_test_idle(3);
         jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* check abstractcs */
@@ -137,7 +162,6 @@ module tb;
         dmi_req.addr      = dm::DMControl;
         dmi_req.op        = dm::DTM_WRITE;
         dmi_req.data      = dmcontrol;
-        jtag_run_test_idle(3);
         jtag_dr_dmi(dmi_req, dmi_resp);
 
         /* read dmcontrol */
@@ -145,7 +169,6 @@ module tb;
         dmi_req.addr = dm::DMControl;
         dmi_req.op   = dm::DTM_READ;
         dmi_req.data = '0;
-        jtag_run_test_idle(3);
         jtag_dr_dmi(dmi_req, dmi_resp);
         chk_debug_req: assert (tb.dut.wb_ibex_core.debug_req == 1'b1);
         $display("%t Hart is halted", $realtime);
@@ -157,32 +180,18 @@ module tb;
         chk_dmcontrol_2: assert (dmcontrol.haltreq == 1'b1);
 
         /* read register x13 with abstract command */
-        $display("%t DMI write command", $realtime);
-        ac_ar_cmd       = '{transfer: 1'b1, write: 1'b0, regno: 16'h100d, default: '0};
-        command.cmdtype = dm::AccessRegister;
-        command.control = ac_ar_cmd;
-        dmi_req.addr    = dm::Command;
-        dmi_req.op      = dm::DTM_WRITE;
-        dmi_req.data    = command;
-        jtag_run_test_idle(3);
-        jtag_dr_dmi(dmi_req, dmi_resp);
-
-        $display("%t DMI read data0", $realtime);
-        dmi_req.addr    = dm::Data0;
-        dmi_req.op      = dm::DTM_READ;
-        dmi_req.data    = '0;
-        jtag_run_test_idle(3);
-        jtag_dr_dmi(dmi_req, dmi_resp);
-
-        $display("%t DMI noop", $realtime);
-        dmi_req = '0;
-        jtag_run_test_idle(3);
-        jtag_dr_dmi(dmi_req, dmi_resp);
-
-        /* check data0 */
-        $display("%t DMI check data0", $realtime);
-        data0 = dmi_resp.data;
+        $display("%t AC read register", $realtime);
+        ac_read_register(16'h100d, data0);
         chk_data0_1: assert (data0 == 32'd55); // result of fib(10)
+
+        /* write to address 0x3000 */
+        $display("%t SB write memory", $realtime);
+        sb_write_memory32(32'h3000, 32'h12345678);
+
+        /* read from address 0x3000 */
+        $display("%t SB read memory", $realtime);
+        sb_read_memory32(32'h3000, sbdata0);
+        chk_sbdata0_1: assert (sbdata0 == 32'h12345678);
 
         repeat (10) @(negedge clk);
         $finish;
