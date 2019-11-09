@@ -16,7 +16,7 @@ module wb_interconnect_sharedbus
    logic [31:0]        adr;
    logic [3:0]         sel;
    logic [31:0]        dat_wr, dat_rd;
-   logic [numm - 1:0]  gnt;
+   logic [numm - 1:0]  gnt, gnt1;
    logic [nums - 1:0]  ss, ss1;
 
    /********************************************************************************
@@ -51,16 +51,16 @@ module wb_interconnect_sharedbus
 
    for (genvar i = 0; i < nums; i++)
      begin
-        assign wbs[i].cyc   =    wbs_cyc[i]; 
-        assign wbs[i].stb   =    wbs_stb[i]; 
-        assign wbs[i].we    =     wbs_we[i]; 
-        assign wbs_ack[i]   =    wbs[i].ack; 
-        assign wbs_err[i]   =    wbs[i].err; 
-        assign wbs_stall[i] =  wbs[i].stall; 
-        assign wbs[i].adr   =    wbs_adr[i]; 
-        assign wbs[i].sel   =    wbs_sel[i]; 
-        assign wbs[i].dat_o =  wbs_dat_o[i]; 
-        assign wbs_dat_i[i] =  wbs[i].dat_i; 
+        assign wbs[i].cyc   =    wbs_cyc[i];
+        assign wbs[i].stb   =    wbs_stb[i];
+        assign wbs[i].we    =     wbs_we[i];
+        assign wbs_ack[i]   =    wbs[i].ack;
+        assign wbs_err[i]   =    wbs[i].err;
+        assign wbs_stall[i] =  wbs[i].stall;
+        assign wbs[i].adr   =    wbs_adr[i];
+        assign wbs[i].sel   =    wbs_sel[i];
+        assign wbs[i].dat_o =  wbs_dat_o[i];
+        assign wbs_dat_i[i] =  wbs[i].dat_i;
      end
 
    /********************************************************************************/
@@ -70,13 +70,14 @@ module wb_interconnect_sharedbus
      for (int i = 0; i < nums; i++)
        ss[i] = (adr >= base_addr[i]) && (adr < base_addr[i] + size[i]);
 
+   /* Assume, that the response is exactly on cycle after request. */
    always_ff @(posedge wbs[0].clk or posedge wbs[0].rst)
      if (wbs[0].rst)
        ss1 <= '0;
      else
        if (cyc && stb)
          ss1 <= ss;
-   
+
    /* priority arbiter */
    always_comb
      begin
@@ -88,6 +89,14 @@ module wb_interconnect_sharedbus
                break;
             end
      end
+
+   /* Assume, that the response is exactly on cycle after request. */
+   always_ff @(posedge wbm[0].clk or posedge wbm[0].rst)
+     if (wbm[0].rst)
+       gnt1 <= '0;
+     else
+       if (cyc && stb)
+         gnt1 <= gnt;
 
    /* shared bus signals */
    always_comb
@@ -129,19 +138,30 @@ module wb_interconnect_sharedbus
      end
 
    /* interconnect */
+
+   /* STALL must respond immediately. */
+   always_comb
+     begin
+        for (int i = 0; i < numm; i++)
+          begin
+             wbm_stall[i] = 1'b1;
+             if (gnt[i])
+               wbm_stall[i] = stall;
+          end
+     end
+
+   /* Response signals are one cycle delayed. */
    always_comb
      begin
         for (int i = 0; i < numm; i++)
           begin
              wbm_ack[i]   = 1'b0;
              wbm_err[i]   = 1'b0;
-             wbm_stall[i] = 1'b1;
              wbm_dat_o[i] = '0;
-             if (gnt[i])
+             if (gnt1[i])
                begin
                   wbm_ack[i]   = ack;
                   wbm_err[i]   = err;
-                  wbm_stall[i] = stall;
                   wbm_dat_o[i] = dat_rd;
                end
           end
