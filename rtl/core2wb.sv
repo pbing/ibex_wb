@@ -16,7 +16,7 @@ module core2wb
    assign wb.adr      = core.addr;
    assign wb.dat_o    = core.wdata;
    assign wb.we       = core.we;
-   assign wb.sel      = core.be;
+   assign wb.sel      = core.we ? core.be : '1;
 
    always_ff @(posedge wb.clk or posedge wb.rst)
      if (wb.rst)
@@ -25,7 +25,7 @@ module core2wb
        if (core.req)
          cyc <= 1'b1;
        else if (wb.ack || wb.err)
-           cyc <= 1'b0;
+         cyc <= 1'b0;
 
    assign wb.cyc = core.req | cyc;
 endmodule
