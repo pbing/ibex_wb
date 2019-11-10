@@ -12,5 +12,7 @@ int main(void) {
     b = y;
   }
 
-  for (;;);
+  for (;;) {
+    asm("wfi");
+  }	
 }
