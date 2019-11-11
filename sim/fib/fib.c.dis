@@ -135,9 +135,9 @@ Disassembly of section .text:
 
 000000d8 <_start>:
   la x26, _bss_start
-  d8:	12400d13          	li	s10,292
+  d8:	12800d13          	li	s10,296
   la x27, _bss_end
-  dc:	12400d93          	li	s11,292
+  dc:	12800d93          	li	s11,296
   bge x26, x27, zero_loop_end
   e0:	01bd5763          	bge	s10,s11,ee <main_entry>
 
@@ -185,16 +185,18 @@ int main(void) {
  10e:	fb75                	bnez	a4,102 <main+0x8>
   }
 
-  for (;;);
- 110:	a001                	j	110 <main+0x16>
+  for (;;) {
+    asm("wfi");
+ 110:	10500073          	wfi
+ 114:	bff5                	j	110 <main+0x16>
 
-00000112 <__CTOR_LIST__>:
+00000116 <__CTOR_LIST__>:
 	...
 
-0000011a <__CTOR_END__>:
+0000011e <__CTOR_END__>:
 	...
 
-00000122 <__DTOR_END__>:
+00000126 <__DTOR_END__>:
 	...
 
 Disassembly of section .stack:
@@ -229,7 +231,7 @@ Disassembly of section .debug_info:
   2e:	0000                	unimp
   30:	fa00                	fsw	fs0,48(a2)
   32:	0000                	unimp
-  34:	1800                	addi	s0,sp,48
+  34:	1c00                	addi	s0,sp,560
   36:	0000                	unimp
   38:	0100                	addi	s0,sp,128
   3a:	7d9c                	flw	fa5,56(a1)
@@ -311,7 +313,7 @@ Disassembly of section .debug_abbrev:
 00000000 <.debug_abbrev>:
   .endr
    0:	1101                	addi	sp,sp,-32
-   2:	2501                	jal	602 <_endtext+0x4de>
+   2:	2501                	jal	602 <_endtext+0x4da>
    4:	130e                	slli	t1,t1,0x23
    6:	1b0e030b          	0x1b0e030b
    a:	550e                	lw	a0,224(sp)
@@ -378,7 +380,7 @@ Disassembly of section .debug_loc:
   20:	5d00                	lw	s0,56(a0)
   22:	010e                	slli	sp,sp,0x3
   24:	0000                	unimp
-  26:	0112                	slli	sp,sp,0x4
+  26:	0116                	slli	sp,sp,0x5
   28:	0000                	unimp
   2a:	0001                	nop
   2c:	005f 0000 0000      	0x5f
@@ -395,7 +397,7 @@ Disassembly of section .debug_loc:
   4a:	5d00                	lw	s0,56(a0)
   4c:	0108                	addi	a0,sp,128
   4e:	0000                	unimp
-  50:	0112                	slli	sp,sp,0x4
+  50:	0116                	slli	sp,sp,0x5
   52:	0000                	unimp
   54:	0001                	nop
   56:	005c                	addi	a5,sp,4
@@ -424,7 +426,7 @@ Disassembly of section .debug_loc:
   jal x0, default_exc_handler
   84:	1c007e3b          	0x1c007e3b
   jal x0, default_exc_handler
-  88:	0a9f 0001 1200      	0x120000010a9f
+  88:	0a9f 0001 1600      	0x160000010a9f
   jal x0, default_exc_handler
   8e:	0001                	nop
   mv  x1, x0
@@ -450,7 +452,7 @@ Disassembly of section .debug_aranges:
    e:	0000                	unimp
   10:	00fa                	slli	ra,ra,0x1e
   12:	0000                	unimp
-  14:	0018                	0x18
+  14:	001c                	0x1c
 	...
   1e:	0000                	unimp
   20:	0024                	addi	s1,sp,8
@@ -484,7 +486,7 @@ Disassembly of section .debug_ranges:
   16:	0000                	unimp
   18:	00fa                	slli	ra,ra,0x1e
   1a:	0000                	unimp
-  1c:	0112                	slli	sp,sp,0x4
+  1c:	0116                	slli	sp,sp,0x5
 	...
   26:	0000                	unimp
   28:	ffff                	0xffff
@@ -624,15 +626,15 @@ Disassembly of section .debug_line:
   ce:	02090603          	lb	a2,32(s2)
   la   x2, _stack_start
   d2:	0100                	addi	s0,sp,128
-  d4:	0b05                	addi	s6,s6,1
+  d4:	0505                	addi	a0,a0,1
   d6:	0200                	addi	s0,sp,256
   la x26, _bss_start
   d8:	0104                	addi	s1,sp,128
-  da:	00090003          	lb	zero,0(s2)
+  da:	00090103          	lb	sp,0(s2)
   la x27, _bss_end
   de:	0100                	addi	s0,sp,128
   bge x26, x27, zero_loop_end
-  e0:	0209                	addi	tp,tp,2
+  e0:	0609                	addi	a2,a2,2
   e2:	0000                	unimp
   sw x0, 0(x26)
   e4:	0101                	addi	sp,sp,0
@@ -657,7 +659,7 @@ int main(void) {
   a = 0;
  100:	0001                	nop
     y = a + b;
- 102:	30747263          	bgeu	s0,t2,406 <_endtext+0x2e2>
+ 102:	30747263          	bgeu	s0,t2,406 <_endtext+0x2de>
     b = y;
  106:	532e                	lw	t1,232(sp)
  108:	0000                	unimp
@@ -665,7 +667,7 @@ int main(void) {
  10c:	0000                	unimp
   for (int i = 1; i < 10; ++i) {
  10e:	0205                	addi	tp,tp,1
-  for (;;);
+    asm("wfi");
  110:	008c                	addi	a1,sp,64
  112:	0000                	unimp
  114:	0315                	addi	t1,t1,5
@@ -819,7 +821,7 @@ Disassembly of section .debug_str:
    a:	20302e33          	0x20302e33
    e:	6d2d                	lui	s10,0xb
   10:	7261                	lui	tp,0xffff8
-  12:	723d6863          	bltu	s10,gp,742 <_endtext+0x61e>
+  12:	723d6863          	bltu	s10,gp,742 <_endtext+0x61a>
   16:	3376                	fld	ft6,376(sp)
   18:	6932                	flw	fs2,12(sp)
   1a:	636d                	lui	t1,0x1b
@@ -849,7 +851,7 @@ Disassembly of section .debug_str:
   52:	006e                	c.slli	zero,0x1b
   54:	6966                	flw	fs2,88(sp)
   56:	2e62                	fld	ft8,24(sp)
-  58:	682f0063          	beq	t5,sp,6d8 <_endtext+0x5b4>
+  58:	682f0063          	beq	t5,sp,6d8 <_endtext+0x5b0>
   5c:	2f656d6f          	jal	s10,56352 <_stack_start+0x46352>
   60:	622f4343          	fmadd.d	ft6,ft10,ft2,fa2,rmm
   64:	6562                	flw	fa0,24(sp)
@@ -863,7 +865,7 @@ Disassembly of section .debug_str:
   78:	7568                	flw	fa0,108(a0)
   7a:	2e62                	fld	ft8,24(sp)
   jal x0, default_exc_handler
-  7c:	2f6d6f63          	bltu	s10,s6,37a <_endtext+0x256>
+  7c:	2f6d6f63          	bltu	s10,s6,37a <_endtext+0x252>
   jal x0, reset_handler
   80:	6270                	flw	fa2,68(a2)
   82:	6e69                	lui	t3,0x1a
@@ -881,7 +883,7 @@ Disassembly of section .debug_str:
   mv  x4, x1
   98:	006e                	c.slli	zero,0x1b
   mv  x5, x1
-  9a:	30747263          	bgeu	s0,t2,39e <_endtext+0x27a>
+  9a:	30747263          	bgeu	s0,t2,39e <_endtext+0x276>
   mv  x7, x1
   9e:	532e                	lw	t1,232(sp)
   mv  x8, x1
@@ -909,7 +911,7 @@ Disassembly of section .comment:
   14:	302e                	fld	ft0,232(sp)
   16:	322d                	jal	fffff940 <_stack_start+0xfffef940>
   18:	3130                	fld	fa2,96(a0)
-  1a:	2e39                	jal	338 <_endtext+0x214>
+  1a:	2e39                	jal	338 <_endtext+0x210>
   1c:	3830                	fld	fa2,112(s0)
   1e:	302e                	fld	ft0,232(sp)
   20:	2029                	jal	2a <__DYNAMIC+0x2a>
@@ -919,7 +921,7 @@ Disassembly of section .comment:
 Disassembly of section .riscv.attributes:
 
 00000000 <.riscv.attributes>:
-   0:	2541                	jal	680 <_endtext+0x55c>
+   0:	2541                	jal	680 <_endtext+0x558>
    2:	0000                	unimp
    4:	7200                	flw	fs0,32(a2)
    6:	7369                	lui	t1,0xffffa
@@ -952,7 +954,7 @@ Disassembly of section .debug_frame:
   16:	0000                	unimp
   18:	00fa                	slli	ra,ra,0x1e
   1a:	0000                	unimp
-  1c:	0018                	0x18
+  1c:	001c                	0x1c
   1e:	0000                	unimp
   20:	0e42                	slli	t3,t3,0x10
   22:	0010                	0x10

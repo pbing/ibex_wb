@@ -14,5 +14,5 @@ int main(void) {
 
   for (;;) {
     asm("wfi");
-  }	
+  }
 }

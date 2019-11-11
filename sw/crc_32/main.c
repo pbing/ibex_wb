@@ -18,7 +18,6 @@ int __attribute__ ((used))
 main (int argc __attribute__ ((unused)),
       char *argv[] __attribute__ ((unused)))
 {
-  int i;
   volatile int result;
   volatile int correct;
 
@@ -35,7 +34,9 @@ main (int argc __attribute__ ((unused)),
   correct = verify_benchmark (result);
 
   //return (!correct);
-  for(;;);
+  for (;;) {
+    asm("wfi");
+  }
 }				/* main () */
 
 
