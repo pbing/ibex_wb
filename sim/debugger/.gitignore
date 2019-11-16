@@ -11,3 +11,6 @@ logs/
 simv*
 vc_hdrs.h
 vcs.args
+xrun.args
+xcelium.d/
+xrun.history
