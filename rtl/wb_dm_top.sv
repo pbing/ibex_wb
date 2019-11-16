@@ -3,31 +3,31 @@
 `default_nettype none
 
 module wb_dm_top
-  #(parameter int                 NrHarts          = 1,
-    parameter int                 BusWidth         = 32,
-    parameter logic [NrHarts-1:0] SelectableHarts  = 1) // Bitmask to select physically available harts for systems that don't use hart numbers in a contiguous fashion.
-   (input  wire                   clk,                  // clock
-    input  wire                   rst_n,                // asynchronous reset active low, connect PoR here, not the system reset
-    input  wire                   testmode,
-    output logic                  ndmreset,             // non-debug module reset
-    output logic                  dmactive,             // debug module is active
-    output logic [NrHarts-1:0]    debug_req,            // async debug request
-    input  wire  [NrHarts-1:0]    unavailable,          // communicate whether the hart is unavailable (e.g.: power down)
-    dm::hartinfo_t [NrHarts-1:0]  hartinfo,
+  #(parameter int                      NrHarts          = 1,
+    parameter int                      BusWidth         = 32,
+    parameter logic [NrHarts-1:0]      SelectableHarts  = 1) // Bitmask to select physically available harts for systems that don't use hart numbers in a contiguous fashion.
+   (input  wire                        clk,                  // clock
+    input  wire                        rst_n,                // asynchronous reset active low, connect PoR here, not the system reset
+    input  wire                        testmode,
+    output logic                       ndmreset,             // non-debug module reset
+    output logic                       dmactive,             // debug module is active
+    output logic [NrHarts-1:0]         debug_req,            // async debug request
+    input  wire  [NrHarts-1:0]         unavailable,          // communicate whether the hart is unavailable (e.g.: power down)
+    input dm::hartinfo_t [NrHarts-1:0] hartinfo,
 
     /* Wishbone interfaces */
-    wb_if.slave                   wbs,
-    wb_if.master                  wbm,
+    wb_if.slave                        wbs,
+    wb_if.master                       wbm,
 
     /* Connection to DTM - compatible to RocketChip Debug Module */
-    input  wire                   dmi_rst_n,
-    input  wire                   dmi_req_valid,
-    output logic                  dmi_req_ready,
-    input  dm::dmi_req_t          dmi_req,
+    input  wire                        dmi_rst_n,
+    input  wire                        dmi_req_valid,
+    output logic                       dmi_req_ready,
+    input  dm::dmi_req_t               dmi_req,
 
-    output logic                  dmi_resp_valid,
-    input  wire                   dmi_resp_ready,
-    output dm::dmi_resp_t         dmi_resp);
+    output logic                       dmi_resp_valid,
+    input  wire                        dmi_resp_ready,
+    output dm::dmi_resp_t              dmi_resp);
 
    logic                  slave_req;
    logic                  slave_we;
