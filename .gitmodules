@@ -7,4 +7,6 @@
 [submodule "pulpino"]
 	path = pulpino
 	url = https://github.com/pulp-platform/pulpino.git
-
+[submodule "ibex"]
+	path = ibex
+	url = https://github.com/lowRISC/ibex.git
