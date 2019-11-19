@@ -13,7 +13,7 @@ module wb_dm_top
     output logic                       dmactive,             // debug module is active
     output logic [NrHarts-1:0]         debug_req,            // async debug request
     input  wire  [NrHarts-1:0]         unavailable,          // communicate whether the hart is unavailable (e.g.: power down)
-    input dm::hartinfo_t [NrHarts-1:0] hartinfo,
+    input  wire dm::hartinfo_t [NrHarts-1:0] hartinfo,
 
     /* Wishbone interfaces */
     wb_if.slave                        wbs,
