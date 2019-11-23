@@ -3,18 +3,18 @@
 `default_nettype none
 
 module wb_led
-  (output logic led,
-   wb_if.slave  wb);
+  (output logic [3:0] led,
+   wb_if.slave        wb);
 
    logic valid;
    logic select;
 
    always @(posedge wb.clk or posedge wb.rst)
      if (wb.rst)
-       led <= 1'b0;
+       led <= '0;
      else
        if (valid && wb.we && select)
-         led <= wb.dat_i[0];
+         led <= wb.dat_i[3:0];
 
    /* Wishbone control */
    assign valid    = wb.cyc & wb.stb;
@@ -28,7 +28,7 @@ module wb_led
      else
        wb.ack <= valid & ~wb.stall;
 
-   assign wb.dat_o = {31'h00000000,led};
+   assign wb.dat_o = {28'h00000000,led};
 endmodule
 
 `resetall

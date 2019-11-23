@@ -4,12 +4,12 @@
 #
 # Generate a baremetal application
 
-PROGRAM ?= nettle-aes
-PROGRAM_CFLAGS = -Wall -g -Os -DCPU_MHZ=1 -DWARMUP_HEAT=0
-#PROGRAM_CFLAGS = -Wall -g -Os -msave-restore -fdata-sections -ffunction-sections -DCPU_MHZ=1 -DWARMUP_HEAT=0
+PROGRAM ?= fib
+PROGRAM_CFLAGS = -Wall -g -Os
+#PROGRAM_CFLAGS = -Wall -g -O0
 #ARCH = rv32imc
 ARCH = rv32im # to disable compressed instructions
-SRCS = $(PROGRAM).c beebsc.c board.c main.c
+SRCS = $(PROGRAM).c
 
 CC = riscv64-unknown-elf-gcc
 
@@ -26,7 +26,7 @@ DEPS = $(OBJS:%.o=%.d)
 
 OUTFILES = $(PROGRAM).elf $(PROGRAM).vmem $(PROGRAM).bin $(PROGRAM).dis
 
-HEX2VMEM = ../../scripts/hex2vmem.pl
+HEX2VMEM = ../../../../../scripts/hex2vmem.pl
 
 all: $(OUTFILES)
 

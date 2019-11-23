@@ -1,19 +1,30 @@
-/* Ibex SOC example for simulation purposes */
-
 `default_nettype none
 
-module ibex_soc_example
-  (input  wire clk,     // clock
-   input  wire rst_n,   // reset (active low)
+module ibex_soc
+  (input  wire       CLK100MHZ,
 
-   input  wire trst_n,  // JTAG test reset (low active)
-   input  wire tck,     // JTAG test clock
-   input  wire tms,     // JTAG test mode select
-   input  wire tdi,     // JTAG test data input
-   output wire tdo,     // JTAG test data output
-   output wire tdo_oe,  // JTAG test data output enable
+   input  wire  [3:0] sw,
+   output logic [3:0] led,
+   input  wire  [3:0] btn,
 
-   output wire led);    // LED
+   input  wire        ck_rst_n,
+
+   inout  wire        ck_io0,
+   inout  wire        ck_io1,
+   inout  wire        ck_io2,
+   inout  wire        ck_io3,
+   inout  wire        ck_io4,
+   inout  wire        ck_io5,
+   inout  wire        ck_io6,
+   inout  wire        ck_io7,
+   inout  wire        ck_io8,
+   inout  wire        ck_io9,
+   inout  wire        ck_io10,
+   inout  wire        ck_io11,
+   inout  wire        ck_io12,
+   inout  wire        ck_io13,
+
+   inout  wire  [7:0] jd);
 
    localparam ram_base_addr = 'h00000000;
    localparam ram_size      = 'h10000;
@@ -24,7 +35,8 @@ module ibex_soc_example
    localparam dm_base_addr  = 'h1A110000;
    localparam dm_size       = 'h1000;
 
-   logic          rst;
+   logic          clk;
+   logic          rst, rst_n;
    logic          core_sleep;
    logic          ndmreset;
    logic          dmactive;
@@ -44,10 +56,25 @@ module ibex_soc_example
    logic          dmi_resp_ready;
    dm::dmi_resp_t dmi_resp;
 
-   assign rst = ~rst_n;
+   logic tck, trst_n, tms, tdi, tdo, tdo_oe;
+
+   assign rst = rst_n;
+
+   /* https://www.digikey.com/eewiki/display/LOGIC/Digilent+Arty+A7+with+Xilinx+Artix-7+Implementing+SiFive+FE310+RISC-V */
+   assign jd[0]  = tdo_oe ? tdo : 1'bz;
+   assign trst_n = jd[1];
+   assign tck    = jd[2];
+   assign tdi    = jd[4];
+   assign tms    = jd[5];
 
    wb_if wbm[3](.*);
    wb_if wbs[3](.*);
+
+   crg crg
+     (.clk100m   (CLK100MHZ),
+      .ext_rst_n (ck_rst_n),
+      .rst_n,
+      .clk);
 
    wb_ibex_core wb_ibex_core
      (.instr_wb     (wbm[1]),
@@ -67,7 +94,7 @@ module ibex_soc_example
      (.testmode  (1'b0),
       .wbm       (wbm[0]),
       .wbs       (wbs[0]),
-      .dmi_rst_n (rst_n),
+      .dmi_rst_n (dmi_rst_n),
       .*);
 
    dmi_jtag dmi
@@ -98,16 +125,9 @@ module ibex_soc_example
 
    wb_spramx32 #(ram_size) wb_spram(.wb(wbs[1]));
 
-   wb_led wb_led(.wb(wbs[2]), .*);
-
-`ifdef ASSERT_ON
-   wb_checker wbm0_checker(wbm[0]);
-   wb_checker wbm1_checker(wbm[1]);
-   wb_checker wbm2_checker(wbm[2]);
-   wb_checker wbs0_checker(wbs[0]);
-   wb_checker wbs1_checker(wbs[1]);
-   wb_checker wbs2_checker(wbs[2]);
-`endif
+   wb_led wb_led
+     (.wb(wbs[2]),
+      .*);
 endmodule
 
 `resetall
