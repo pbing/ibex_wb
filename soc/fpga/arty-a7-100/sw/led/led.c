@@ -41,6 +41,6 @@ int main(int argc, char **argv) {
   while (1) {
     //usleep(1000 * 1000); // 1000 ms
     usleep(1 * 1000); // 1 ms
-    *var = ~(*var);
+    *var = *var + 1;
   }
 }
