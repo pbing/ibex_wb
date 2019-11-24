@@ -5,7 +5,7 @@
 module tb;
    timeunit 1ns / 1ps;
 
-   const realtime tclk = 1s / 100.0e6; // CPU clock period
+   const realtime tclk = 1s / 100.0e6; // System clock period
    const realtime ttck = 1s / 10.0e6;  // JTAG clock period
 
    localparam dm_base_addr  = 'h1A110000;
@@ -39,15 +39,16 @@ module tb;
       logic [1:0]  resp;
    } dmi_resp_t;
 
-   bit              clk;
-   bit              rst_n;
-   wire             led;
-   bit              trst_n;
-   bit              tck;
-   bit              tms;
-   bit              tdi;
-   wire             tdo;
-   wire             tdo_oe;
+   bit        clk100mhz;
+   bit  [3:0] sw;
+   wire [3:0] led;
+   bit  [3:0] btn;
+   bit        ck_rst_n;
+   bit        tck;
+   bit        trst_n;
+   bit        tms;
+   bit        tdi;
+   wire       tdo;
 
    logic [4:0]      ir_resp    = 5'h0;
    logic [31:0]     idcode     = 32'h0;
@@ -63,13 +64,19 @@ module tb;
 
 `include "tasks.svh"
 
-   ibex_soc_example dut(.*);
+   glbl glbl();
+   ibex_soc dut(.*);
 
-   always #(tclk / 2) clk = ~clk;
+   always #(tclk / 2) clk100mhz = ~clk100mhz;
 
    always #(ttck / 2) tck = ~tck;
 
-   assign trst_n = rst_n;
+`ifdef ASSERT_ON
+   bind dut wb_checker wbm0_checker(wbm[0]);
+   bind dut wb_checker wbm1_checker(wbm[1]);
+   bind dut wb_checker wbs0_checker(wbs[0]);
+   bind dut wb_checker wbs1_checker(wbs[1]);
+`endif
 
    initial
      begin:main
@@ -82,8 +89,11 @@ module tb;
         chk_filename: assert (status) else $fatal("No memory file provided. Please use './simv '+filename=<file.vmem>");
         $readmemh(filename, tb.dut.wb_spram.spram.mem);
 
-        repeat (3) @(negedge clk);
-        rst_n = 1'b1;
+        repeat (3) @(negedge clk100mhz);
+        ck_rst_n = 1'b1;
+
+        repeat (3) @(negedge tck);
+        trst_n = 1'b1;
 
         /* JTAG IDCODE */
         jtag_test_logic_reset();
@@ -193,8 +203,7 @@ module tb;
         sb_read_memory32(32'h3000, sbdata0);
         chk_sbdata0_1: assert (sbdata0 == 32'h12345678);
 
-        repeat (10) @(negedge clk);
-        $finish;
+        #100ns $finish;
      end:main
 endmodule
 

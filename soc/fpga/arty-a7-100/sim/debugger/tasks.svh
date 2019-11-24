@@ -104,7 +104,7 @@ task jtag_dr_dmi (input dmi_req_t x = '0, output dmi_resp_t resp);
    const bit [1:3] tms1 = 3'b100;
    const bit [1:2] tms2 = 2'b10;
 
-   jtag_run_test_idle(3);
+   jtag_run_test_idle(4); // adjust for CPU clock
 
    foreach(tms1[i])
      begin

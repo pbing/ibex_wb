@@ -7,55 +7,28 @@ module tb;
 
    const realtime tclk = 1s / 100.0e6;
 
-   localparam ram_base_addr = 'h00000000;
-   localparam ram_size      = 'h10000;
+   bit        clk100mhz;
+   bit  [3:0] sw;
+   wire [3:0] led;
+   bit  [3:0] btn;
+   bit        ck_rst_n;
+   bit        tck;
+   bit        trst_n;
+   bit        tms;
+   bit        tdi;
+   wire       tdo;
 
-   localparam led_base_addr = 'h10000000;
-   localparam led_size      = 'h1000;
+   glbl glbl();
+   ibex_soc dut(.*);
 
-   bit          clk;
-   bit          rst = 1'b1;
+   always #(tclk / 2) clk100mhz = ~clk100mhz;
 
-   bit          test_en;
-   bit  [31:0]  hart_id;
-   bit  [31:0]  boot_addr;
-   bit          irq_software;
-   bit          irq_timer;
-   bit          irq_external;
-   bit  [14:0]  irq_fast;
-   bit          irq_nm;
-   bit          debug_req;
-   bit          fetch_enable = 1'b1;
-   wire         core_sleep;
-   wire         led;
-
-   wb_if wbm[2](.*);
-   wb_if wbs[2](.*);
-
-   wb_ibex_core dut
-     (.rst_n    (~rst),
-      .instr_wb (wbm[0]),
-      .data_wb  (wbm[1]),
-      .*);
-
-   wb_interconnect_sharedbus
-     #(.numm      (2),
-       .nums      (2),
-       .base_addr ({ram_base_addr, led_base_addr}),
-       .size      ({ram_size, led_size}) )
-   wb_intercon
-     (.*);
-
-   wb_spramx32 #(ram_size) wb_spram(.wb(wbs[0]));
-
-   led #(led_size) inst_led(.*, .wb(wbs[1]));
-
-   wb_checker wbm0_checker(wbm[0]);
-   wb_checker wbm1_checker(wbm[1]);
-   wb_checker wbs0_checker(wbs[0]);
-   wb_checker wbs1_checker(wbs[1]);
-
-   always #(tclk / 2) clk = ~clk;
+`ifdef ASSERT_ON
+   bind dut wb_checker wbm0_checker(wbm[0]);
+   bind dut wb_checker wbm1_checker(wbm[1]);
+   bind dut wb_checker wbs0_checker(wbs[0]);
+   bind dut wb_checker wbs1_checker(wbs[1]);
+`endif
 
    initial
      begin:main
@@ -65,14 +38,13 @@ module tb;
         $timeformat(-9, 3, " ns");
 
         status = $value$plusargs("filename=%s", filename);
-        assert(status) else $fatal("No memory file provided. Please use './simv '+filename=<file.vmem>");
-        $readmemh(filename, tb.wb_spram.spram.mem);
+        chk_filename: assert(status) else $fatal("No memory file provided. Please use './simv '+filename=<file.vmem>");
+        $readmemh(filename, tb.dut.wb_spram.spram.mem);
 
-        repeat (3) @(negedge clk);
-        rst = 1'b0;
+        repeat (3) @(negedge clk100mhz);
+        ck_rst_n = 1'b1;
 
-        repeat (510000) @(negedge clk);
-        $finish;
+        #33ms $finish;
      end:main
 endmodule
 
