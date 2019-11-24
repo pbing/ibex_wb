@@ -1,7 +1,7 @@
 `default_nettype none
 
 module ibex_soc
-  (input  wire       CLK100MHZ,
+  (input  wire        clk100mhz,
 
    input  wire  [3:0] sw,
    output logic [3:0] led,
@@ -9,22 +9,13 @@ module ibex_soc
 
    input  wire        ck_rst_n,
 
-   inout  wire        ck_io0,
-   inout  wire        ck_io1,
-   inout  wire        ck_io2,
-   inout  wire        ck_io3,
-   inout  wire        ck_io4,
-   inout  wire        ck_io5,
-   inout  wire        ck_io6,
-   inout  wire        ck_io7,
-   inout  wire        ck_io8,
-   inout  wire        ck_io9,
-   inout  wire        ck_io10,
-   inout  wire        ck_io11,
-   inout  wire        ck_io12,
-   inout  wire        ck_io13,
+   input  wire        tck,
+   input  wire        trst_n,
+   input  wire        tms,
+   input  wire        tdi,
+   output wire        tdo);
 
-   inout  wire  [7:0] jd);
+
 
    localparam ram_base_addr = 'h00000000;
    localparam ram_size      = 'h10000;
@@ -55,23 +46,15 @@ module ibex_soc
    logic          dmi_resp_valid;
    logic          dmi_resp_ready;
    dm::dmi_resp_t dmi_resp;
-
-   logic tck, trst_n, tms, tdi, tdo, tdo_oe;
+   logic          tdo_oe;
 
    assign rst = rst_n;
-
-   /* https://www.digikey.com/eewiki/display/LOGIC/Digilent+Arty+A7+with+Xilinx+Artix-7+Implementing+SiFive+FE310+RISC-V */
-   assign jd[0]  = tdo_oe ? tdo : 1'bz;
-   assign trst_n = jd[1];
-   assign tck    = jd[2];
-   assign tdi    = jd[4];
-   assign tms    = jd[5];
 
    wb_if wbm[3](.*);
    wb_if wbs[3](.*);
 
    crg crg
-     (.clk100m   (CLK100MHZ),
+     (.clk100m   (clk100mhz),
       .ext_rst_n (ck_rst_n),
       .rst_n,
       .clk);
