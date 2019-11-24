@@ -9,7 +9,7 @@ module crg
    output wire clk);
 
    BUFR
-     #(.BUFR_DIVIDE(4))
+     #(.BUFR_DIVIDE("4"))
    clkdiv
      (.I   (clk100m),
       .O   (clk),

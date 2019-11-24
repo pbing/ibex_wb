@@ -28,7 +28,7 @@ module wb_led
      else
        wb.ack <= valid & ~wb.stall;
 
-   assign wb.dat_o = {28'h00000000,led};
+   assign wb.dat_o = {28'h0000000, led};
 endmodule
 
 `resetall

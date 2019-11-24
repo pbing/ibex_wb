@@ -1,19 +1,19 @@
 `default_nettype none
 
 module ibex_soc
-  (input  wire        clk100mhz,
+  (input  wire       clk100mhz,
 
-   input  wire  [3:0] sw,
-   output logic [3:0] led,
-   input  wire  [3:0] btn,
+   input  wire [3:0] sw,
+   output wire [3:0] led,
+   input  wire [3:0] btn,
 
-   input  wire        ck_rst_n,
+   input  wire       ck_rst_n,
 
-   input  wire        tck,
-   input  wire        trst_n,
-   input  wire        tms,
-   input  wire        tdi,
-   output wire        tdo);
+   input  wire       tck,
+   input  wire       trst_n,
+   input  wire       tms,
+   input  wire       tdi,
+   output wire       tdo);
 
 
 
@@ -48,7 +48,7 @@ module ibex_soc
    dm::dmi_resp_t dmi_resp;
    logic          tdo_oe;
 
-   assign rst = rst_n;
+   assign rst = ~rst_n;
 
    wb_if wbm[3](.*);
    wb_if wbs[3](.*);
