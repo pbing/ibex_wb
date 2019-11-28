@@ -23,7 +23,7 @@ module wb_dm_top
     input  wire                        dmi_rst_n,
     input  wire                        dmi_req_valid,
     output logic                       dmi_req_ready,
-    input  dm::dmi_req_t               dmi_req,
+    input  wire dm::dmi_req_t          dmi_req,
 
     output logic                       dmi_resp_valid,
     input  wire                        dmi_resp_ready,

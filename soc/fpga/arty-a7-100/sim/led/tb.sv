@@ -38,7 +38,7 @@ module tb;
         $timeformat(-9, 3, " ns");
 
         status = $value$plusargs("filename=%s", filename);
-        chk_filename: assert(status) else $fatal("No memory file provided. Please use './simv '+filename=<file.vmem>");
+        chk_filename: assert(status) else $fatal(1, "No memory file provided. Please use './simv '+filename=<file.vmem>");
         $readmemh(filename, tb.dut.wb_spram.spram.mem);
 
         repeat (3) @(negedge clk100mhz);

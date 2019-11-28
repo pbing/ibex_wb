@@ -9,8 +9,8 @@ task jtag_run_test_idle(input int unsigned n = 1);
 endtask
 
 task jtag_ir(input ir_t x, output [4:0] resp);
-   const bit [1:4] tms1 = 4'b1100;
-   const bit [1:2] tms2 = 2'b10;
+   static const bit [1:4] tms1 = 4'b1100;
+   static const bit [1:2] tms2 = 2'b10;
 
    foreach(tms1[i])
      begin
@@ -41,8 +41,8 @@ task jtag_ir(input ir_t x, output [4:0] resp);
 endtask
 
 task jtag_dr_idcode (input [31:0] x = '0, output [31:0] resp);
-   const bit [1:3] tms1 = 3'b100;
-   const bit [1:2] tms2 = 2'b10;
+   static const bit [1:3] tms1 = 3'b100;
+   static const bit [1:2] tms2 = 2'b10;
 
    foreach(tms1[i])
      begin
@@ -71,8 +71,8 @@ task jtag_dr_idcode (input [31:0] x = '0, output [31:0] resp);
 endtask
 
 task jtag_dr_dtmcs (input dtmcs_t x = '0, output dtmcs_t resp);
-   const bit [1:3] tms1 = 3'b100;
-   const bit [1:2] tms2 = 2'b10;
+   static const bit [1:3] tms1 = 3'b100;
+   static const bit [1:2] tms2 = 2'b10;
 
    foreach(tms1[i])
      begin
@@ -101,8 +101,8 @@ task jtag_dr_dtmcs (input dtmcs_t x = '0, output dtmcs_t resp);
 endtask
 
 task jtag_dr_dmi (input dmi_req_t x = '0, output dmi_resp_t resp);
-   const bit [1:3] tms1 = 3'b100;
-   const bit [1:2] tms2 = 2'b10;
+   static const bit [1:3] tms1 = 3'b100;
+   static const bit [1:2] tms2 = 2'b10;
 
    jtag_run_test_idle(4); // adjust for CPU clock
 
