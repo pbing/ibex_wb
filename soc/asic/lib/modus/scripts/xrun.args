@@ -1,0 +1,15 @@
+-64bit
++access+rwc
++simvision
+-seq_udp_delay 50ps
+-nospecify
+-timescale 1ns/1ps
+-override_timescale
++HEARTBEAT
++FAILSET
++COMMANDFILE=./work/testresults/verilog_hw/VER.FULLSCAN.ram_atpg.logic.ex1.ts1
++define+NC_SIM
++define+FAST_FUNC
+
+../../memory/ramcell/veri/RAM16384X32.v
+./work/testresults/verilog_hw/VER.FULLSCAN.ram_atpg.mainsim_hw.sv

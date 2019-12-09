@@ -1,0 +1,860 @@
+/*
+    ******************************************************************
+    ***                                                            ***
+    ***  CS251 Compiled cell Synthesis Library                     ***
+    ***  Copyright (c) MIE FUJITSU SEMICONDUCTOR LTD. 2019         ***
+    ***  All Rights Reserved. Licensed Library.                    ***
+    ***                                                            ***
+    ******************************************************************
+*/
+library ("cs251_cc_s_p125_1012v") {
+	delay_model : "table_lookup";
+        define ("add_pg_pin_to_lib",  "library",  "boolean");
+        add_pg_pin_to_lib : true;
+        voltage_map ( VDD,1.012000 );
+        voltage_map ( VSS, 0.000000 );
+	date : "Nov.25.2019";
+	revision : "0001";
+	bus_naming_style : "%s[%d]";
+	in_place_swap_mode : "match_footprint";
+	simulation : true;
+	time_unit : "1ps";
+	voltage_unit : "1V";
+	current_unit : "1mA";
+	pulling_resistance_unit : "1kohm";
+	capacitive_load_unit(1,"pf");
+	leakage_power_unit : "1pW";
+	default_fanout_load : 1;
+	default_max_fanout : 100;
+	default_inout_pin_cap : 0;
+	default_input_pin_cap : 0;
+	default_output_pin_cap : 0;
+	default_cell_leakage_power : 0;
+	k_process_setup_fall : 0;
+	k_process_setup_rise : 0;
+	k_process_hold_fall : 0;
+	k_process_hold_rise : 0;
+	k_process_recovery_fall : 0;
+	k_process_recovery_rise : 0;
+	k_process_min_period : 0;
+	k_process_min_pulse_width_high : 0;
+	k_process_min_pulse_width_low : 0;
+	k_process_cell_rise : 0;
+	k_process_rise_transition : 0;
+	k_process_cell_fall : 0;
+	k_process_fall_transition : 0;
+	k_process_pin_cap : 0;
+	k_process_wire_cap : 0;
+	k_process_wire_res : 0;
+	k_process_cell_leakage_power : 0;
+	k_process_internal_power : 0;
+	k_temp_setup_fall : 0;
+	k_temp_setup_rise : 0;
+	k_temp_hold_fall : 0;
+	k_temp_hold_rise : 0;
+	k_temp_min_period : 0;
+	k_temp_min_pulse_width_high : 0;
+	k_temp_min_pulse_width_low : 0;
+	k_temp_recovery_fall : 0;
+	k_temp_recovery_rise : 0;
+	k_temp_cell_rise : 0;
+	k_temp_rise_transition : 0;
+	k_temp_cell_fall : 0;
+	k_temp_fall_transition : 0;
+	k_temp_pin_cap : 0;
+	k_temp_wire_cap : 0;
+	k_temp_wire_res : 0;
+	k_temp_cell_leakage_power : 0;
+	k_temp_internal_power : 0;
+	k_volt_setup_fall : 0;
+	k_volt_setup_rise : 0;
+	k_volt_hold_fall : 0;
+	k_volt_hold_rise : 0;
+	k_volt_min_period : 0;
+	k_volt_min_pulse_width_high : 0;
+	k_volt_min_pulse_width_low : 0;
+	k_volt_recovery_fall : 0;
+	k_volt_recovery_rise : 0;
+	k_volt_cell_rise : 0;
+	k_volt_rise_transition : 0;
+	k_volt_cell_fall : 0;
+	k_volt_fall_transition : 0;
+	k_volt_pin_cap : 0;
+	k_volt_wire_cap : 0;
+	k_volt_wire_res : 0;
+	k_volt_cell_leakage_power : 0;
+	k_volt_internal_power : 0;
+	nom_process : 1;
+	nom_temperature : 125;
+	nom_voltage : 1.012;
+	default_wire_load_mode : "enclosed";
+	library_features("report_delay_calculation");
+	input_threshold_pct_fall : 50;
+	input_threshold_pct_rise : 50;
+	output_threshold_pct_rise : 50;
+	output_threshold_pct_fall : 50;
+	slew_lower_threshold_pct_rise : 20;
+	slew_upper_threshold_pct_rise : 80;
+	slew_lower_threshold_pct_fall : 20;
+	slew_upper_threshold_pct_fall : 80;
+	slew_derate_from_library : 1;
+	operating_conditions ("s_p125_1012v") {
+		process : 1;
+		temperature : 125;
+		voltage : 1.012;
+		tree_type : "best_case_tree";
+	}
+	power_lut_template ("P_LUT") {
+		variable_1 : "input_transition_time";
+		index_1("100");
+	}
+	lu_table_template ("graph1-u_RPSQLPA") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,330,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,1.4");
+	}
+	lu_table_template ("graph1-d_RPSQLPA") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,330,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,1.4");
+	}
+	lu_table_template ("graph2-u_RPSQLPA") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,330,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,1.4");
+	}
+	lu_table_template ("graph2-d_RPSQLPA") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,330,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,1.4");
+	}
+	lu_table_template ("Tmg_zero_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		index_1(" 0.000000 ");
+	}
+	lu_table_template ("Tmg_tSI_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tHI_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tSDM_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tHDM_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tSA_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tHA_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tSW_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tHW_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tSCE_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tHCE_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tSF_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tHF_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tSSLP_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	lu_table_template ("Tmg_tHSLP_RPSQLPA") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,500,1980");
+		index_2("1,100,330,660");
+	}
+	type ("32_DATA") {
+		base_type : "array";
+		data_type : "bit";
+		bit_width : 32;
+		bit_from : 31;
+		bit_to : 0;
+		downto : true;
+	}
+	type ("14_ADDRESS") {
+		base_type : "array";
+		data_type : "bit";
+		bit_width : 14;
+		bit_from : 13;
+		bit_to : 0;
+		downto : true;
+	}
+	type ("6_FUSEOUT") {
+		base_type : "array";
+		data_type : "bit";
+		bit_width : 6;
+		bit_from : 5;
+		bit_to : 0;
+		downto : true;
+	}
+	lu_table_template ("graph1-u_RAM_EFUSE32A") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,220,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,0.935");
+	}
+	lu_table_template ("graph1-d_RAM_EFUSE32A") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,220,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,0.935");
+	}
+	lu_table_template ("graph2-u_RAM_EFUSE32A") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,220,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,0.935");
+	}
+	lu_table_template ("graph2-d_RAM_EFUSE32A") {
+		variable_1 : "input_net_transition";
+		variable_2 : "total_output_net_capacitance";
+		index_1("1,30,55,100,220,660");
+		index_2("0.001,0.00425,0.018,0.034,0.1275,0.425,0.935");
+	}
+	lu_table_template ("Tmg_RAM_EFUSE32A") {
+		variable_1 : "constrained_pin_transition";
+		variable_2 : "related_pin_transition";
+		index_1("1,330,1980");
+		index_2("1,100,220,660");
+	}
+	type ("32_FO") {
+		base_type : "array";
+		data_type : "bit";
+		bit_width : 32;
+		bit_from : 31;
+		bit_to : 0;
+		downto : true;
+	}
+	default_operating_conditions : "s_p125_1012v";
+	cell ("RAM_EFUSE32A") {
+                pg_pin (VDD) {
+                  pg_type : primary_power;
+                  voltage_name : VDD;
+                }
+                pg_pin (VSS) {
+                  pg_type : primary_ground;
+                  voltage_name : VSS;
+                }
+                is_macro_cell : true ;
+		area : 306532;
+		cell_leakage_power : 17401.9;
+		interface_timing : true;
+		dont_use : true;
+		dont_touch : true;
+		pin (VBLOW) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 7.46;
+			fanout_load : 1;
+			max_transition : 1200;
+		}
+		pin (EN) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00186;
+			fanout_load : 1;
+			max_transition : 1200;
+		}
+		pin (SENSE) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00119;
+			fanout_load : 1;
+			max_transition : 400;
+		}
+		pin (WE) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00238;
+			fanout_load : 1;
+			max_transition : 400;
+		}
+		pin (SEL) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.0017;
+			fanout_load : 1;
+			max_transition : 1200;
+		}
+		pin (CLK) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00166;
+			fanout_load : 1;
+			clock : true;
+			min_period : 3696;
+			min_pulse_width_high : 950;
+			min_pulse_width_low : 950;
+			max_transition : 400;
+		}
+		pin (SM) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00171;
+			fanout_load : 1;
+			max_transition : 1200;
+		}
+		pin (SI) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00193;
+			fanout_load : 1;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CLK";
+				when : "!SM";
+				sdf_cond : "SENSEe0andENe1andSMe0andSELe0andVBLOWe0";
+				rise_constraint ("Tmg_RAM_EFUSE32A") {
+					values("100, 100, 100, 100","100, 100, 100, 100","100, 100, 100, 100");
+				}
+				fall_constraint ("Tmg_RAM_EFUSE32A") {
+					values("100, 100, 100, 100","100, 100, 100, 100","100, 100, 100, 100");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CLK";
+				when : "!SM";
+				sdf_cond : "SENSEe0andENe1andSMe0andSELe0andVBLOWe0";
+				rise_constraint ("Tmg_RAM_EFUSE32A") {
+					values("742, 742, 742, 742","742, 742, 742, 742","742, 742, 742, 742");
+				}
+				fall_constraint ("Tmg_RAM_EFUSE32A") {
+					values("742, 742, 742, 742","742, 742, 742, 742","742, 742, 742, 742");
+				}
+			}
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CLK";
+				when : "SM";
+				sdf_cond : "WEe0andSENSEe0andENe1andSMe1andSELe1";
+				rise_constraint ("Tmg_RAM_EFUSE32A") {
+					values("9142, 9142, 9142, 9142","9142, 9142, 9142, 9142","9142, 9142, 9142, 9142");
+				}
+				fall_constraint ("Tmg_RAM_EFUSE32A") {
+					values("9142, 9142, 9142, 9142","9142, 9142, 9142, 9142","9142, 9142, 9142, 9142");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CLK";
+				when : "SM";
+				sdf_cond : "WEe0andSENSEe0andENe1andSMe1andSELe1";
+				rise_constraint ("Tmg_RAM_EFUSE32A") {
+					values("742, 742, 742, 742","742, 742, 742, 742","742, 742, 742, 742");
+				}
+				fall_constraint ("Tmg_RAM_EFUSE32A") {
+					values("742, 742, 742, 742","742, 742, 742, 742","742, 742, 742, 742");
+				}
+			}
+		}
+		pin (SENSO) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+                        power_down_function : "!VDD + VSS";
+			direction : "output";
+			max_capacitance : 0.728;
+			timing () {
+				timing_type : "rising_edge";
+				related_pin : "SENSE";
+				cell_rise ("graph1-u_RAM_EFUSE32A") {
+					values("109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610");
+				}
+				rise_transition ("graph2-u_RAM_EFUSE32A") {
+					values("20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906");
+				}
+				cell_fall ("graph1-d_RAM_EFUSE32A") {
+					values("109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610","109610, 109610, 109610, 109610, 109610, 109610, 109610");
+				}
+				fall_transition ("graph2-d_RAM_EFUSE32A") {
+					values("20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906","20, 28, 69, 116, 400, 1296, 2906");
+				}
+			}
+		}
+		pin (SO) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+                        power_down_function : "!VDD + VSS";
+			direction : "output";
+			max_capacitance : 0.84;
+			timing () {
+				timing_type : "rising_edge";
+				related_pin : "CLK";
+				when : "!SM";
+				sdf_cond : "SM===0";
+				cell_rise ("graph1-u_RAM_EFUSE32A") {
+					values("3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213");
+				}
+				rise_transition ("graph2-u_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+				cell_fall ("graph1-d_RAM_EFUSE32A") {
+					values("3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213","3213, 3213, 3213, 3213, 3213, 3213, 3213");
+				}
+				fall_transition ("graph2-d_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+			}
+			timing () {
+				timing_type : "rising_edge";
+				related_pin : "CLK";
+				when : "SM";
+				sdf_cond : "SM===1";
+				cell_rise ("graph1-u_RAM_EFUSE32A") {
+					values("12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065");
+				}
+				rise_transition ("graph2-u_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+				cell_fall ("graph1-d_RAM_EFUSE32A") {
+					values("12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065","12065, 12065, 12065, 12065, 12065, 12065, 12065");
+				}
+				fall_transition ("graph2-d_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+			}
+			timing () {
+				timing_type : "rising_edge";
+				related_pin : "SI";
+				when : "SM";
+				sdf_cond : "SM===1";
+				cell_rise ("graph1-u_RAM_EFUSE32A") {
+					values("11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634");
+				}
+				rise_transition ("graph2-u_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+				cell_fall ("graph1-d_RAM_EFUSE32A") {
+					values("11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634","11634, 11634, 11634, 11634, 11634, 11634, 11634");
+				}
+				fall_transition ("graph2-d_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+			}
+			timing () {
+				timing_type : "falling_edge";
+				related_pin : "SI";
+				when : "SM";
+				sdf_cond : "SM===1";
+				cell_rise ("graph1-u_RAM_EFUSE32A") {
+					values("11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630");
+				}
+				rise_transition ("graph2-u_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+				cell_fall ("graph1-d_RAM_EFUSE32A") {
+					values("11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630","11630, 11630, 11630, 11630, 11630, 11630, 11630");
+				}
+				fall_transition ("graph2-d_RAM_EFUSE32A") {
+					values("16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2","16.8, 25.5, 62.1, 105.1, 360.2, 1171.8, 2573.2");
+				}
+			}
+		}
+		bus (FO) {
+			bus_type : "32_FO";
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+                        power_down_function : "!VDD + VSS";
+			direction : "output";
+			max_capacitance : 0.835;
+			timing () {
+				timing_type : "rising_edge";
+				related_pin : "SENSE";
+				cell_rise ("graph1-u_RAM_EFUSE32A") {
+					values("299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702");
+				}
+				rise_transition ("graph2-u_RAM_EFUSE32A") {
+					values("16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3");
+				}
+				cell_fall ("graph1-d_RAM_EFUSE32A") {
+					values("299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702","299702, 299702, 299702, 299702, 299702, 299702, 299702");
+				}
+				fall_transition ("graph2-d_RAM_EFUSE32A") {
+					values("16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3");
+				}
+				retaining_rise ("graph1-u_RAM_EFUSE32A") {
+					values("2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312");
+				}
+				retain_rise_slew ("graph2-u_RAM_EFUSE32A") {
+					values("16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3");
+				}
+				retaining_fall ("graph1-d_RAM_EFUSE32A") {
+					values("2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312","2312, 2312, 2312, 2312, 2312, 2312, 2312");
+				}
+				retain_fall_slew ("graph2-d_RAM_EFUSE32A") {
+					values("16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3","16.5, 24.5, 60.6, 103.6, 359.7, 1176, 2576.3");
+				}
+			}
+		}
+	}
+	cell (RAM16384X32) {
+                pg_pin (VDD) {
+                  pg_type : primary_power;
+                  voltage_name : VDD;
+                }
+                pg_pin (VSS) {
+                  pg_type : primary_ground;
+                  voltage_name : VSS;
+                }
+                is_macro_cell : true ;
+		area : 1.15363e+07;
+		cell_leakage_power : 3.14345e+08;
+		interface_timing : true;
+		dont_use : true;
+		dont_touch : true;
+		leakage_power () {
+			when : "SLP";
+			value : 3.83473e+08;
+		}
+		leakage_power () {
+			when : "!SLP";
+			value : 2.45219e+08;
+		}
+		bus (I) {
+			bus_type : "32_DATA";
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00261;
+			fanout_load : 1;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tSI_RPSQLPA") {
+					values("50,50,50,50","50,50,50,50","132,99,50,50");
+				}
+				fall_constraint ("Tmg_tSI_RPSQLPA") {
+					values("50,50,50,50","50,50,50,50","132,99,50,50");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tHI_RPSQLPA") {
+					values("715,757,855,989","634,677,775,909","666,707,799,923");
+				}
+				fall_constraint ("Tmg_tHI_RPSQLPA") {
+					values("715,757,855,989","634,677,775,909","666,707,799,923");
+				}
+			}
+			memory_write () {
+				address : "IA";
+				clocked_on : "CK";
+			}
+		}
+		bus (DM) {
+			bus_type : "32_DATA";
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.0026;
+			fanout_load : 1;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tSDM_RPSQLPA") {
+					values("50,50,50,50","50,50,50,50","132,99,50,50");
+				}
+				fall_constraint ("Tmg_tSDM_RPSQLPA") {
+					values("50,50,50,50","50,50,50,50","132,99,50,50");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tHDM_RPSQLPA") {
+					values("715,757,855,989","634,677,775,909","666,707,799,923");
+				}
+				fall_constraint ("Tmg_tHDM_RPSQLPA") {
+					values("715,757,855,989","634,677,775,909","666,707,799,923");
+				}
+			}
+		}
+		bus (IA) {
+			bus_type : "14_ADDRESS";
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00361;
+			fanout_load : 1;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tSA_RPSQLPA") {
+					values("77,50,50,50","243,212,142,53","495,464,395,305");
+				}
+				fall_constraint ("Tmg_tSA_RPSQLPA") {
+					values("77,50,50,50","243,212,142,53","495,464,395,305");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tHA_RPSQLPA") {
+					values("433,476,573,709","333,376,474,610","300,342,440,578");
+				}
+				fall_constraint ("Tmg_tHA_RPSQLPA") {
+					values("433,476,573,709","333,376,474,610","300,342,440,578");
+				}
+			}
+		}
+		pin (WE) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00241;
+			fanout_load : 1;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tSW_RPSQLPA") {
+					values("77,50,50,50","243,212,142,53","495,464,395,305");
+				}
+				fall_constraint ("Tmg_tSW_RPSQLPA") {
+					values("77,50,50,50","243,212,142,53","495,464,395,305");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tHW_RPSQLPA") {
+					values("433,476,573,709","333,376,474,610","300,342,440,578");
+				}
+				fall_constraint ("Tmg_tHW_RPSQLPA") {
+					values("433,476,573,709","333,376,474,610","300,342,440,578");
+				}
+			}
+		}
+		bus (FO) {
+			bus_type : "6_FUSEOUT";
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.0045;
+			fanout_load : 1;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tSF_RPSQLPA") {
+					values("100000,100000,100000,100000","100000,100000,100000,100000","100000,100000,100000,100000");
+				}
+				fall_constraint ("Tmg_tSF_RPSQLPA") {
+					values("100000,100000,100000,100000","100000,100000,100000,100000","100000,100000,100000,100000");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tHF_RPSQLPA") {
+					values("40000,40000,40000,40000","40000,40000,40000,40000","40000,40000,40000,40000");
+				}
+				fall_constraint ("Tmg_tHF_RPSQLPA") {
+					values("40000,40000,40000,40000","40000,40000,40000,40000","40000,40000,40000,40000");
+				}
+			}
+		}
+		pin (CK) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00609;
+			fanout_load : 1;
+			clock : true;
+			min_period : 5444;
+			min_pulse_width_high : 1498;
+			min_pulse_width_low : 1522;
+			max_transition : 400;
+			internal_power () {
+				when : "!CE&!WE";
+				rise_power ("P_LUT") {
+					values("41.7117");
+				}
+				fall_power ("P_LUT") {
+					values("0");
+				}
+			}
+			internal_power () {
+				when : "!CE&WE";
+				rise_power ("P_LUT") {
+					values("32.7753");
+				}
+				fall_power ("P_LUT") {
+					values("0");
+				}
+			}
+		}
+		pin (CE) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00231;
+			fanout_load : 1;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tSCE_RPSQLPA") {
+					values("364,419,545,727","520,574,701,882","767,821,947,1129");
+				}
+				fall_constraint ("Tmg_tSCE_RPSQLPA") {
+					values("364,419,545,727","520,574,701,882","767,821,947,1129");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tHCE_RPSQLPA") {
+					values("232,271,354,454","146,184,265,364","128,167,249,346");
+				}
+				fall_constraint ("Tmg_tHCE_RPSQLPA") {
+					values("232,271,354,454","146,184,265,364","128,167,249,346");
+				}
+			}
+		}
+		pin (SLP) {
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+			direction : "input";
+			capacitance : 0.00241;
+			fanout_load : 1;
+			min_pulse_width_high : 3000;
+			min_pulse_width_low : 3000;
+			max_transition : 1200;
+			timing () {
+				timing_type : "setup_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tSSLP_RPSQLPA") {
+					values("50000,50000,50000,50000","50000,50000,50000,50000","50000,50000,50000,50000");
+				}
+				fall_constraint ("Tmg_tSSLP_RPSQLPA") {
+					values("50000,50000,50000,50000","50000,50000,50000,50000","50000,50000,50000,50000");
+				}
+			}
+			timing () {
+				timing_type : "hold_rising";
+				related_pin : "CK";
+				rise_constraint ("Tmg_tHSLP_RPSQLPA") {
+					values("30000,30000,30000,30000","30000,30000,30000,30000","30000,30000,30000,30000");
+				}
+				fall_constraint ("Tmg_tHSLP_RPSQLPA") {
+					values("30000,30000,30000,30000","30000,30000,30000,30000","30000,30000,30000,30000");
+				}
+			}
+		}
+		bus (A) {
+			bus_type : "32_DATA";
+                        related_power_pin : VDD;
+                        related_ground_pin : VSS;
+                        power_down_function : "!VDD + VSS";
+			direction : "output";
+			max_capacitance : 1.18199;
+			timing () {
+				timing_type : "rising_edge";
+				related_pin : "CK";
+				cell_rise ("graph1-u_RPSQLPA") {
+					values("5138,5143,5166,5185,5295,5635,6750","5146,5152,5175,5194,5303,5643,6758","5154,5159,5182,5201,5311,5651,6766","5168,5174,5197,5216,5325,5665,6780","5250,5256,5279,5298,5407,5747,6862","5353,5358,5381,5400,5509,5849,6964");
+				}
+				rise_transition ("graph2-u_RPSQLPA") {
+					values("29,34,56,83,244,788,2579","29,34,56,83,244,788,2579","29,34,55,83,244,788,2579","29,34,55,83,244,788,2579","29,34,55,83,244,788,2579","29,34,55,83,244,788,2579");
+				}
+				cell_fall ("graph1-d_RPSQLPA") {
+					values("5106,5113,5140,5158,5259,5560,6546","5115,5122,5148,5166,5268,5568,6554","5123,5129,5156,5174,5275,5576,6562","5138,5144,5171,5189,5290,5591,6577","5221,5227,5254,5272,5373,5674,6660","5322,5328,5355,5373,5474,5775,6761");
+				}
+				fall_transition ("graph2-d_RPSQLPA") {
+					values("36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264");
+				}
+				retaining_rise ("graph1-u_RPSQLPA") {
+					values("3848,3852,3869,3884,3968,4227,5077","3855,3859,3876,3891,3975,4234,5084","3861,3865,3883,3897,3981,4241,5090","3873,3877,3894,3909,3993,4252,5102","3936,3940,3958,3972,4056,4316,5165","4013,4017,4035,4049,4133,4392,5242");
+				}
+				retain_rise_slew ("graph2-u_RPSQLPA") {
+					values("29,34,56,83,244,788,2579","29,34,56,83,244,788,2579","29,34,55,83,244,788,2579","29,34,55,83,244,788,2579","29,34,55,83,244,788,2579","29,34,55,83,244,788,2579");
+				}
+				retaining_fall ("graph1-d_RPSQLPA") {
+					values("3829,3835,3855,3869,3946,4175,4927","3836,3841,3862,3876,3953,4182,4933","3842,3847,3868,3882,3959,4188,4939","3853,3858,3879,3893,3970,4199,4951","3916,3921,3942,3956,4033,4262,5014","3993,3998,4019,4033,4110,4339,5091");
+				}
+				retain_fall_slew ("graph2-d_RPSQLPA") {
+					values("36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264","36,42,64,85,215,691,2264");
+				}
+			}
+			memory_read () {
+				address : "IA";
+			}
+		}
+		memory () {
+			type : "ram";
+			address_width : 14;
+			word_width : 32;
+		}
+	}
+}

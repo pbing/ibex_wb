@@ -1,0 +1,15 @@
+
+IDDSINH : LIB=RAM16384X32
+        : CONDITION="SLP != 1",
+          "RAM Cell Sleep Mode is prohibition."
+        ;
+
+IDDSINH : LIB=RAM_EFUSE32A
+        : CONDITION="WE != 0 && EN != 0",
+          "Redundancy E-Fuse WE!=L(/WE/) and EN!=L(/EN/) is prohibit"
+        : CONDITION="SENSE != 0",
+          "Redundancy E-Fuse SENSE!=L(/SENSE/) is prohibit"
+        : CONDITION="VBLOW != 0",
+          "Redundancy E-Fuse VBLOW!=L(/VBLOW/) is prohibit"
+        ;
+

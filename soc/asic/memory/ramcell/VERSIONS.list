@@ -1,0 +1,188 @@
+===================================================================
+Mon Nov 25 09:01:53 CET 2019
+--------------- Programs ---------------
+
+charam Ver.4.02 2017.04.26
+All Rights Reserved, Copyright (c) MIE FUJITSU SEMICONDUCTOR LTD. 2015-2017
+
+LccBasil Ver.1.00  Date 2005.07.20
+
+LccBot Ver.1.00  Date 2005.07.20
+
+LccCeltic.pl Ver 1.07  Date 2004.11.18
+
+LccFglib Ver.2.03  Date 2009.09.28
+
+LccFuse Ver.1.07  Date 2013.04.01
+
+LccFv.pl Ver 2.00  Date 2007.08.06
+
+LccMerge Ver.4.02  Date 2017.04.26
+
+LccPslib Ver.2.03  Date 2007.04.12
+
+LccSpecsheet Ver.1.00  Date 2005.07.20
+
+LccWBC Ver.1.00  Date 2005.07.20
+
+PccBB Ver.1.01  Date 2008.05.07
+
+PccCasper Ver.1.00  Date 2005.07.20
+
+PccLEF Ver.1.06  Date 2008.01.24
+
+PccLefMerge.pl : Ver 1.03  Date 2004.07.08
+
+PccModiMol Ver.0.02  Date 2013.04.01
+
+PccSprundle Ver.1.00  Date 2005.07.20
+
+RccClean Ver.2.03  Date 2008.11.11
+
+RccInitTmp Ver.2.02  Date 2008.05.07
+
+RccVersion Ver.1.03  Date 2008.03.11
+
+LccCellMerge 3.01 2014.11.28 / posy 2.02 2008.02.07
+All Rights Reserved, Copyright (c) MIE FUJITSU SEMICONDUCTOR LTD. 2017
+
+LccHtml 3.01 2014.11.28 / posy 2.02 2008.02.07
+All Rights Reserved, Copyright (c) MIE FUJITSU SEMICONDUCTOR LTD. 2017
+
+LccWBCons V3.01 2014.11.28 / posy 2.02 2008.02.07
+All Rights Reserved, Copyright (c) MIE FUJITSU SEMICONDUCTOR LTD. 2017
+
+libValBottom 3.01 2014.11.28 / posy 2.02 2008.02.07
+All Rights Reserved, Copyright (c) MIE FUJITSU SEMICONDUCTOR LTD. 2017
+
+rccLic 3.01 2014.11.28 / posy 2.02 2008.02.07
+All Rights Reserved, Copyright (c) MIE FUJITSU SEMICONDUCTOR LTD. 2017
+
+basil : Ver.01.39 Date 2014/11/18
+
+nutmeg : Ver.1.82 Date 2014/11/14
+
+bb_casper : Version [ V01L10 ], Date [ 2014/12/02 ].
+
+      **************************************************
+      *                                                *
+      *      bb_mif_generater  V01/L16  2004-11/08(Mon)         *
+      *     (c) MIE FUJITSU SEMICONDUCTOR LTD. 2017    *
+      *    All Rights Reserved. Licensed Software.     *
+      *                                                *
+      **************************************************
+
+
+ Version - [V01L16]  Date - [2005/05/19] 
+
+ LIGEN - Version number [V03.L11], date [03/10/09].
+
+mol2lef : V03/L17(2004/01/16)
+
+ palm - Version number [V3.9.16], date [03/10/31].
+
+PICASO : Version number [ V05L17 ], date[ 05/10/13 ]
+
+--------------- Data -------------------
+conf/VERSION
+# Revision : 0014 , Date : 2015/11/27                 #
+
+conf/charam.conf
+# Revision : 0013 , Date : 2015/11/27                 #
+
+............... rpsqlpa ...............
+conf/rpsqlpa.funcdef
+# Revision : 0004 , Date : 2014/04/15                #
+
+
+dc/rpsqlpa
+# Revision : 0002 , Date : 2017/04/18 rpsqlpa      #
+
+BPF:
+    cs251.common.bpf : 0010
+    cs251.rpsqlpa.bpf : 0001
+
+celtic/udn_best.rpsqlpa.card
+% Revision : 0001 , Date : 2013/04/12                %
+
+celtic/udn_worst.rpsqlpa.card
+% Revision : 0001 , Date : 2013/04/12                %
+
+veri/v.rpsqp.tlib
+% Revision : 0003 , Date : 2017/04/26                               %
+
+nutmeg/rpsqp.pinpara
+% Revision : 0001 , Date : 2012/04/16                %
+
+crtv/crtv.rpsqp.tlib
+% Revision : 0001,  Date : 2012/04/16                    %
+
+palm.crd.bulk
+/* REVISION : 0001 ;  DATE : 12/03/06 ; */
+
+pcomp/rpsqlpa/picaso.rpsqlpa.card
+# Revision : 0001 ,  Date : 2013/04/12                                #
+
+mol/rpsqp.ModiMol
+# Revision : 0001 , Date : 2012/04/16                #
+
+mbist/mbist.rpsqp.tlib
+% Revision : 0002 ,  Date : 2017/04/26 %
+
+mbist/uda_rs.rpsqp.tlib
+% Revision : 0002 ,  Date : 2017/04/26 %
+
+mbist/func_rs.rpsqp.tlib
+% Revision : 0002 ,  Date : 2017/04/26 %
+
+fastscan/atpg.rpsqp.tlib
+% Revision : 0002 ,  Date : 2017/04/26                                 %
+
+pum/pum.rpsqlpa.tlib
+% Revision : 0002,  Date : 2013/06/10                            %
+% ram16384x32.smp %
+STAMP :
+HISTORY =
+"SYSTEM-BankBase,"
+"PROG-bb_casper-V01L10,"
+"LIB-cs251.common.bpf-0010,"
+"LIB-cs251.rpsqlpa.bpf-0001,"
+"PROG-picaso-V05L17,"
+"LIB-cs251.rpsqlpa.GDS_LIB-0001,"
+"LIB-cs251.rpsqlpa.picaso.card-0001";
+
+CS251/fuse/RAM_EFUSE32A.v
+% Revision : 0007 ,  Date : 2017/04/26  RAM_EFUSE32A         %
+
+CS251/fuse/RAM_EFUSE32A.crtv
+% Revision : 0001,  Date : 2013/02/07                    %
+
+CS251/fuse/RAM_EFUSE32A.atpg
+% Revision : 0001,  Date : 2013/05/27                    %
+
+CS251/fuse/RAM_EFUSE32A.lef
+% Revision : 0001 ,  Date : 2012/09/22 ram_efuse32 %
+
+dc/ram_efuse32a
+# Revision : 0001 , Date : 2012/10/31 ram_efuse32a #
+CS251/fuse/udn_best.ram_efuse32a.card
+% Revision : 0001 , Date : 2012/07/27                %
+
+CS251/fuse/udn_worst.ram_efuse32a.card
+% Revision : 0001 , Date : 2012/07/27                %
+
+CS251/fuse/udn_nonirworst.ram_efuse32a.card
+% Revision : 0001 , Date : 2012/07/27                %
+
+CS251/fuse/udn_bestHT.ram_efuse32a.card
+% Revision : 0001 , Date : 2012/07/27                %
+
+CS251/fuse/udn_worstLT.ram_efuse32a.card
+% Revision : 0001 , Date : 2012/07/27                %
+
+CS251/fuse/udn_nonirworstLT.ram_efuse32a.card
+% Revision : 0001 , Date : 2012/07/27                %
+
+CS251/fuse/ram_efuse32a.pinpara
+% Revision : 0001 ,  Date : 2012/10/19  ram_efuse32a %
+

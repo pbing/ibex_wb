@@ -1,0 +1,90 @@
+// **************************************************************
+// ***                                                        ***
+// *** 1RW RAM wth SLP MBIST Library                          ***
+// *** Copyright (c) MIE FUJITSU SEMICONDUCTOR Limited, 2017  ***
+// *** All Rights Reserved. Licensed Library.                 ***
+// ***                                                        ***
+// **************************************************************
+//   Revision   0001   Date 2013.02.25  K.Kawazoe
+//                     New Release
+//
+//   Revision   0002   Date 2017.04.26  K.Kasuga
+//                     The Copyright was changed.
+//
+
+model RAM16384X32 (A, I, IA, DM, CK, CE, WE, FO, SLP)
+(
+    bist_definition  (
+    address IA (array = 13 : 0;);
+    data_in I  (array = 31 : 0;);
+    data_out A (array = 31 : 0;);
+    clock CK high;
+    chip_enable CE low;
+    write_enable WE low;
+    write_enable DM (array = 31 : 0;) low;
+    write_enable_map DM(31) I(31);
+      write_enable_map DM(30) I(30);
+      write_enable_map DM(29) I(29);
+      write_enable_map DM(28) I(28);
+      write_enable_map DM(27) I(27);
+      write_enable_map DM(26) I(26);
+      write_enable_map DM(25) I(25);
+      write_enable_map DM(24) I(24);
+      write_enable_map DM(23) I(23);
+      write_enable_map DM(22) I(22);
+      write_enable_map DM(21) I(21);
+      write_enable_map DM(20) I(20);
+      write_enable_map DM(19) I(19);
+      write_enable_map DM(18) I(18);
+      write_enable_map DM(17) I(17);
+      write_enable_map DM(16) I(16);
+      write_enable_map DM(15) I(15);
+      write_enable_map DM(14) I(14);
+      write_enable_map DM(13) I(13);
+      write_enable_map DM(12) I(12);
+      write_enable_map DM(11) I(11);
+      write_enable_map DM(10) I(10);
+      write_enable_map DM(9) I(9);
+      write_enable_map DM(8) I(8);
+      write_enable_map DM(7) I(7);
+      write_enable_map DM(6) I(6);
+      write_enable_map DM(5) I(5);
+      write_enable_map DM(4) I(4);
+      write_enable_map DM(3) I(3);
+      write_enable_map DM(2) I(2);
+      write_enable_map DM(1) I(1);
+      write_enable_map DM(0) I(0);
+      dont_touch FO (array = 5 : 0;) high;
+    dont_touch SLP low;
+
+        version = "0001";
+        message = "1RW-RAM [Redundancy # External FUSE][LargeScale][Sleep]<Standard>";
+        min_address = 0;
+        max_address = 16383;
+        top_column  = 16 ;
+        top_word    = 1;
+
+        read_write_port (
+            read_cycle(
+                change IA;
+                assert CE;
+                wait;
+                assert CK;
+                wait;
+                expect A move;
+                wait;
+            )
+            write_cycle(
+                change IA;
+                change I;
+                assert WE;
+                assert CE;
+                assert DM;
+                wait;
+                assert CK;
+                wait;
+            )
+        ) // read_write_port
+
+    ) // bist_definition
+)

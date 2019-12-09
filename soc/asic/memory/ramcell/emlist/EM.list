@@ -1,0 +1,17 @@
+# EM limit control list
+
+# life   range : 0 < year <= 11.4
+# em_life_year  11.4
+
+# EM temperature   range : -40 <= temp <= 125
+# em_temp  125
+
+# EM activity default  range : 0 < act <= 1
+# em_activity_default  1
+
+# EM activity   range : 0 < act <= 1
+# em_activity  CELLNAME  act
+# em_activity  WildCard  act      WildCard is * and ?
+# ex. em_activity  RAMF001   0.9
+# ex. em_activity  RAMF0?A*  0.9
+# em_activity  RAM16384X32               1

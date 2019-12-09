@@ -1,0 +1,88 @@
+*User-Define-Noise file for Memory Macro
+
+.bbox RAM16384X32
++ CK CE WE IA[0] IA[1] IA[2] IA[3] IA[4]
++ IA[5] IA[6] IA[7] IA[8] IA[9] IA[10] IA[11] IA[12]
++ IA[13] I[0] I[1] I[2] I[3] I[4] I[5] I[6]
++ I[7] I[8] I[9] I[10] I[11] I[12] I[13] I[14]
++ I[15] I[16] I[17] I[18] I[19] I[20] I[21] I[22]
++ I[23] I[24] I[25] I[26] I[27] I[28] I[29] I[30]
++ I[31] DM[0] DM[1] DM[2] DM[3] DM[4] DM[5] DM[6]
++ DM[7] DM[8] DM[9] DM[10] DM[11] DM[12] DM[13] DM[14]
++ DM[15] DM[16] DM[17] DM[18] DM[19] DM[20] DM[21] DM[22]
++ DM[23] DM[24] DM[25] DM[26] DM[27] DM[28] DM[29] DM[30]
++ DM[31] SLP FO[0] FO[1] FO[2] FO[3] FO[4] FO[5]
++ A[0] A[1] A[2] A[3] A[4] A[5] A[6] A[7]
++ A[8] A[9] A[10] A[11] A[12] A[13] A[14] A[15]
++ A[16] A[17] A[18] A[19] A[20] A[21] A[22] A[23]
++ A[24] A[25] A[26] A[27] A[28] A[29] A[30] A[31]
+
+bb_set_output -vddres 726 -gndres 492 {\
+ A[0] A[1] A[2] A[3] A[4] A[5] A[6] A[7]\
+ A[8] A[9] A[10] A[11] A[12] A[13] A[14] A[15]\
+ A[16] A[17] A[18] A[19] A[20] A[21] A[22] A[23]\
+ A[24] A[25] A[26] A[27] A[28] A[29] A[30] A[31]};
+
+bb_set_input -vhtolerance  0.42 -vltolerance  0.38 -cap  5.96e-15 {\
+ CK};
+bb_set_input -vhtolerance  0.38 -vltolerance  0.42 -cap  2.06e-15 {\
+ CE};
+bb_set_input -vhtolerance  0.38 -vltolerance  0.42 -cap  2.09e-15 {\
+ WE};
+bb_set_input -vhtolerance  0.38 -vltolerance  0.42 -cap  3.32e-15 {\
+ IA[0] IA[1] IA[2] IA[3] IA[4] IA[5] IA[6] IA[7]\
+ IA[8] IA[9] IA[10] IA[11] IA[12] IA[13]};
+bb_set_input -vhtolerance  0.38 -vltolerance  0.42 -cap  2.33e-15 {\
+ I[0] I[1] I[2] I[3] I[4] I[5] I[6] I[7]\
+ I[8] I[9] I[10] I[11] I[12] I[13] I[14] I[15]\
+ I[16] I[17] I[18] I[19] I[20] I[21] I[22] I[23]\
+ I[24] I[25] I[26] I[27] I[28] I[29] I[30] I[31]};
+bb_set_input -vhtolerance  0.38 -vltolerance  0.42 -cap  2.33e-15 {\
+ DM[0] DM[1] DM[2] DM[3] DM[4] DM[5] DM[6] DM[7]\
+ DM[8] DM[9] DM[10] DM[11] DM[12] DM[13] DM[14] DM[15]\
+ DM[16] DM[17] DM[18] DM[19] DM[20] DM[21] DM[22] DM[23]\
+ DM[24] DM[25] DM[26] DM[27] DM[28] DM[29] DM[30] DM[31]};
+bb_set_input -vhtolerance  0.37 -vltolerance  0.41 -cap  2.09e-15 {\
+ SLP};
+bb_set_input -vhtolerance  0.37 -vltolerance  0.41 -cap  4.96e-15 {\
+ FO[0] FO[1] FO[2] FO[3] FO[4] FO[5]};
+
+.endbb
+*User-Define-Noise file for Memory Macro
+
+.bbox RAM_EFUSE32A
++ VBLOW WE CLK EN SEL SM SENSE SI
++ SO SENSO FO[0] FO[1] FO[2] FO[3] FO[4] FO[5]
++ FO[6] FO[7] FO[8] FO[9] FO[10] FO[11] FO[12] FO[13]
++ FO[14] FO[15] FO[16] FO[17] FO[18] FO[19] FO[20] FO[21]
++ FO[22] FO[23] FO[24] FO[25] FO[26] FO[27] FO[28] FO[29]
++ FO[30] FO[31]
+
+bb_set_output -vddres 664 -gndres 487 {\
+ SO};
+bb_set_output -vddres 664 -gndres 487 {\
+ SENSO};
+bb_set_output -vddres 664 -gndres 487 {\
+ FO[0] FO[1] FO[2] FO[3] FO[4] FO[5] FO[6] FO[7]\
+ FO[8] FO[9] FO[10] FO[11] FO[12] FO[13] FO[14] FO[15]\
+ FO[16] FO[17] FO[18] FO[19] FO[20] FO[21] FO[22] FO[23]\
+ FO[24] FO[25] FO[26] FO[27] FO[28] FO[29] FO[30] FO[31]};
+
+bb_set_input -vhtolerance  0.01 -vltolerance  0.01 -cap  6.96e-12 {\
+ VBLOW};
+bb_set_input -vhtolerance  0.40 -vltolerance  0.38 -cap  1.89e-15 {\
+ WE};
+bb_set_input -vhtolerance  0.39 -vltolerance  0.36 -cap  1.82e-15 {\
+ CLK};
+bb_set_input -vhtolerance  0.40 -vltolerance  0.38 -cap  2.06e-15 {\
+ EN};
+bb_set_input -vhtolerance  0.40 -vltolerance  0.38 -cap  1.89e-15 {\
+ SEL};
+bb_set_input -vhtolerance  0.40 -vltolerance  0.38 -cap  1.89e-15 {\
+ SM};
+bb_set_input -vhtolerance  0.40 -vltolerance  0.38 -cap  1.89e-15 {\
+ SENSE};
+bb_set_input -vhtolerance  0.40 -vltolerance  0.38 -cap  1.89e-15 {\
+ SI};
+
+.endbb

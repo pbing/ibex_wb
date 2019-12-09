@@ -1,0 +1,22 @@
+#-------------------------------------------------------------------------
+# Rev.0003
+#-------------------------------------------------------------------------
+user      bbeuster
+designer  CC
+revision  0001
+module    MEM
+
+#-------------------------------------------------------------------------
+# PTV
+#    corner          p    t    v
+ptv  nominal         t   25  1.2
+ptv  best            f  -40  1.3
+ptv  bestHT          f  125  1.3
+ptv  worst           s  125  1.012
+ptv  worstLT         s  -40  1.012
+ptv  nonirworst      s  125  1.1
+ptv  nonirworstLT    s  -40  1.1
+
+#-------------------------------------------------------------------------
+# macro_name   function      word    bit     column
+RAM16384X32    CSSE1RPSQLPA  16384   32      16   #  1RW-RAM
