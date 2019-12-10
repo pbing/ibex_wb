@@ -1,0 +1,196 @@
+STIL 1.0 { Design 2005; }
+Header {
+   Title "  TetraMAX(R)  P-2019.03-SP5-i20191017_034049 STIL output";
+   Date "Tue Dec 10 10:09:21 2019";
+   History {
+      Ann {*     Uncollapsed Stuck Fault Summary Report *}
+      Ann {* ----------------------------------------------- *}
+      Ann {* fault class                     code   #faults *}
+      Ann {* ------------------------------  ----  --------- *}
+      Ann {* Detected                         DT          0 *}
+      Ann {* Possibly detected                PT          0 *}
+      Ann {* Undetectable                     UD          0 *}
+      Ann {* ATPG untestable                  AU          0 *}
+      Ann {* Not detected                     ND          0 *}
+      Ann {* ----------------------------------------------- *}
+      Ann {* total faults                                 0 *}
+      Ann {* test coverage                             0.00% *}
+      Ann {* ----------------------------------------------- *}
+      Ann {*  *}
+      Ann {*            Pattern Summary Report *}
+      Ann {* ----------------------------------------------- *}
+      Ann {* #internal patterns                           0 *}
+      Ann {* ----------------------------------------------- *}
+      Ann {*  *}
+      Ann {* rule  severity  #fails  description *}
+      Ann {* ----  --------  ------  --------------------------------- *}
+      Ann {* N20   warning        1  underspecified UDP *}
+      Ann {* N21   warning        1  unsupported UDP entry *}
+      Ann {* B7    warning     1308  undriven module output pin *}
+      Ann {* B8    warning     1361  unconnected module input pin *}
+      Ann {* B9    warning     1666  undriven module internal net *}
+      Ann {* B10   warning     1646  unconnected module internal net *}
+      Ann {*  *}
+      Ann {* clock_name        off  period    LE_time  TE_time  meas_time  usage *}
+      Ann {* ----------------  ---  --------  -------  -------  ---------  -------------------------- *}
+      Ann {* xo                 1      100ns       45       55         40  shift_clock  *}
+      Ann {* tck                0      100ns       45       55         40  shift_clock  *}
+      Ann {* ext_rst_n          1      100ns       45       55         40   *}
+      Ann {* trst_n             1      100ns       45       55         40   *}
+      Ann {*  *}
+      Ann {* port_name         constraint_value *}
+      Ann {* ----------------  --------------- *}
+      Ann {* test_en             1 *}
+      Ann {*  *}
+      Ann {* There are no equivalent pins *}
+      Ann {* There are no net connections *}
+      Ann {* top_module_name = ibex_soc *}
+   }
+}
+Signals {
+   "xi" In; "ext_rst_n" In; "tck" In; "trst_n" In; "tms" In; "tdi" In; "test_en" In;
+   "vpd" In; "xo" InOut; "gpio[15]" InOut; "gpio[14]" InOut; "gpio[13]" InOut { ScanOut;
+   } "gpio[12]" InOut { ScanOut; } "gpio[11]" InOut { ScanOut; } "gpio[10]" InOut
+   { ScanOut; } "gpio[9]" InOut { ScanOut; } "gpio[8]" InOut { ScanOut; } "gpio[7]" InOut;
+   "gpio[6]" InOut; "gpio[5]" InOut { ScanIn; } "gpio[4]" InOut { ScanIn; } "gpio[3]" InOut
+   { ScanIn; } "gpio[2]" InOut { ScanIn; } "gpio[1]" InOut { ScanIn; } "gpio[0]" InOut
+   { ScanIn; } "tdo" Out;
+}
+SignalGroups {
+   "_pi" = '"xi" + "xo" + "ext_rst_n" + "gpio[15]" + "gpio[14]" + "gpio[13]" +
+   "gpio[12]" + "gpio[11]" + "gpio[10]" + "gpio[9]" + "gpio[8]" + "gpio[7]" +
+   "gpio[6]" + "gpio[5]" + "gpio[4]" + "gpio[3]" + "gpio[2]" + "gpio[1]" +
+   "gpio[0]" + "tck" + "trst_n" + "tms" + "tdi" + "test_en" + "vpd"' { WFCMap { 0X->0;
+   1X->1; ZX->Z; NX->N; ZH->H; ZL->L; ZT->T; 1Z->1; 0Z->0; PX->P; P1->P; } } // #signals=25
+   "_in" = '"xi" + "ext_rst_n" + "tck" + "trst_n" + "tms" + "tdi" + "test_en" +
+   "vpd"'; // #signals=8
+   "_io" = '"xo" + "gpio[15]" + "gpio[14]" + "gpio[13]" + "gpio[12]" +
+   "gpio[11]" + "gpio[10]" + "gpio[9]" + "gpio[8]" + "gpio[7]" + "gpio[6]" +
+   "gpio[5]" + "gpio[4]" + "gpio[3]" + "gpio[2]" + "gpio[1]" + "gpio[0]"' { WFCMap
+   { 0X->0; 1X->1; ZX->Z; NX->N; ZH->H; ZL->L; ZT->T; 1Z->1; 0Z->0; PX->P; P1->P;
+   } } // #signals=17
+   "_so" = '"gpio[8]" + "gpio[9]" + "gpio[10]" + "gpio[11]" + "gpio[12]" +
+   "gpio[13]"' { ScanOut; } // #signals=6
+   "_po" = '"xo" + "gpio[15]" + "gpio[14]" + "gpio[13]" + "gpio[12]" +
+   "gpio[11]" + "gpio[10]" + "gpio[9]" + "gpio[8]" + "gpio[7]" + "gpio[6]" +
+   "gpio[5]" + "gpio[4]" + "gpio[3]" + "gpio[2]" + "gpio[1]" + "gpio[0]" + "tdo"'
+   { WFCMap { 0X->0; 1X->1; ZX->Z; NX->N; ZH->H; ZL->L; ZT->T; 1Z->1; 0Z->0; PX->P;
+   P1->P; } } // #signals=18
+   "_out" = '"tdo"'; // #signals=1
+   "_default_In_Timing_" = '"xi" + "gpio[15]" + "gpio[14]" + "gpio[13]" +
+   "gpio[12]" + "gpio[11]" + "gpio[10]" + "gpio[9]" + "gpio[8]" + "gpio[7]" +
+   "gpio[6]" + "gpio[5]" + "gpio[4]" + "gpio[3]" + "gpio[2]" + "gpio[1]" +
+   "gpio[0]" + "tms" + "tdi" + "test_en" + "vpd"'; // #signals=21
+   "_default_Out_Timing_" = '"gpio[15]" + "gpio[14]" + "gpio[13]" + "gpio[12]" +
+   "gpio[11]" + "gpio[10]" + "gpio[9]" + "gpio[8]" + "gpio[7]" + "gpio[6]" +
+   "gpio[5]" + "gpio[4]" + "gpio[3]" + "gpio[2]" + "gpio[1]" + "gpio[0]" + "tdo"';
+   // #signals=17
+   "_si" = '"gpio[0]" + "gpio[1]" + "gpio[2]" + "gpio[3]" + "gpio[4]" +
+   "gpio[5]"' { ScanIn; } // #signals=6
+}
+Timing {
+   WaveformTable "_default_WFT_" {
+      Period '100ns';
+      Waveforms {
+         "xo" { P { '0ns' U; '45ns' D; '55ns' U; } }
+         "xo" { 0 { '0ns' D; } }
+         "xo" { 1 { '0ns' U; } }
+         "xo" { T { '0ns' Z; '40ns' T; } }
+         "xo" { X { '0ns' Z; '40ns' X; } }
+         "xo" { H { '0ns' Z; '40ns' H; } }
+         "xo" { Z { '0ns' Z; } }
+         "xo" { L { '0ns' Z; '40ns' L; } }
+         "tck" { 0 { '0ns' D; } }
+         "tck" { P { '0ns' D; '45ns' U; '55ns' D; } }
+         "tck" { 1 { '0ns' U; } }
+         "tck" { Z { '0ns' Z; } }
+         "ext_rst_n" { 0 { '0ns' D; } }
+         "ext_rst_n" { P { '0ns' U; '45ns' D; '55ns' U; } }
+         "ext_rst_n" { 1 { '0ns' U; } }
+         "ext_rst_n" { Z { '0ns' Z; } }
+         "trst_n" { 0 { '0ns' D; } }
+         "trst_n" { P { '0ns' U; '45ns' D; '55ns' U; } }
+         "trst_n" { 1 { '0ns' U; } }
+         "trst_n" { Z { '0ns' Z; } }
+         "_default_In_Timing_" { 0 { '0ns' D; } }
+         "_default_In_Timing_" { 1 { '0ns' U; } }
+         "_default_In_Timing_" { Z { '0ns' Z; } }
+         "_default_In_Timing_" { N { '0ns' N; } }
+         "_default_Out_Timing_" { X { '0ns' Z; } }
+         "_default_Out_Timing_" { H { '0ns' Z; '40ns' H; } }
+         "_default_Out_Timing_" { T { '0ns' Z; '40ns' T; } }
+         "_default_Out_Timing_" { L { '0ns' Z; '40ns' L; } }
+      }
+   }
+}
+ScanStructures {
+   ScanChain "chain0" {
+      ScanIn "gpio[0]";
+      ScanOut "gpio[8]";
+      ScanInversion 0;
+   }
+   ScanChain "chain1" {
+      ScanIn "gpio[1]";
+      ScanOut "gpio[9]";
+      ScanInversion 0;
+   }
+   ScanChain "chain2" {
+      ScanIn "gpio[2]";
+      ScanOut "gpio[10]";
+      ScanInversion 0;
+   }
+   ScanChain "chain3" {
+      ScanIn "gpio[3]";
+      ScanOut "gpio[11]";
+      ScanInversion 0;
+   }
+   ScanChain "chain4" {
+      ScanIn "gpio[4]";
+      ScanOut "gpio[12]";
+      ScanInversion 0;
+   }
+   ScanChain "chain5" {
+      ScanIn "gpio[5]";
+      ScanOut "gpio[13]";
+      ScanInversion 0;
+   }
+}
+PatternBurst "_burst_" {
+   PatList { "_pattern_" {
+   }
+}}
+PatternExec {
+   PatternBurst "_burst_";
+}
+Procedures {
+   "load_unload" {
+      W "_default_WFT_";
+      C { "gpio[4]"=Z; "gpio[13]"=Z; "gpio[3]"=Z; "gpio[9]"=Z; "gpio[12]"=Z; "gpio[2]"=Z; "gpio[8]"=Z; 
+         "gpio[11]"=Z; "gpio[1]"=Z; "gpio[10]"=Z; "gpio[0]"=Z; "gpio[5]"=Z; "xo"=1; "tck"=0; "ext_rst_n"=1; 
+         "trst_n"=1; "gpio[6]"=1; "test_en"=1; }
+      Shift {          W "_default_WFT_";
+         V { "_si"=######; "_so"=######; "xo"=P; "tck"=P; }
+      }
+   }
+   "multiclock_capture" { W "_default_WFT_";
+      F { "test_en"=1; "tdo"=X; }
+      V { "_pi"=\j \r25 #; "_po"=\j \r18 #; }}
+   "allclock_capture" { W "_default_WFT_";
+      F { "test_en"=1; "tdo"=X; }
+      V { "_pi"=\j \r25 #; "_po"=\j \r18 #; }}
+   "allclock_launch" { W "_default_WFT_";
+      F { "test_en"=1; "tdo"=X; }
+      V { "_pi"=\j \r25 #; "_po"=\j \r18 #; }}
+   "allclock_launch_capture" { W "_default_WFT_";
+      F { "test_en"=1; "tdo"=X; }
+      V { "_pi"=\j \r25 #; "_po"=\j \r18 #; }}
+}
+MacroDefs {
+   "test_setup" {
+      W "_default_WFT_";
+      C { "xo"=Z; "gpio[15]"=Z; "gpio[14]"=Z; "gpio[13]"=Z; "gpio[12]"=Z; "gpio[11]"=Z; "gpio[10]"=Z; 
+         "gpio[9]"=Z; "gpio[8]"=Z; "gpio[7]"=Z; "gpio[6]"=Z; "gpio[5]"=Z; "gpio[4]"=Z; "gpio[3]"=Z; 
+         "gpio[2]"=Z; "gpio[1]"=Z; "gpio[0]"=Z; }
+      V { "test_en"=1; "xo"=1; "tck"=0; "ext_rst_n"=1; "trst_n"=1; }
+   }
+}

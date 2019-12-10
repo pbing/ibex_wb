@@ -1,0 +1,9 @@
+*.log
+*.log.*
+README.TMAX-RM.txt
+Release_Notes.TMAX-RM.txt
+TMAX-RM*.tar
+TMAX-RMsettings.txt
+reports/
+results/
+temp_*.spf
