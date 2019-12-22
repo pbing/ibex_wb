@@ -1,0 +1,40 @@
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_TOOL_NAME "Qsys"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_TOOL_VERSION "19.1"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_TOOL_ENV "Qsys"
+set_global_assignment -library "fpga_clock_gating" -name SOPCINFO_FILE [file join $::quartus(qip_path) "../../fpga_clock_gating.sopcinfo"]
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name SLD_INFO "QSYS_NAME fpga_clock_gating HAS_SOPCINFO 1 GENERATION_ID 1577016059"
+set_global_assignment -library "fpga_clock_gating" -name MISC_FILE [file join $::quartus(qip_path) "../fpga_clock_gating.cmp"]
+set_global_assignment -library "fpga_clock_gating" -name SLD_FILE [file join $::quartus(qip_path) "fpga_clock_gating.debuginfo"]
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_TARGETED_DEVICE_FAMILY "Cyclone V"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_GENERATED_DEVICE_FAMILY "{Cyclone V}"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_QSYS_MODE "STANDALONE"
+set_global_assignment -name SYNTHESIS_ONLY_QIP ON
+set_global_assignment -library "fpga_clock_gating" -name MISC_FILE [file join $::quartus(qip_path) "../../fpga_clock_gating.qsys"]
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_NAME "ZnBnYV9jbG9ja19nYXRpbmc="
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_DISPLAY_NAME "ZnBnYV9jbG9ja19nYXRpbmc="
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_REPORT_HIERARCHY "On"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_INTERNAL "Off"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_VERSION "MS4w"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "QVVUT19HRU5FUkFUSU9OX0lE::MTU3NzAxNjA1OQ==::QXV0byBHRU5FUkFUSU9OX0lE"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfRkFNSUxZ::Q3ljbG9uZSBW::QXV0byBERVZJQ0VfRkFNSUxZ"
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0U=::NUNHWEZDNUM2RjI3Qzc=::QXV0byBERVZJQ0U="
+set_global_assignment -entity "fpga_clock_gating" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "QVVUT19ERVZJQ0VfU1BFRURHUkFERQ==::N19INg==::QXV0byBERVZJQ0VfU1BFRURHUkFERQ=="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_NAME "ZnBnYV9jbG9ja19nYXRpbmdfYWx0Y2xrY3RybF8w"
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_DISPLAY_NAME "QUxUQ0xLQ1RSTCBJbnRlbCBGUEdBIElQ"
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_REPORT_HIERARCHY "Off"
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_INTERNAL "Off"
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_AUTHOR "SW50ZWwgQ29ycG9yYXRpb24="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_VERSION "MTkuMQ=="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "REVWSUNFX0ZBTUlMWQ==::Q3ljbG9uZSBW::RGV2aWNlIEZhbWlseQ=="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "Q0xPQ0tfVFlQRQ==::MQ==::SG93IGRvIHlvdSB3YW50IHRvIHVzZSB0aGUgQUxUQ0xLQ1RSTD8="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "TlVNQkVSX09GX0NMT0NLUw==::MQ==::SG93IG1hbnkgY2xvY2sgaW5wdXRzIHdvdWxkIHlvdSBsaWtlPw=="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "RU5BX1JFR0lTVEVSX01PREU=::MQ==::SG93IGRvIHlvdSB3YW50IHRvIHJlZ2lzdGVyIHRoZSAnZW5hJyBwb3J0Pw=="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "R1VJX1VTRV9FTkE=::dHJ1ZQ==::Q3JlYXRlICdlbmEnIHBvcnQgdG8gZW5hYmxlIG9yIGRpc2FibGUgdGhlIGNsb2NrIG5ldHdvcmsgZHJpdmVuIGJ5IHRoaXMgYnVmZmVyPw=="
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_COMPONENT_PARAMETER "VVNFX0dMSVRDSF9GUkVFX1NXSVRDSF9PVkVSX0lNUExFTUVOVEFUSU9O::ZmFsc2U=::RW5zdXJlIGdsaXRjaC1mcmVlIHN3aXRjaG92ZXIgaW1wbGVtZW50YXRpb24="
+
+set_global_assignment -library "fpga_clock_gating" -name VERILOG_FILE [file join $::quartus(qip_path) "fpga_clock_gating.v"]
+set_global_assignment -library "fpga_clock_gating" -name VERILOG_FILE [file join $::quartus(qip_path) "submodules/fpga_clock_gating_altclkctrl_0.v"]
+
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_TOOL_NAME "altclkctrl"
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_TOOL_VERSION "19.1"
+set_global_assignment -entity "fpga_clock_gating_altclkctrl_0" -library "fpga_clock_gating" -name IP_TOOL_ENV "Qsys"
