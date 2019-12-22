@@ -101,8 +101,8 @@ module ibex_soc
    wb_interconnect_sharedbus
      #(.numm      (3),
        .nums      (3),
-       .base_addr ({dm_base_addr, ram_base_addr, led_base_addr}),
-       .size      ({dm_size, ram_size, led_size}))
+       .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
+       .size      ('{dm_size, ram_size, led_size}))
    wb_intercon
      (.*);
 

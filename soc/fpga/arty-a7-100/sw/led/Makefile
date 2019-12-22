@@ -48,11 +48,11 @@ $(PROGRAM).elf: $(OBJS) $(LINKER_SCRIPT)
 %.vmem: %.hex
 	$(HEX2VMEM) $< > $@
 
+%.mif: %.hex
+	$(HEX2MIF) $< > $@
+
 %.hex: %.elf
 	$(OBJCOPY) -O verilog --interleave-width=4 --interleave=4 --byte=0 $< $@
-
-%.bin: %.elf
-	$(OBJCOPY) -O binary $< $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -MMD -c $(INCS) -o $@ $<

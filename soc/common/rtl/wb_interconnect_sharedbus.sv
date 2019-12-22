@@ -6,12 +6,12 @@
 `default_nettype none
 
 module wb_interconnect_sharedbus
-  #(parameter numm = 1,               // number of masters
-    parameter nums = 1,               // number of slaves
-    parameter [31:0] base_addr[nums] = '{0}, // base addresses of slaves
-    parameter [31:0] size[nums]      = '{0}) // address size of slaves
-   (wb_if.slave  wbm[numm],           // Wishbone master interfaces
-    wb_if.master wbs[nums]);          // Wishbone slave interfaces
+  #(parameter numm = 1,                          // number of masters
+    parameter nums = 1,                          // number of slaves
+    parameter bit [31:0] base_addr[nums] = '{0}, // base addresses of slaves
+    parameter bit [31:0] size[nums]      = '{0}) // address size of slaves
+   (wb_if.slave  wbm[numm],                      // Wishbone master interfaces
+    wb_if.master wbs[nums]);                     // Wishbone slave interfaces
    logic               cyc, stb, we, ack, err, stall;
    logic [31:0]        adr;
    logic [3:0]         sel;
