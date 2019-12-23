@@ -46,9 +46,11 @@ module ibex_soc
    logic          dmi_resp_valid;
    logic          dmi_resp_ready;
    dm::dmi_resp_t dmi_resp;
+   logic          tdo_o;
    logic          tdo_oe;
 
    assign rst = ~rst_n;
+   assign tdo = tdo_oe ? tdo_o : 1'bz;
 
    wb_if wbm[3](.*);
    wb_if wbs[3](.*);
@@ -95,7 +97,7 @@ module ibex_soc
       .tms_i            (tms),
       .trst_ni          (trst_n),
       .td_i             (tdi),
-      .td_o             (tdo),
+      .td_o             (tdo_o),
       .tdo_oe_o         (tdo_oe));
 
    wb_interconnect_sharedbus
