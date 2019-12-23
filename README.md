@@ -47,12 +47,12 @@ Simulated with Synopsys VCS.
 ### Intel/Cyclone-V
 [Cyclone V GX Starter Kit](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=167&No=830)
 
-For Quartus 19.1 use branch `fpga_quartus`.
+For Quartus 19.1 use branch `ibex/fpga_quartus`.
 
 ### Xilinx/Artix-7
 [Arty A7-100T](https://www.xilinx.com/products/boards-and-kits/1-w51quh.html)
 
-For Vivado 2019 use branch `master`.
+For Vivado 2019.2 use branch `ibex/master`.
 
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)
