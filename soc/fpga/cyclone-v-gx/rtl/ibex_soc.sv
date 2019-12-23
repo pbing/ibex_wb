@@ -4,7 +4,7 @@
 //`define ENABLE_HSMC_XCVR
 //`define ENABLE_SMA
 //`define ENABLE_REFCLK
-//`define ENABLE_GPIO
+`define ENABLE_GPIO
 
 `default_nettype none
 
@@ -138,17 +138,45 @@ module ibex_soc
    localparam led_base_addr = 'h10000000;
    localparam led_size      = 'h1000;
 
+   localparam dm_base_addr  = 'h1A110000;
+   localparam dm_size       = 'h1000;
+
    logic          clk;
    logic          rst, rst_n;
    logic          core_sleep;
    logic          ndmreset;
    logic          dmactive;
-   logic          debug_req = 1'b0;
+   logic          debug_req;
+   logic          unavailable = 1'b0;
+   dm::hartinfo_t hartinfo = '{zero1: 0,
+                               nscratch: 2,
+                               zero0: 0,
+                               dataaccess: 1,
+                               datasize: dm::DataCount,
+                               dataaddr: dm::DataAddr};
+   logic          dmi_rst_n;
+   logic          dmi_req_valid;
+   logic          dmi_req_ready;
+   dm::dmi_req_t  dmi_req;
+   logic          dmi_resp_valid;
+   logic          dmi_resp_ready;
+   dm::dmi_resp_t dmi_resp;
+   logic          tck;
+   logic          trst_n;
+   logic          tms;
+   logic          tdi;
+   logic          tdo;
+   logic          tdo_oe;
 
-   assign rst = ~rst_n;
+   assign rst      = ~rst_n;
+   assign tck      = GPIO[0];
+   assign trst_n   = GPIO[1];
+   assign tms      = GPIO[19];
+   assign tdi      = GPIO[20];
+   assign GPIO[21] = tdo_oe ? tdo : 1'bz;
 
-   wb_if wbm[2](.*);
-   wb_if wbs[2](.*);
+   wb_if wbm[3](.*);
+   wb_if wbs[3](.*);
 
    crg crg
      (.clk50m    (CLOCK_50_B5B),
@@ -157,8 +185,8 @@ module ibex_soc
       .clk);
 
    wb_ibex_core wb_ibex_core
-     (.instr_wb     (wbm[0]),
-      .data_wb      (wbm[1]),
+     (.instr_wb     (wbm[1]),
+      .data_wb      (wbm[2]),
       .test_en      (1'b0),
       .hart_id      (32'h0),
       .boot_addr    (32'h0),
@@ -170,18 +198,43 @@ module ibex_soc
       .fetch_enable (1'b1),
       .*);
 
+   wb_dm_top wb_dm
+     (.testmode  (1'b0),
+      .wbm       (wbm[0]),
+      .wbs       (wbs[0]),
+      .dmi_rst_n (dmi_rst_n),
+      .*);
+
+   dmi_jtag dmi
+     (.clk_i            (clk),
+      .rst_ni           (rst_n),
+      .testmode_i       (1'b0),
+      .dmi_rst_no       (dmi_rst_n),
+      .dmi_req_o        (dmi_req),
+      .dmi_req_valid_o  (dmi_req_valid),
+      .dmi_req_ready_i  (dmi_req_ready),
+      .dmi_resp_i       (dmi_resp),
+      .dmi_resp_ready_o (dmi_resp_ready),
+      .dmi_resp_valid_i (dmi_resp_valid),
+      .tck_i            (tck),
+      .tms_i            (tms),
+      .trst_ni          (trst_n),
+      .td_i             (tdi),
+      .td_o             (tdo),
+      .tdo_oe_o         (tdo_oe));
+
    wb_interconnect_sharedbus
-     #(.numm      (2),
-       .nums      (2),
-       .base_addr ('{ram_base_addr, led_base_addr}),
-       .size      ('{ram_size, led_size}))
+     #(.numm      (3),
+       .nums      (3),
+       .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
+       .size      ('{dm_size, ram_size, led_size}))
    wb_intercon
      (.*);
 
-   wb_spram16384x32 wb_spram(.wb(wbs[0]));
+   wb_spram16384x32 wb_spram(.wb(wbs[1]));
 
    wb_led wb_led
-     (.wb  (wbs[1]),
+     (.wb  (wbs[2]),
       .led (LEDG[3:0]));
 endmodule
 

@@ -39,7 +39,9 @@ set_time_format -unit ns -decimal_places 3
 # Create Clock
 #**************************************************************
 
-create_clock -name {CLOCK_50_B5B} -period 20.000 -waveform { 0.000 10.000 } [get_ports { CLOCK_50_B5B }]
+create_clock -name {SYS_CLK} -period 20.000 -waveform { 0.000 10.000 } [get_ports { CLOCK_50_B5B }]
+
+create_clock -name {TCK} -period 100.000 -waveform { 0.000 50.000 } [get_ports { GPIO[0] }]
 
 
 #**************************************************************
@@ -58,21 +60,21 @@ create_clock -name {CLOCK_50_B5B} -period 20.000 -waveform { 0.000 10.000 } [get
 # Set Clock Uncertainty
 #**************************************************************
 
-set_clock_uncertainty -rise_from [get_clocks {CLOCK_50_B5B}] -rise_to [get_clocks {CLOCK_50_B5B}] -setup 0.100  
-set_clock_uncertainty -rise_from [get_clocks {CLOCK_50_B5B}] -rise_to [get_clocks {CLOCK_50_B5B}] -hold 0.060  
-set_clock_uncertainty -rise_from [get_clocks {CLOCK_50_B5B}] -fall_to [get_clocks {CLOCK_50_B5B}] -setup 0.100  
-set_clock_uncertainty -rise_from [get_clocks {CLOCK_50_B5B}] -fall_to [get_clocks {CLOCK_50_B5B}] -hold 0.060  
-set_clock_uncertainty -fall_from [get_clocks {CLOCK_50_B5B}] -rise_to [get_clocks {CLOCK_50_B5B}] -setup 0.100  
-set_clock_uncertainty -fall_from [get_clocks {CLOCK_50_B5B}] -rise_to [get_clocks {CLOCK_50_B5B}] -hold 0.060  
-set_clock_uncertainty -fall_from [get_clocks {CLOCK_50_B5B}] -fall_to [get_clocks {CLOCK_50_B5B}] -setup 0.100  
-set_clock_uncertainty -fall_from [get_clocks {CLOCK_50_B5B}] -fall_to [get_clocks {CLOCK_50_B5B}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {SYS_CLK}] -rise_to [get_clocks {SYS_CLK}] -setup 0.100  
+set_clock_uncertainty -rise_from [get_clocks {SYS_CLK}] -rise_to [get_clocks {SYS_CLK}] -hold 0.060  
+set_clock_uncertainty -rise_from [get_clocks {SYS_CLK}] -fall_to [get_clocks {SYS_CLK}] -setup 0.100  
+set_clock_uncertainty -rise_from [get_clocks {SYS_CLK}] -fall_to [get_clocks {SYS_CLK}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {SYS_CLK}] -rise_to [get_clocks {SYS_CLK}] -setup 0.100  
+set_clock_uncertainty -fall_from [get_clocks {SYS_CLK}] -rise_to [get_clocks {SYS_CLK}] -hold 0.060  
+set_clock_uncertainty -fall_from [get_clocks {SYS_CLK}] -fall_to [get_clocks {SYS_CLK}] -setup 0.100  
+set_clock_uncertainty -fall_from [get_clocks {SYS_CLK}] -fall_to [get_clocks {SYS_CLK}] -hold 0.060  
 
 
 #**************************************************************
 # Set Input Delay
 #**************************************************************
 
-set_false_path -from [all_inputs]
+set_input_delay -clock_fall -clock [get_clocks TCK] 0.0 [get_ports {GPIO[1] GPIO[19] GPIO[20]}]
 
 
 
@@ -80,7 +82,7 @@ set_false_path -from [all_inputs]
 # Set Output Delay
 #**************************************************************
 
-set_false_path -to [all_outputs]
+set_output_delay -clock [get_clocks TCK] 0.0 [get_ports {GPIO[21]}]
 
 
 
@@ -88,12 +90,16 @@ set_false_path -to [all_outputs]
 # Set Clock Groups
 #**************************************************************
 
+set_clock_groups -asynchronous -group {SYS_CLK} -group {TCK}
 
 
 #**************************************************************
 # Set False Path
 #**************************************************************
 
+set_false_path -from [get_ports {CPU_RESET_n}]
+
+set_false_path -to [get_ports {LEDG*}]
 
 
 #**************************************************************

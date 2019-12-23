@@ -760,7 +760,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[4]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[5]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[6]
-set_global_assignment -name SDC_FILE ibex_wb.sdc
+set_global_assignment -name SYSTEMVERILOG_FILE ../../../../pulpino/rtl/components/pulp_clock_mux2.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../../../../pulpino/rtl/components/cluster_clock_inverter.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../ibex/shared/rtl/prim_assert.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../ibex/rtl/ibex_alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../ibex/rtl/ibex_compressed_decoder.sv
@@ -779,12 +780,25 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../../../../ibex/rtl/ibex_pkg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../ibex/rtl/ibex_pmp.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../ibex/rtl/ibex_prefetch_buffer.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../ibex/rtl/ibex_register_file_ff.sv
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dm_pkg.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dmi_jtag_tap.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dmi_jtag.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dmi_cdc.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dm_top.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dm_sba.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dm_mem.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/src/dm_csrs.sv"
+set_global_assignment -name SYSTEMVERILOG_FILE "../../../../riscv-dbg/debug_rom/debug_rom.sv"
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../rtl/core2wb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../rtl/core_if.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../rtl/slave2wb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../rtl/wb_ibex_core.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../../../../rtl/wb_dm_top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../rtl/wb_if.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../../../rtl/wb_pkg.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../../../../common_cells/src/cdc_2phase.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../../../../common_cells/src/fifo_v3.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../../../../common_cells/src/deprecated/fifo_v2.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/crg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/ibex_soc.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/prim_clock_gating.sv
@@ -795,4 +809,5 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../rtl/wb_spram16384x32.sv
 set_global_assignment -name QIP_FILE ../lib/fpga_clock_gating/fpga_clock_gating/synthesis/fpga_clock_gating.qip
 set_global_assignment -name QIP_FILE ../lib/spramx32/spram16384x32.qip
 set_global_assignment -name SOURCE_FILE db/ibex_wb.cmp.rdb
+set_global_assignment -name SDC_FILE ibex_wb.sdc
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

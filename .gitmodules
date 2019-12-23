@@ -1,9 +1,9 @@
 [submodule "riscv-dbg"]
 	path = riscv-dbg
-	url = https://github.com/pulp-platform/riscv-dbg.git
+	url = https://github.com/pbing/riscv-dbg.git
 [submodule "common_cells"]
 	path = common_cells
-	url = https://github.com/pulp-platform/common_cells
+	url = https://github.com/pbing/common_cells.git
 [submodule "pulpino"]
 	path = pulpino
 	url = https://github.com/pulp-platform/pulpino.git
