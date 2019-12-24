@@ -31,7 +31,7 @@ HEX2MIF = ../../../../../scripts/hex2mif.pl
 
 all: $(OUTFILES)
 
-sim:
+syn:
 	cp $(PROGRAM).mif ../../syn/spram16384x32.mif
 
 $(PROGRAM).elf: $(OBJS) $(LINKER_SCRIPT)
