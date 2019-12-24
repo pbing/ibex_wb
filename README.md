@@ -42,17 +42,17 @@ Simulated with Synopsys VCS.
 | nettle-aes | 113482 | 63235          | 1.79 |
 |            |        | mean           | 1.56 |
 
-## FPGA Implentation
+## FPGA Implementation
 
 ### Intel/Cyclone-V
 [Cyclone V GX Starter Kit](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=167&No=830)
 
-For Quartus 19.1 use branch `ibex/fpga_quartus`.
+For Quartus 19.1 use branch `fpga_quartus` in submodules `common_cells`, `ibex` and`riscv-dbg`.
 
 ### Xilinx/Artix-7
 [Arty A7-100T](https://www.xilinx.com/products/boards-and-kits/1-w51quh.html)
 
-For Vivado 2019.2 use branch `ibex/master`.
+For Vivado 2019.2 use branch `master` in all submodules.
 
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)

@@ -169,11 +169,11 @@ module ibex_soc
    logic          tdo_oe;
 
    assign rst      = ~rst_n;
-   assign tck      = GPIO[0];
-   assign trst_n   = GPIO[1];
-   assign tms      = GPIO[19];
-   assign tdi      = GPIO[20];
-   assign GPIO[21] = tdo_oe ? tdo : 1'bz;
+   assign tck      = GPIO[2];
+   assign trst_n   = GPIO[20];
+   assign tms      = GPIO[1];
+   assign tdi      = GPIO[0];
+   assign GPIO[19] = tdo_oe ? tdo : 1'bz;
 
    wb_if wbm[3](.*);
    wb_if wbs[3](.*);
