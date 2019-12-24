@@ -10,10 +10,15 @@ read_design \
      ../../../../../../riscv-dbg/src/dmi_jtag.sv \
      ../../../../../../riscv-dbg/src/dmi_jtag_tap.sv \
      ../../../../../../riscv-dbg/debug_rom/debug_rom.sv \
+     ../../../../../../common_cells/src/cdc_2phase.sv \
      ../../../../../../common_cells/src/deprecated/fifo_v2.sv \
-     ../../../../../../common_cells/src/fifo_v3.sv}
+     ../../../../../../common_cells/src/fifo_v3.sv \
+     ../../../../../pulpino/rtl/components/cluster_clock_inverter.sv \
+     ../../../../../pulpino/rtl/components/pulp_clock_mux2.sv}
 
+#elaborate_design -golden -root dm_jtag
 elaborate_design -golden -root dm_top
+
 
 read_design \
     -enumconstraint -define SYNTHESIS  -merge bbox -revised -lastmod -noelab \
@@ -27,9 +32,13 @@ read_design \
      ../../../../../riscv-dbg/src/dmi_jtag.sv \
      ../../../../../riscv-dbg/src/dmi_jtag_tap.sv \
      ../../../../../riscv-dbg/debug_rom/debug_rom.sv \
+     ../../../../../common_cells/src/cdc_2phase.sv \
      ../../../../../common_cells/src/deprecated/fifo_v2.sv \
-     ../../../../../common_cells/src/fifo_v3.sv}
+     ../../../../../common_cells/src/fifo_v3.sv \
+     ../../../../../pulpino/rtl/components/cluster_clock_inverter.sv \
+     ../../../../../pulpino/rtl/components/pulp_clock_mux2.sv}
 
+#elaborate_design -revised -root dm_jtag
 elaborate_design -revised -root dm_top
 
 
@@ -51,6 +60,3 @@ add_compared_points -all
 compare
 
 exit
-
-
-
