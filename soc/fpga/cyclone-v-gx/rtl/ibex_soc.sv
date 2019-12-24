@@ -170,7 +170,7 @@ module ibex_soc
 
    assign rst      = ~rst_n;
    assign tck      = GPIO[2];
-   assign trst_n   = GPIO[20];
+   assign trst_n   = GPIO[20] | 1'b1; // not connected
    assign tms      = GPIO[1];
    assign tdi      = GPIO[0];
    assign GPIO[19] = tdo_oe ? tdo : 1'bz;
