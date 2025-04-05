@@ -1,37 +1,43 @@
 /* Single port 32 bit RAM with Wishbone interface */
 
-`default_nettype none
-
 module wb_spram16384x32
   (wb_if.slave wb);
 
-   localparam size       = 'h10000;
-   localparam addr_width = $clog2(size) - 2;
+   localparam AWIDTH = $clog2(16384);
 
-   logic                    valid;
-   logic [addr_width - 1:0] ram_addr;     // RAM address
-   logic                    ram_ce;
-   logic [31:0]             ram_d;
-   logic [31:0]             ram_q;
+   logic                valid;
+   logic [AWIDTH - 1:0] ram_addr;     // RAM address
+   logic                ram_rden;
+   logic                ram_wren;
+   logic [31:0]         ram_data;
+   logic [31:0]         ram_q;
 
    spram16384x32 spram
      (.address (ram_addr),
       .byteena (wb.sel),
       .clock   (wb.clk),
-      .data    (ram_d),
-      .rden    (ram_ce),
-      .wren    (wb.we),
+      .data    (ram_data),
+      .rden    (ram_rden),
+      .wren    (ram_wren),
       .q       (ram_q));
 
-   assign ram_addr = wb.adr[addr_width + 1 : 2];
-   assign ram_ce   = valid;
-   assign ram_d    = wb.dat_i;
-   assign wb.dat_o = ram_q;
+   assign
+     ram_addr = wb.adr[AWIDTH+1 : 2],
+     ram_rden   = valid & ~wb.we,
+     ram_wren   = valid & wb.we,
+   `ifdef NO_MODPORT_EXPRESSIONS
+     ram_data   = wb.dat_m,
+     wb.dat_s   = ram_q;
+   `else
+     ram_data   = wb.dat_i,
+     wb.dat_o   = ram_q;
+   `endif
 
    /* Wishbone control */
-   assign valid    = wb.cyc & wb.stb;
-   assign wb.stall = 1'b0;
-   assign wb.err   = 1'b0;
+   assign
+     valid    = wb.cyc & wb.stb,
+     wb.stall = 1'b0,
+     wb.err   = 1'b0;
 
    always_ff @(posedge wb.clk or posedge wb.rst)
      if (wb.rst)
@@ -39,5 +45,3 @@ module wb_spram16384x32
      else
        wb.ack <= valid & ~wb.stall;
 endmodule
-
-`resetall
