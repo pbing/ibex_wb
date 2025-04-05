@@ -2,12 +2,7 @@
 RISC-V Ibex core with Wishbone B4 interface.
 
 ## Design
-The instruction and data memory interfaces are converted to
-Wishbone.
-[These examples](https://github.com/pbing/ibex_wb/tree/master/sim) use shared bus
-interconnection between masters (instruction bus, data bus) and slaves (e.g. memory, LED driver).
-For better throughput or latency a crossbar interconnect can be considered.
-
+The instruction and data memory interfaces are converted to Wishbone.
 
 ## Ibex memory control vs. Wishbone bus
 
@@ -22,25 +17,48 @@ For better throughput or latency a crossbar interconnect can be considered.
 
 
 ## Status
-Simulated with Synopsys VCS.
+Simulated with Verilator
 
-### Timing with uncompressed instructions
+### Shared bus Wishbone interface
+
+#### Timing with uncompressed instructions
+| Program    | Cycles | Instructions | CPI  |
+|------------|--------|--------------|------|
+| crc_32     | 36073  | 24715        | 1.46 |
+| fib        | 164    | 108          | 1.52 |
+| led        | 999991 | 749959       | 1.33 |
+| nettle-aes | 101476 | 63236        | 1.60 |
+|            |        | geom. mean   | 1.48 |
+
+#### Timing with compressed instructions
 | Program    | Cycles | Instructions   | CPI  |
 |------------|--------|----------------|------|
-| crc_32     | 43277  | 24714          | 1.75 |
-| fib        | 172    | 107            | 1.61 |
-| led        | 509993 | 382481         | 1.33 |
-| nettle-aes | 118693 | 63235          | 1.88 |
-|            |        | mean           | 1.64 |
+| crc_32     | 34008  | 23688          | 1.44 |
+| fib        | 151    | 108            | 1.40 |
+| led        | 999991 | 749995         | 1.33 |
+| nettle-aes | 96053  | 63236          | 1.52 |
+|            |        | geom. mean     | 1.42 |
 
-### Timing with compressed instructions
+### Crossbar Wishbone interface
+The crossbar Wishbone interface uses skid buffers. Therefor the latency has been increased.
+
+#### Timing with uncompressed instructions
 | Program    | Cycles | Instructions   | CPI  |
 |------------|--------|----------------|------|
-| crc_32     | 37105  | 23687          | 1.57 |
-| fib        | 165    | 107            | 1.54 |
-| led        | 509993 | 382492         | 1.33 |
-| nettle-aes | 113482 | 63235          | 1.79 |
-|            |        | mean           | 1.56 |
+| crc_32     | 84515  | 24715          | 3.42 |
+| fib        | 370    | 108            | 3.43 |
+| led        | 999990 | 375012         | 2.67 |
+| nettle-aes | 236207 | 63236          | 3.74 |
+|            |        | geom. mean     | 3.29 |
+
+#### Timing with compressed instructions
+| Program    | Cycles | Instructions   | CPI  |
+|------------|--------|----------------|------|
+| crc_32     | 67037  | 23688          | 2.83 |
+| fib        | 275    | 108            | 2.55 |
+| led        | 999992 | 500004         | 2.00 |
+| nettle-aes | 220501 | 63236          | 3.54 |
+|            |        | geom. mean     | 2.67 |
 
 ## FPGA Implementation
 
@@ -57,3 +75,4 @@ For Vivado 2019.2 use branch `master` in all submodules.
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)
 - [ZipCPU](http://zipcpu.com/zipcpu/2017/11/07/wb-formal.html) for a deeper understanding of the pipelined mode.
+- [WB2AXIP: Bus interconnects, bridges, and other components](https://github.com/ZipCPU/wb2axip/)
