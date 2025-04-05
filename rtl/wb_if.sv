@@ -6,11 +6,9 @@
  * modport slave  (.dat_i(dat_m), .dat_o(dat_s), ...);
  */
 
-`default_nettype none
-
 interface wb_if
-  (input wire rst,
-   input wire clk);
+  (input logic rst,
+   input logic clk);
 
    import wb_pkg::*;
 
@@ -79,5 +77,3 @@ interface wb_if
       input  dat_m,
       input  dat_s);
 endinterface: wb_if
-
-`resetall

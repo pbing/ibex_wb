@@ -1,33 +1,39 @@
 /* Converter between Ibex core interface and Wishbone interface */
 
-`default_nettype none
-
 module core2wb
-  (core_if.slave core,
-   wb_if.master  wb);
+  #(parameter pending = 64) // number of outstandig transactions
+   (core_if.slave core,
+    wb_if.master  wb);
 
-   logic cyc;
+   logic [$clog2(pending)-1:0] counts;
 
-   assign core.gnt    = core.req & ~wb.stall;
-   assign core.rvalid = wb.ack;
-   assign core.err    = wb.err;
-   assign core.rdata  = wb.dat_i;
-   assign wb.stb      = core.req;
-   assign wb.adr      = core.addr;
-   assign wb.dat_o    = core.wdata;
-   assign wb.we       = core.we;
-   assign wb.sel      = core.we ? core.be : '1;
+   assign
+     core.gnt    = core.req & ~wb.stall,
+     core.rvalid = wb.ack,
+     core.err    = wb.err,
+     wb.stb      = core.req,
+     wb.adr      = core.addr,
+     wb.we       = core.we,
+     wb.sel      = core.we ? core.be : '1;
+
+`ifdef NO_MODPORT_EXPRESSIONS
+   assign
+     core.rdata = wb.dat_s,
+     wb.dat_m   = core.wdata;
+`else
+   assign
+     core.rdata  = wb.dat_i,
+     wb.dat_o    = core.wdata;
+`endif
 
    always_ff @(posedge wb.clk or posedge wb.rst)
      if (wb.rst)
-       cyc <= 1'b0;
+       counts <= 0;
      else
-       if (core.req)
-         cyc <= 1'b1;
-       else if (wb.ack || wb.err)
-         cyc <= 1'b0;
+       if (core.gnt && !wb.ack)
+         counts <= counts + 1;
+       else if (!core.gnt && wb.ack)
+         counts <= counts - 1;
 
-   assign wb.cyc = core.req | cyc;
+   assign wb.cyc = core.req | (counts != 0);
 endmodule
-
-`resetall

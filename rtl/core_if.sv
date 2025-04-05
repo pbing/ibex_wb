@@ -1,10 +1,8 @@
 /* Core interface */
 
-`default_nettype none
-
 interface core_if
-  (input wire clk,
-   input wire rst_n);
+  (input logic clk,
+   input logic rst_n);
 
    logic        req;
    logic        gnt;
@@ -55,5 +53,3 @@ interface core_if
       input  rdata,
       input  err);
 endinterface
-
-`resetall
