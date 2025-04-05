@@ -1,7 +1,7 @@
 /* Converter between Ibex core interface and Wishbone interface */
 
 module core2wb
-  #(parameter pending = 64) // number of outstandig transactions
+  #(parameter pending = 16) // number of outstandig transactions
    (core_if.slave core,
     wb_if.master  wb);
 
@@ -35,5 +35,5 @@ module core2wb
        else if (!core.gnt && wb.ack)
          counts <= counts - 1;
 
-   assign wb.cyc = core.req | (counts != 0);
+   assign wb.cyc = core.req || (counts != 0);
 endmodule
