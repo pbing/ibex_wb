@@ -1,0 +1,30 @@
++define+ASSERTS_OFF
++define+NO_MODPORT_EXPRESSIONS
+-I../../../../common_cells/include
+-I../../../../common_cells/src
+-I../../../../common_cells/src/deprecated
+-I../../../../ibex/dv/uvm/core_ibex/common/prim
+-I../../../../ibex/rtl
+-I../../../../ibex/vendor/lowrisc_ip/dv/sv/dv_utils
+-I../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl
+-I../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl
+-I../../../../riscv-dbg/debug_rom
+-I../../../../riscv-dbg/src
+-I../../../../tech_cells_generic/src/rtl
+-I../../../../wb2axip/rtl
+-I../../../../rtl
+-I../rtl
+-v cdc_4phase.sv
+-v tc_clk.sv
+prim_pkg.sv
+prim_cipher_pkg.sv
+prim_count_pkg.sv
+prim_mubi_pkg.sv
+prim_ram_1p_pkg.sv
+prim_secded_pkg.sv
+prim_util_pkg.sv
+cdc_reset_ctrlr_pkg.sv
+ibex_pkg.sv
+ibex_tracer_pkg.sv
+dm_pkg.sv
+wb_pkg.sv

@@ -1,12 +1,18 @@
 [submodule "common_cells"]
 	path = common_cells
-	url = https://github.com/pbing/common_cells.git
+	url = https://github.com/pulp-platform/common_cells.git
 [submodule "pulpino"]
 	path = pulpino
 	url = https://github.com/pulp-platform/pulpino.git
 [submodule "ibex"]
 	path = ibex
-	url = https://github.com/pbing/ibex.git
+	url = https://github.com/lowRISC/ibex.git
 [submodule "riscv-dbg"]
 	path = riscv-dbg
-	url = https://github.com/pbing/riscv-dbg.git
+	url = https://github.com/pulp-platform/riscv-dbg.git
+[submodule "tech_cells_generic"]
+	path = tech_cells_generic
+	url = https://github.com/pulp-platform/tech_cells_generic.git
+[submodule "wb2axip"]
+	path = wb2axip
+	url = https://github.com/ZipCPU/wb2axip.git
