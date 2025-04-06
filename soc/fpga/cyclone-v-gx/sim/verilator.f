@@ -1,3 +1,4 @@
+-Wno-REDEFMACRO
 +define+ASSERTS_OFF
 +define+NO_MODPORT_EXPRESSIONS
 -I../../../../common_cells/include
@@ -12,6 +13,7 @@
 -I../../../../riscv-dbg/src
 -I../../../../tech_cells_generic/src/rtl
 -I../../../../wb2axip/rtl
+-I../../../common/rtl
 -I../../../../rtl
 -I../rtl
 -v cdc_4phase.sv
