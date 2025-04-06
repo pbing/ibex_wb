@@ -1,18 +1,19 @@
 /* Single port 32 bit RAM */
 
-`default_nettype none
-
 module spramx32
-  #(parameter size       = 'h80,
-    parameter addr_width = $clog2(size) - 2)
-   (input  wire                     clk,  // clock
-    input  wire  [addr_width - 1:0] addr, // address
-    input  wire                     ce,   // chip enable
-    input  wire  [3:0]              we,   // write enables
-    input  wire  [31:0]             d,    // data input
-    output logic [31:0]             q);   // data output
+  #(parameter  size       = 'h80,
+    localparam addr_width = $clog2(size) - 2)
+   (input  logic                  clk,  // clock
+    input  logic [addr_width-1:0] addr, // address
+    input  logic                  ce,   // chip enable
+    input  logic [3:0]            we,   // write enables
+    input  logic [31:0]           d,    // data input
+    output logic [31:0]           q);   // data output
 
-   (* ram_decomp = "power" *) logic [31:0] mem[size >> 2];
+   (* ram_style = "block" *) logic [31:0] mem[size >> 2];
+
+   initial
+     $readmemh("spramx32.vmem", mem);
 
    always @(posedge clk)
      if (ce)
@@ -27,5 +28,3 @@ module spramx32
      if (ce)
        q <= mem[addr];
 endmodule
-
-`resetall

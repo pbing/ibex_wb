@@ -1,13 +1,12 @@
 /* Clock and reset generator */
 
-`default_nettype none
-
 module crg
-  (input  wire clk100m,
-   input  wire ext_rst_n,
-   output wire rst_n,
-   output wire clk);
+  (input  logic clk100m,
+   input  logic ext_rst_n,
+   output logic rst_n,
+   output logic clk);
 
+/* -----\/----- EXCLUDED -----\/-----
    BUFR
      #(.BUFR_DIVIDE("4"))
    clkdiv
@@ -15,11 +14,11 @@ module crg
       .O   (clk),
       .CE  (1'b1),
       .CLR (1'b0));
+ -----/\----- EXCLUDED -----/\----- */
+   assign clk = clk100m;
 
    sync_reset sync_reset
      (.clk       (clk),
       .ext_rst_n (ext_rst_n),
       .rst_n);
 endmodule
-
-`resetall

@@ -1,4 +1,4 @@
-`default_nettype none
+/* SoC Toplevel */
 
 module ibex_soc
   (input  wire       clk100mhz,
@@ -15,28 +15,25 @@ module ibex_soc
    input  wire       tdi,
    output wire       tdo);
 
+   import ibex_pkg::*;
 
+   localparam [31:0] ram_base_addr = 'h00000000;
+   localparam [31:0] ram_size      = 'h10000;
 
-   localparam ram_base_addr = 'h00000000;
-   localparam ram_size      = 'h10000;
+   localparam [31:0] led_base_addr = 'h10000000;
+   localparam [31:0] led_size      = 'h1000;
 
-   localparam led_base_addr = 'h10000000;
-   localparam led_size      = 'h1000;
-
-   localparam dm_base_addr  = 'h1A110000;
-   localparam dm_size       = 'h1000;
+   localparam [31:0] dm_base_addr  = 'h1A110000;
+   localparam [31:0] dm_size       = 'h1000;
 
    logic          clk;
    logic          rst, rst_n;
-   logic          core_sleep;
-   logic          ndmreset;
-   logic          dmactive;
+
    logic          debug_req;
-   logic          unavailable = 1'b0;
    dm::hartinfo_t hartinfo = '{zero1: 0,
-                               nscratch: 2,
+                               nscratch: 2,   // Debug module needs at least two scratch regs
                                zero0: 0,
-                               dataaccess: 1,
+                               dataaccess: 1, // data registers are memory mapped in the debugger
                                datasize: dm::DataCount,
                                dataaddr: dm::DataAddr};
    logic          dmi_rst_n;
@@ -46,14 +43,15 @@ module ibex_soc
    logic          dmi_resp_valid;
    logic          dmi_resp_ready;
    dm::dmi_resp_t dmi_resp;
+
    logic          tdo_o;
    logic          tdo_oe;
 
    assign rst = ~rst_n;
    assign tdo = tdo_oe ? tdo_o : 1'bz;
 
-   wb_if wbm[3](.*);
-   wb_if wbs[3](.*);
+   wb_if wbm[3] (.rst, .clk);
+   wb_if wbs[3] (.rst, .clk);
 
    crg crg
      (.clk100m   (clk100mhz),
@@ -61,58 +59,103 @@ module ibex_soc
       .rst_n,
       .clk);
 
-   wb_ibex_core wb_ibex_core
-     (.instr_wb     (wbm[1]),
-      .data_wb      (wbm[2]),
-      .test_en      (1'b0),
-      .hart_id      (32'h0),
-      .boot_addr    (32'h0),
-      .irq_software (1'b0),
-      .irq_timer    (1'b0),
-      .irq_external (1'b0),
-      .irq_fast     (15'b0),
-      .irq_nm       (1'b0),
-      .fetch_enable (1'b1),
-      .*);
+   wb_ibex_top
+     #(.RegFile (RegFileFPGA))
+   u_wb_ibex_top
+     (.clk,
+      .rst_n,
+      .instr_wb             (wbm[2]),
+      .data_wb              (wbm[1]),
 
-   wb_dm_top wb_dm
-     (.testmode  (1'b0),
-      .wbm       (wbm[0]),
-      .wbs       (wbs[0]),
-      .dmi_rst_n (dmi_rst_n),
-      .*);
+      .test_en              (1'b0),
+      .ram_cfg              ('0),
 
-   dmi_jtag dmi
+      .hart_id              (32'h00000000),
+      .boot_addr            (32'h00000000),
+
+      .irq_software         (1'b0),
+      .irq_timer            (1'b0),
+      .irq_external         (1'b0),
+      .irq_fast             (15'h0000),
+      .irq_nm               (1'b0),
+
+      .scramble_key_valid   (1'b0),
+      .scramble_key         ('0),
+      .scramble_nonce       ('0),
+      .scramble_req         (),
+
+      .debug_req,
+      .crash_dump           (),
+      .double_fault_seen    (),
+
+      .fetch_enable         ('1),
+      .alert_minor          (),
+      .alert_major_internal (),
+      .alert_major_bus      (),
+      .core_sleep           (),
+      
+      .scan_rst_n           (1'b0));
+
+   wb_dm_top u_wb_dm_top
+     (.clk,
+      .rst_n,
+
+      .next_dm_addr (32'h00000000),
+      .testmode     (1'b0),
+      .ndmreset     (),
+      .ndmreset_ack (1'b0),
+      .dmactive     (),
+      .debug_req,
+      .unavailable  ('0),
+      .hartinfo,
+
+      .wbs          (wbs[0]),
+      .wbm          (wbm[0]),
+
+      .dmi_rst_n,
+      .dmi_req_valid,
+      .dmi_req_ready,
+      .dmi_req,
+
+      .dmi_resp_valid,
+      .dmi_resp_ready,
+      .dmi_resp);
+
+   dmi_jtag u_dmi_jtag
      (.clk_i            (clk),
       .rst_ni           (rst_n),
       .testmode_i       (1'b0),
+
       .dmi_rst_no       (dmi_rst_n),
       .dmi_req_o        (dmi_req),
       .dmi_req_valid_o  (dmi_req_valid),
       .dmi_req_ready_i  (dmi_req_ready),
+      
       .dmi_resp_i       (dmi_resp),
       .dmi_resp_ready_o (dmi_resp_ready),
       .dmi_resp_valid_i (dmi_resp_valid),
+      
       .tck_i            (tck),
       .tms_i            (tms),
       .trst_ni          (trst_n),
       .td_i             (tdi),
-      .td_o             (tdo_o),
+      .td_o             (tdo),
       .tdo_oe_o         (tdo_oe));
 
+
    wb_interconnect_sharedbus
+   //wb_interconnect_xbar
      #(.numm      (3),
        .nums      (3),
        .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
        .size      ('{dm_size, ram_size, led_size}))
-   wb_intercon
-     (.*);
+   u_wb_interconnect
+     (.wbm, .wbs);
 
    wb_spramx32 #(ram_size) wb_spram(.wb(wbs[1]));
 
-   wb_led wb_led
-     (.wb(wbs[2]),
-      .*);
+   wb_led
+     #(.N (4))
+   u_wb_ledg
+     (.wb (wbs[2]), .led);
 endmodule
-
-`resetall

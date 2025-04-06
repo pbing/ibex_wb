@@ -1,22 +1,18 @@
 /* Reset synchronizer */
 
-`default_nettype none
-
 module sync_reset
-  #(parameter n = 2)
+  #(parameter N = 2)
    (input  wire clk,
     input  wire ext_rst_n,
     output wire rst_n);
 
-   (* async_reg = "true" *) logic [1:n] q;
+   logic [N-1:0] q;
 
    always_ff @(posedge clk or negedge ext_rst_n)
      if (!ext_rst_n)
        q <= '0;
      else
-       q <= {1'b1, q[$left(q):$right(q) - 1]};
+       q <= {q[N-2:0], 1'b1};
 
-   assign rst_n = q[$right(q)];
+   assign rst_n = q[N-1];
 endmodule
-
-`resetall
