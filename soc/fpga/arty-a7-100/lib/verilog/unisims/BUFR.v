@@ -57,10 +57,18 @@ module BUFR (O, CE, CLR, I);
     integer count, period_toggle, half_period_toggle;    
     reg first_rise, half_period_done;
     reg notifier;
+`ifndef VERILATOR
     reg  o_out_divide = 0;
+`else
+    reg  o_out_divide;
+`endif
     wire o_out;
     reg ce_enable1, ce_enable2, ce_enable3, ce_enable4;
+`ifndef VERILATOR
     tri0 GSR = glbl.GSR;
+`else
+    reg GSR = 0;
+`endif
     wire i_in, ce_in, clr_in, gsr_in, ce_en, i_ce;
     
     buf buf_i (i_in, I);
@@ -106,7 +114,9 @@ module BUFR (O, CE, CLR, I);
             end
       default : begin 
               $display("Attribute Syntax Error : The attribute BUFR_DIVIDE on BUFR instance %m is set to %s.  Legal values for this attribute are BYPASS, 1, 2, 3, 4, 5, 6, 7 or 8.", BUFR_DIVIDE);
+              `ifndef VERILATOR
                     #1 $finish;
+              `endif
       end
   endcase // case(BUFR_DIVIDE)
 
@@ -117,7 +127,9 @@ module BUFR (O, CE, CLR, I);
            "7SERIES" : ;
       default : begin 
               $display("Attribute Syntax Error : The attribute SIM_DEVICE on BUFR instance %m is set to %s.  Legal values for this attribute are VIRTEX4 or VIRTEX5 or VIRTEX6 or 7SERIES.", SIM_DEVICE);
+              `ifndef VERILATOR
                     #1 $finish;
+              `endif
       end
         endcase 
 
@@ -126,7 +138,7 @@ module BUFR (O, CE, CLR, I);
 
     always @(gsr_in or clr_in)
   if (gsr_in == 1'b1 || clr_in == 1'b1) begin
-      assign o_out_divide = 1'b0;
+      //assign o_out_divide = 1'b0;
       assign count = 0;
       assign first_rise = 1'b1;
       assign half_period_done = 1'b0;
@@ -137,6 +149,7 @@ module BUFR (O, CE, CLR, I);
     assign ce_enable4 = 1'b0;
       end      
   end  
+  `ifndef VERILATOR
   else if (gsr_in == 1'b0 || clr_in == 1'b0) begin
       deassign o_out_divide;      
       deassign count;
@@ -149,6 +162,7 @@ module BUFR (O, CE, CLR, I);
     deassign ce_enable4;
       end    
   end
+ `endif
     
 
     always @(negedge i_in) 
@@ -195,16 +209,16 @@ module BUFR (O, CE, CLR, I);
        always @(i_ce)
        begin 
            if (i_ce == 1'b1 && first_rise == 1'b1) begin
-       o_out_divide = 1'b1;
+       o_out_divide <= 1'b1;
        first_rise = 1'b0;
      end
      else if (count == half_period_toggle && half_period_done == 1'b0) begin
-              o_out_divide = ~o_out_divide;
+              o_out_divide <= ~o_out_divide;
         half_period_done = 1'b1;
        count = 0;  
      end
      else if (count == period_toggle && half_period_done == 1'b1) begin
-       o_out_divide = ~o_out_divide;
+       o_out_divide <= ~o_out_divide;
        half_period_done = 1'b0;
        count = 0;
            end
@@ -220,7 +234,7 @@ module BUFR (O, CE, CLR, I);
     assign o_out = (period_toggle == 0) ? i_in : o_out_divide;
 
 
-
+`ifndef VERILATOR
 //*** Timing Checks Start here
 
     always @(notifier) begin
@@ -242,7 +256,8 @@ module BUFR (O, CE, CLR, I);
     $width (negedge I, 0:0:0, 0, notifier);
     specparam PATHPULSE$ = 0;
   endspecify
-`endif
+`endif // XIL_TIMING
+`endif // VERILATOR
 endmodule // BUFR
 
 `endcelldefine
