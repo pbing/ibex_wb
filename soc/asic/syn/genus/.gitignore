@@ -1,9 +1,0 @@
-README
-*.cmd*
-*.log*
-outputs/
-reports/
-test_scripts/
-fv/
-*.tstamp
-.simvision/

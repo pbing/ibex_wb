@@ -1,7 +1,0 @@
-set group(RAMB) {\
-      RAM16384X32}
-set rule(RAMBB) {
-  greaterThanEqual  -comment {Min spacing for RAMB-RAMB} \
-   -group1  RAMB  -termSide1  1   -noTermSide1  1 \
-   -group2  RAMB  -termSide2  1   -noTermSide2  1 
-}

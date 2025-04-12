@@ -1,0 +1,16 @@
+*.do
+*.key
+*.log
+*.sh
+*.tcl
+*.vpd
+DVEfiles/
+README
+csrc/
+logs/
+simv*
+vc_hdrs.h
+vcs.args
+xrun.args
+xcelium.d/
+xrun.history

@@ -1,0 +1,16 @@
+*.args
+*.do
+*.history
+*.key
+*.log
+*.sh
+*.tcl
+*.vpd
+.simvision
+DVEfiles/
+README
+csrc/
+logs/
+simv*
+vc_hdrs.h
+waves.shm

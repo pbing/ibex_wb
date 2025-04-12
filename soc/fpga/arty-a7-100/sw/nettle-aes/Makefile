@@ -7,8 +7,8 @@
 PROGRAM ?= nettle-aes
 PROGRAM_CFLAGS = -Wall -g -Os -DCPU_MHZ=1 -DWARMUP_HEAT=0
 #PROGRAM_CFLAGS = -Wall -g -Os -msave-restore -fdata-sections -ffunction-sections -DCPU_MHZ=1 -DWARMUP_HEAT=0
-#ARCH = rv32imc
-ARCH = rv32im # to disable compressed instructions
+ARCH = rv32imc_zicsr
+#ARCH = rv32im_zicsr # to disable compressed instructions
 SRCS = $(PROGRAM).c beebsc.c board.c main.c
 
 CC = riscv64-unknown-elf-gcc

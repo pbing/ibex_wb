@@ -1,8 +1,0 @@
-# Generate memory model
-modus -e build_memory_model
-
-
-# Verify memory model
-modus -files ./scripts/run_ram.tcl
-
-xrun -clean -f ./scripts/xrun.args

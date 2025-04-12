@@ -7,8 +7,8 @@
 PROGRAM ?= led
 PROGRAM_CFLAGS = -Wall -g -Os
 #PROGRAM_CFLAGS = -Wall -g -O0
-#ARCH = rv32imc
-ARCH = rv32im # to disable compressed instructions
+ARCH = rv32imc_zicsr
+#ARCH = rv32im_zicsr # to disable compressed instructions
 SRCS = $(PROGRAM).c
 
 CC = riscv64-unknown-elf-gcc
@@ -48,11 +48,11 @@ $(PROGRAM).elf: $(OBJS) $(LINKER_SCRIPT)
 %.vmem: %.hex
 	$(HEX2VMEM) $< > $@
 
-%.mif: %.hex
-	$(HEX2MIF) $< > $@
-
 %.hex: %.elf
 	$(OBJCOPY) -O verilog --interleave-width=4 --interleave=4 --byte=0 $< $@
+
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -MMD -c $(INCS) -o $@ $<
