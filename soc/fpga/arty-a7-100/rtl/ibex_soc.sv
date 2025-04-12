@@ -139,7 +139,7 @@ module ibex_soc
       .tms_i            (tms),
       .trst_ni          (trst_n),
       .td_i             (tdi),
-      .td_o             (tdo),
+      .td_o             (tdo_o),
       .tdo_oe_o         (tdo_oe));
 
 
