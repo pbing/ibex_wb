@@ -143,8 +143,8 @@ module ibex_soc
       .tdo_oe_o         (tdo_oe));
 
 
-   wb_interconnect_sharedbus
-   //wb_interconnect_xbar
+   //wb_interconnect_sharedbus
+   wb_interconnect_xbar
      #(.numm      (3),
        .nums      (3),
        .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),

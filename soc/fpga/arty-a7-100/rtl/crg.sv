@@ -6,19 +6,16 @@ module crg
    output logic rst_n,
    output logic clk);
 
-/* -----\/----- EXCLUDED -----\/-----
    BUFR
-     #(.BUFR_DIVIDE("4"))
+     #(.BUFR_DIVIDE("2"))
    clkdiv
      (.I   (clk100m),
       .O   (clk),
       .CE  (1'b1),
       .CLR (1'b0));
- -----/\----- EXCLUDED -----/\----- */
-   assign clk = clk100m;
 
    sync_reset sync_reset
-     (.clk       (clk),
-      .ext_rst_n (ext_rst_n),
+     (.clk,
+      .ext_rst_n,
       .rst_n);
 endmodule
