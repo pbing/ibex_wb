@@ -1,8 +1,0 @@
-*.bin
-*.d
-*.dis
-*.elf
-*.hex
-*.mif
-*.o
-*.vmem

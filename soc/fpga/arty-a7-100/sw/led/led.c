@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #include <stdint.h>
-#define CLK_FIXED_FREQ_HZ (25ULL * 1000 * 1000)
+#define CLK_FIXED_FREQ_HZ (33ULL * 1000 * 1000)
 
 /**
  * Delay loop executing within 8 cycles on ibex
@@ -38,9 +38,12 @@ int main(int argc, char **argv) {
   volatile uint32_t *var = (volatile uint32_t *) 0x10000000;
   *var = 0;
 
+  //asm("csrci 0x7c0, 1"); // disable icache
+  asm("csrsi 0x7c0, 1"); // enable icache
+
   while (1) {
-    //usleep(1000 * 1000); // 1000 ms
-    usleep(1 * 1000); // 1 ms
+    usleep(1000 * 1000); // 1000 ms
+    //usleep(1 * 1000); // 1 ms
     *var = *var + 1;
   }
 }

@@ -1,4 +1,0 @@
-#BSUB -R span[hosts=1]
-#BSUB -n 4,8
-
-modus -overwrite -files ./scripts/runmodus.atpg.tcl

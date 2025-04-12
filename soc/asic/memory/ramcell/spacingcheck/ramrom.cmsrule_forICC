@@ -1,2 +1,0 @@
-set_keepout_margin  -outer { 1 1 1 1 } \
- -type hard [get_flat_cells -quiet -filter "ref_name==RAM16384X32"] -north

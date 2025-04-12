@@ -21,6 +21,9 @@ main (int argc __attribute__ ((unused)),
   volatile int result;
   volatile int correct;
 
+  //asm("csrci 0x7c0, 1"); // disable icache
+  asm("csrsi 0x7c0, 1"); // enable icache
+
   initialise_board ();
   initialise_benchmark ();
   warm_caches (WARMUP_HEAT);

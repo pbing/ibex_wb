@@ -1,5 +1,0 @@
-compile_flags.txt
-*.log
-*.fst
-*.gtkw
-obj_dir/

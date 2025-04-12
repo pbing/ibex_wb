@@ -7,8 +7,8 @@
 PROGRAM ?= fib
 PROGRAM_CFLAGS = -Wall -g -Os
 #PROGRAM_CFLAGS = -Wall -g -O0
-#ARCH = rv32imc
-ARCH = rv32im # to disable compressed instructions
+ARCH = rv32imc_zicsr
+#ARCH = rv32im_zicsr # to disable compressed instructions
 SRCS = $(PROGRAM).c
 
 CC = riscv64-unknown-elf-gcc
