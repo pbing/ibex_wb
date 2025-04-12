@@ -15,62 +15,52 @@ The instruction and data memory interfaces are converted to Wishbone.
 ### Slow Response Memory Transaction
 <p align="center"><img src="doc/images/timing3.svg" width="650"></p>
 
-
 ## Status
 Simulated with Verilator
 
-### Shared bus Wishbone interface
+### Interconnect with Shared Bus
+The shared bus interconnect has the lowest latency but long combinational paths.
+This can lead to a decrease of the maximum clock frequency.
 
-#### Timing with uncompressed instructions
-| Program    | Cycles | Instructions | CPI  |
-|------------|--------|--------------|------|
-| crc_32     | 36073  | 24715        | 1.46 |
-| fib        | 164    | 108          | 1.52 |
-| led        | 999991 | 749959       | 1.33 |
-| nettle-aes | 101476 | 63236        | 1.60 |
-|            |        | geom. mean   | 1.48 |
+An instruction cache does not improve the performance by a large amount.
 
-#### Timing with compressed instructions
+#### Timing without ICACHE
 | Program    | Cycles | Instructions   | CPI  |
 |------------|--------|----------------|------|
-| crc_32     | 34008  | 23688          | 1.44 |
-| fib        | 151    | 108            | 1.40 |
-| led        | 999991 | 749995         | 1.33 |
-| nettle-aes | 96053  | 63236          | 1.52 |
-|            |        | geom. mean     | 1.42 |
+| crc_32     | 35032  | 23689          | 1.48 |
+| nettle-aes | 91710  | 64380          | 1.42 |
+| geom. mean |        |                | 1.45 |
 
-### Crossbar Wishbone interface
-The crossbar Wishbone interface uses skid buffers. Therefor the latency has been increased.
-
-#### Timing with uncompressed instructions
+#### Timing with ICACHE
 | Program    | Cycles | Instructions   | CPI  |
 |------------|--------|----------------|------|
-| crc_32     | 84515  | 24715          | 3.42 |
-| fib        | 370    | 108            | 3.43 |
-| led        | 999990 | 375012         | 2.67 |
-| nettle-aes | 236207 | 63236          | 3.74 |
-|            |        | geom. mean     | 3.29 |
+| crc_32     | 35044  | 23689          | 1.48 |
+| nettle-aes | 87829  | 64380          | 1.36 |
+| geom. mean |        |                | 1.42 |
 
-#### Timing with compressed instructions
+### Interconnect with Crossbar
+The crossbar interconnect uses skid buffers. Therefor the latency has been increased.
+
+The optional instruction cache is designed to improve CPU performance in systems
+with high instruction memory latency. The instruction cache integrates into the
+CPU by replacing the prefetch buffer, interfacing directly between the bus and IF stage.
+
+#### Timing without ICACHE
 | Program    | Cycles | Instructions   | CPI  |
 |------------|--------|----------------|------|
-| crc_32     | 67037  | 23688          | 2.83 |
-| fib        | 275    | 108            | 2.55 |
-| led        | 999992 | 500004         | 2.00 |
-| nettle-aes | 220501 | 63236          | 3.54 |
-|            |        | geom. mean     | 2.67 |
+| crc_32     | 66997  | 23689          | 2.83 |
+| nettle-aes | 186998 | 64380          | 2.90 |
+| geom. mean |        |                | 2.87 |
+
+#### Timing with ICACHE
+| Program    | Cycles | Instructions   | CPI  |
+|------------|--------|----------------|------|
+| crc_32     | 44478  | 23689          | 1.88 |
+| nettle-aes | 134913 | 64380          | 2.10 |
+| geom. mean |        |                | 1.98 |
 
 ## FPGA Implementation
-
-### Intel/Cyclone-V
-[Cyclone V GX Starter Kit](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=167&No=830)
-
-For Quartus 19.1 use branch `fpga_quartus` in submodules `common_cells`, `ibex` and`riscv-dbg`.
-
-### Xilinx/Artix-7
 [Arty A7-100T](https://www.xilinx.com/products/boards-and-kits/1-w51quh.html)
-
-For Vivado 2019.2 use branch `master` in all submodules.
 
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)
