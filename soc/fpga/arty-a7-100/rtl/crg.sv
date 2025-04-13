@@ -6,13 +6,9 @@ module crg
    output logic rst_n,
    output logic clk);
 
-   BUFR
-     #(.BUFR_DIVIDE("2"))
-   clkdiv
-     (.I   (clk100m),
-      .O   (clk),
-      .CE  (1'b1),
-      .CLR (1'b0));
+   clkgen_50mhz u_glk_gen
+     (.clk_out1 (clk),
+      .clk_in1  (clk100m));
 
    sync_reset sync_reset
      (.clk,
