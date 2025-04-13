@@ -1,5 +1,5 @@
 # ibex_wb
-RISC-V Ibex core with Wishbone B4 interface.
+[RISC-V Ibex](https://ibex-core.readthedocs.io/en/latest/index.html) core with Wishbone B4 interface.
 
 ## Design
 The instruction and data memory interfaces are converted to Wishbone.
@@ -39,10 +39,12 @@ An instruction cache does not improve the performance by a large amount.
 | geom. mean |        |                | 1.42 |
 
 ### Interconnect with Crossbar
-The crossbar interconnect uses skid buffers. Therefor the latency has been increased.
+The [crossbar](https://zipcpu.com/blog/2019/07/17/crossbar.html) interconnect uses skid buffers.
+Therefor the latency has been increased.
 
-The optional instruction cache is designed to improve CPU performance in systems
-with high instruction memory latency. The instruction cache integrates into the
+The optional [instruction cache](https://ibex-core.readthedocs.io/en/latest/03_reference/icache.html)
+is designed to improve CPU performance in systems with high instruction memory latency.
+The instruction cache integrates into the
 CPU by replacing the prefetch buffer, interfacing directly between the bus and IF stage.
 
 #### Timing without ICACHE
