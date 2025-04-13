@@ -2,4 +2,5 @@ compile_flags.txt
 *.log
 *.fst
 *.gtkw
+*.vmem
 obj_dir/

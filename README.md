@@ -4,6 +4,29 @@
 ## Design
 The instruction and data memory interfaces are converted to Wishbone.
 
+## Status
+Simulated with Verilator and implemented in Vivado.
+
+To be done:
+- implement on FPGA board
+- use debugger via JTAG or BSCANE2
+
+## Linting with Verilator
+```shell
+cd soc/fpga/arty-a7-100/lint
+./lint.sh
+```
+
+## Simulation with Verilator
+```shell
+cd soc/fpga/arty-a7-100/sim
+./use.sh ../sw/nettle-aes/nettle-aes.vmem
+./build.sh
+./sim.sh
+less trace_core_00000000.log
+gtkwave dump.fst
+```
+
 ## Ibex memory control vs. Wishbone bus
 
 ### Basic Memory Transaction
@@ -14,9 +37,6 @@ The instruction and data memory interfaces are converted to Wishbone.
 
 ### Slow Response Memory Transaction
 <p align="center"><img src="doc/images/timing3.svg" width="650"></p>
-
-## Status
-Simulated with Verilator
 
 ### Interconnect with Shared Bus
 The shared bus interconnect has the lowest latency but long combinational paths.
