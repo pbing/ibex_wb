@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   top->trace(tfp.get(), 99);
   tfp->open("dump.fst");
 
-  while (contextp->time() < 2 * 200000) {
+  while (contextp->time() < 600000) {
     contextp->timeInc(1);
 
     top->clk100mhz = ~top->clk100mhz;

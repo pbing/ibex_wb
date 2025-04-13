@@ -64,11 +64,12 @@ CPU by replacing the prefetch buffer, interfacing directly between the bus and I
 ## FPGA Implementation
 [Arty A7-100T](https://digilent.com/shop/arty-a7-100t-artix-7-fpga-development-board/)
 
-Two variants were implemented, both with ICACHE.
-| Interconnect | max. clock frequency |
-|--------------|----------------------|
-| Shared       | ~40 MHz              |
-| Crossbar     | ~50 MHz              |
+Two variants were implemented. The clock for the SOC was 50 MHz.
+
+| WB Interconnect | Icache | LUT  | Registers |
+|-----------------|--------|------|-----------|
+| Shared          | no     | 3906 | 2015      |
+| Crossbar        | yes    | 5094 | 2876      |
 
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)

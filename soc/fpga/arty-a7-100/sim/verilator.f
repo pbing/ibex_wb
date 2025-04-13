@@ -16,7 +16,7 @@
 -I../../../common/rtl
 -I../../../../rtl
 -I../rtl
--I../lib/verilog/unisims
+-I../lib/verilog
 -v cdc_4phase.sv
 -v tc_clk.sv
 prim_pkg.sv
