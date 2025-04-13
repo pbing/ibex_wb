@@ -1,6 +1,8 @@
 /* SoC Toplevel */
 
 module ibex_soc
+ #(parameter bit WBInterconnet = 1'b1, // 0:shared, 1:crossbar
+   parameter bit ICache        = 1'b1) // 0:prefetch buffer, 1:instruction cache
   (input  wire       clk100mhz,
 
    input  wire [3:0] sw,
@@ -60,7 +62,8 @@ module ibex_soc
       .clk);
 
    wb_ibex_top
-     #(.RegFile (RegFileFPGA))
+     #(.RegFile (RegFileFPGA),
+       .ICache  (ICache))
    u_wb_ibex_top
      (.clk,
       .rst_n,
@@ -142,15 +145,22 @@ module ibex_soc
       .td_o             (tdo_o),
       .tdo_oe_o         (tdo_oe));
 
-
-   //wb_interconnect_sharedbus
-   wb_interconnect_xbar
-     #(.numm      (3),
-       .nums      (3),
-       .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
-       .size      ('{dm_size, ram_size, led_size}))
-   u_wb_interconnect
-     (.wbm, .wbs);
+    if (WBInterconnet)
+       wb_interconnect_xbar
+         #(.numm      (3),
+           .nums      (3),
+           .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
+           .size      ('{dm_size, ram_size, led_size}))
+       u_wb_interconnect
+         (.wbm, .wbs);
+    else
+       wb_interconnect_sharedbus
+         #(.numm      (3),
+           .nums      (3),
+           .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
+           .size      ('{dm_size, ram_size, led_size}))
+       u_wb_interconnect
+         (.wbm, .wbs);
 
    wb_spramx32 #(ram_size) wb_spram(.wb(wbs[1]));
 
