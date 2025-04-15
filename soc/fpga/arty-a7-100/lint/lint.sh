@@ -1,3 +1,4 @@
 verilator --lint-only \
-	-f ../sim/verilator.f \
-	ibex_soc.sv
+          --top-module ibex_soc \
+          -Wno-REDEFMACRO \
+          -f ../sim/verilator.f
