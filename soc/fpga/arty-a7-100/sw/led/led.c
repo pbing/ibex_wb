@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #include <stdint.h>
-#define CLK_FIXED_FREQ_HZ (33ULL * 1000 * 1000)
+#define CLK_FIXED_FREQ_HZ (50ULL * 1000 * 1000)
 
 /**
  * Delay loop executing within 8 cycles on ibex
