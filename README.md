@@ -5,10 +5,11 @@
 The instruction and data memory interfaces are converted to Wishbone.
 
 ## Status
-Simulated with Verilator and implemented in Vivado.
+- simulated with Verilator
+- implemented in Vivado
+- programmed on FPGA board
 
 To be done:
-- implement on FPGA board
 - use debugger via JTAG or BSCANE2
 
 ## Linting with Verilator
