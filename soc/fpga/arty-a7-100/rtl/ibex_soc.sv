@@ -9,13 +9,7 @@ module ibex_soc
    output wire [3:0] led,
    input  wire [3:0] btn,
 
-   input  wire       ck_rst_n,
-
-   input  wire       tck,
-   input  wire       trst_n,
-   input  wire       tms,
-   input  wire       tdi,
-   output wire       tdo);
+   input  wire       ck_rst_n);
 
    import ibex_pkg::*;
 
@@ -46,11 +40,7 @@ module ibex_soc
    logic          dmi_resp_ready;
    dm::dmi_resp_t dmi_resp;
 
-   logic          tdo_o;
-   logic          tdo_oe;
-
    assign rst = ~rst_n;
-   assign tdo = tdo_oe ? tdo_o : 1'bz;
 
    wb_if wbm[3] (.rst, .clk);
    wb_if wbs[3] (.rst, .clk);
@@ -138,12 +128,12 @@ module ibex_soc
       .dmi_resp_ready_o (dmi_resp_ready),
       .dmi_resp_valid_i (dmi_resp_valid),
       
-      .tck_i            (tck),
-      .tms_i            (tms),
-      .trst_ni          (trst_n),
-      .td_i             (tdi),
-      .td_o             (tdo_o),
-      .tdo_oe_o         (tdo_oe));
+      .tck_i            (1'b0),
+      .tms_i            (1'b0),
+      .trst_ni          (1'b0),
+      .td_i             (1'b0),
+      .td_o             (),
+      .tdo_oe_o         ());
 
     if (WBInterconnet)
        wb_interconnect_xbar

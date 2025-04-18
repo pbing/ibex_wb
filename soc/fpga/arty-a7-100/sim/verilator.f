@@ -68,8 +68,7 @@
 ../../../../riscv-dbg/src/dm_top.sv
 ../../../../riscv-dbg/src/dmi_cdc.sv
 ../../../../riscv-dbg/src/dmi_intf.sv
-//../../../../riscv-dbg/src/dmi_bscane_tap.sv
-../../../../riscv-dbg/src/dmi_jtag_tap.sv
+../../../../riscv-dbg/src/dmi_bscane_tap.sv
 ../../../../riscv-dbg/src/dmi_jtag.sv
 ../../../../riscv-dbg/debug_rom/debug_rom_one_scratch.sv
 ../../../../riscv-dbg/debug_rom/debug_rom.sv
@@ -89,6 +88,7 @@
 ../../../../soc/common/rtl/wb_interconnect_sharedbus.sv
 ../../../../soc/common/rtl/wb_interconnect_xbar.sv
 ../../../../soc/fpga/arty-a7-100/lib/verilog/clkgen_50mhz.sv
+../../../../soc/fpga/arty-a7-100/lib/verilog/BSCANE2.sv
 ../../../../soc/fpga/arty-a7-100/rtl/crg.sv
 ../../../../soc/fpga/arty-a7-100/rtl/spramx32.sv
 ../../../../soc/fpga/arty-a7-100/rtl/sync_reset.sv
