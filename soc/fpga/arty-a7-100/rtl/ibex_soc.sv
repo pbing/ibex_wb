@@ -4,12 +4,20 @@ module ibex_soc
  #(parameter bit WBInterconnet = 1'b1, // 0:shared, 1:crossbar
    parameter bit ICache        = 1'b1) // 0:prefetch buffer, 1:instruction cache
   (input  wire       clk100mhz,
+   input  wire       ck_rst_n,
 
-   input  wire [3:0] sw,
-   output wire [3:0] led,
-   input  wire [3:0] btn,
-
-   input  wire       ck_rst_n);
+    input  logic [3:0] sw,
+    output logic [3:0] led,
+    input  logic [3:0] btn
+`ifndef SYNTHESIS
+    ,
+    input  logic       tck,
+    input  logic       trst_n,
+    input  logic       tms,
+    input  logic       tdi,
+    output wire        tdo
+`endif
+    );
 
    import ibex_pkg::*;
 
@@ -42,10 +50,24 @@ module ibex_soc
 
    assign rst = ~rst_n;
 
+`ifndef SYNTHESIS
+   logic tdo_o;
+   logic tdo_oe;
+
+   assign tdo = tdo_oe ? tdo_o : 1'bz;
+`else
+   logic tck    = 1'b0;
+   logic tms    = 1'b1;
+   logic trst_n = 1'b1;
+   logic tdi    = 1'b0;
+   logic tdo_o;
+   logic tdo_oe;
+`endif
+
    wb_if wbm[3] (.rst, .clk);
    wb_if wbs[3] (.rst, .clk);
 
-   crg crg
+   crg u_crg
      (.clk100m   (clk100mhz),
       .ext_rst_n (ck_rst_n),
       .rst_n,
@@ -86,10 +108,10 @@ module ibex_soc
       .alert_major_internal (),
       .alert_major_bus      (),
       .core_sleep           (),
-      
+
       .scan_rst_n           (1'b0));
 
-   wb_dm_top u_wb_dm_top
+   wb_dm_top u_dm_top
      (.clk,
       .rst_n,
 
@@ -123,17 +145,17 @@ module ibex_soc
       .dmi_req_o        (dmi_req),
       .dmi_req_valid_o  (dmi_req_valid),
       .dmi_req_ready_i  (dmi_req_ready),
-      
+
       .dmi_resp_i       (dmi_resp),
       .dmi_resp_ready_o (dmi_resp_ready),
       .dmi_resp_valid_i (dmi_resp_valid),
-      
-      .tck_i            (1'b0),
-      .tms_i            (1'b1),
-      .trst_ni          (1'b1),
-      .td_i             (1'b0),
-      .td_o             (),
-      .tdo_oe_o         ());
+
+      .tck_i            (tck),
+      .tms_i            (tms),
+      .trst_ni          (trst_n),
+      .td_i             (tdi),
+      .td_o             (tdo_o),
+      .tdo_oe_o         (tdo_oe));
 
     if (WBInterconnet)
        wb_interconnect_xbar
@@ -152,10 +174,10 @@ module ibex_soc
        u_wb_interconnect
          (.wbm, .wbs);
 
-   wb_spramx32 #(ram_size) wb_spram(.wb(wbs[1]));
+   wb_spramx32 #(ram_size) u_spram(.wb(wbs[1]));
 
    wb_led
      #(.N (4))
-   u_wb_ledg
+   u_ledg
      (.wb (wbs[2]), .led);
 endmodule
