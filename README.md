@@ -94,8 +94,8 @@ An instruction cache does not improve the performance by a large amount.
 | Program    | Cycles | Instructions   | CPI  |
 |------------|--------|----------------|------|
 | crc_32     | 35032  | 23689          | 1.48 |
-| nettle-aes | 91710  | 64380          | 1.42 |
-| geom. mean |        |                | 1.45 |
+| nettle-aes | 93902  | 64380          | 1.46 |
+| geom. mean |        |                | 1.47 |
 
 #### Timing with ICACHE
 | Program    | Cycles | Instructions   | CPI  |
@@ -116,9 +116,9 @@ CPU by replacing the prefetch buffer, interfacing directly between the bus and I
 #### Timing without ICACHE
 | Program    | Cycles | Instructions   | CPI  |
 |------------|--------|----------------|------|
-| crc_32     | 66997  | 23689          | 2.83 |
-| nettle-aes | 186998 | 64380          | 2.90 |
-| geom. mean |        |                | 2.87 |
+| crc_32     | 71124  | 23689          | 3.00 |
+| nettle-aes | 219912 | 64380          | 3.42 |
+| geom. mean |        |                | 3.20 |
 
 #### Timing with ICACHE
 | Program    | Cycles | Instructions   | CPI  |
