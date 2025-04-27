@@ -129,8 +129,8 @@ module ibex_soc
       .dmi_resp_valid_i (dmi_resp_valid),
       
       .tck_i            (1'b0),
-      .tms_i            (1'b0),
-      .trst_ni          (1'b0),
+      .tms_i            (1'b1),
+      .trst_ni          (1'b1),
       .td_i             (1'b0),
       .td_o             (),
       .tdo_oe_o         ());
