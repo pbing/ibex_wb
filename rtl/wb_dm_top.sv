@@ -86,11 +86,11 @@ module wb_dm_top
    assign slave_core.rvalid = 1'b1;
    assign slave_core.err    = 1'b0;
 
-   wb2core slave_core2wb
+   wb2core u_wb2core
      (.core (slave_core),
       .wb   (wbs));
 
-   core2wb master_core2wb
+   core2wb u_core2wb
      (.core (master_core),
       .wb   (wbm));
 endmodule
