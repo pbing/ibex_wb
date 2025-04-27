@@ -1,4 +1,5 @@
 ibex_soc.*/
 !ibex_soc.gen
+.Xil/
 vivado*.jou
 vivado*.log

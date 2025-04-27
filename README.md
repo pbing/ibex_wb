@@ -42,10 +42,6 @@ force hard breakpoints
 Info : ftdi: if you experience problems at higher adapter clocks, try the command "ftdi tdo_sample_edge falling"
 Info : clock speed 10000 kHz
 Info : JTAG tap: riscv.cpu tap/device found: 0x13631093 (mfg: 0x049 (Xilinx), part: 0x3631, ver: 0x1)
-Warn : JTAG tap: riscv.cpu       UNEXPECTED: 0x13631093 (mfg: 0x049 (Xilinx), part: 0x3631, ver: 0x1)
-Error: JTAG tap: riscv.cpu  expected 1 of 1: 0x0362d093 (mfg: 0x049 (Xilinx), part: 0x362d, ver: 0x0)
-Error: Trying to use configured scan chain anyway...
-Warn : Bypassing JTAG setup events due to errors
 Info : datacount=2 progbufsize=8
 Info : Examined RISC-V core; found 1 harts
 Info :  hart 0: XLEN=32, misa=0x40101104
@@ -138,8 +134,8 @@ Two variants were implemented. The clock for the SOC was 50 MHz.
 
 | WB Interconnect | Icache | LUT  | Registers |
 |-----------------|--------|------|-----------|
-| Shared          | no     | 3906 | 2015      |
-| Crossbar        | yes    | 5094 | 2876      |
+| Shared          | no     | 3938 | 1987      |
+| Crossbar        | yes    | 5115 | 2848      |
 
 ## Recources
 - [Wishbone at opencores.org](https://opencores.org/howto/wishbone)
