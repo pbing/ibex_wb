@@ -76,7 +76,7 @@
 ../../../../rtl/wb_pkg.sv
 ../../../../rtl/core_if.sv
 ../../../../rtl/core2wb.sv
-../../../../rtl/slave2wb.sv
+../../../../rtl/wb2core.sv
 ../../../../rtl/wb_dm_top.sv
 ../../../../rtl/wb_if.sv
 ../../../../rtl/wb_ibex_top.sv

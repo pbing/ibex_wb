@@ -19,7 +19,7 @@ module wb_ibex_top
      parameter bit                          ICache                       = 1'b0,
      parameter bit                          ICacheECC                    = 1'b0,
      parameter bit                          BranchPredictor              = 1'b0,
-     parameter bit                          DbgTriggerEn                 = 1'b0,
+     parameter bit                          DbgTriggerEn                 = 1'b1,
      parameter int unsigned                 DbgHwBreakNum                = 1,
      parameter bit                          SecureIbex                   = 1'b0,
      parameter bit                          ICacheScramble               = 1'b0,

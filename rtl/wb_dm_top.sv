@@ -83,12 +83,12 @@ module wb_dm_top
 
    /* Wishbone */
    assign slave_core.gnt    = 1'b1;
-   assign slave_core.rvalid = 1'b0; // don't care
+   assign slave_core.rvalid = 1'b1;
    assign slave_core.err    = 1'b0;
 
-   slave2wb slave_core2wb
-     (.slave (slave_core),
-      .wb    (wbs));
+   wb2core slave_core2wb
+     (.core (slave_core),
+      .wb   (wbs));
 
    core2wb master_core2wb
      (.core (master_core),

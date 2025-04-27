@@ -1,0 +1,2 @@
+# module add jasper/24.03.008
+bsub -Is -app jasper.inter jg run.tcl
