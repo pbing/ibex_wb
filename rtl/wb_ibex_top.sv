@@ -13,15 +13,19 @@ module wb_ibex_top
      parameter bit                          RV32E                        = 1'b0,
      parameter rv32m_e                      RV32M                        = RV32MFast,
      parameter rv32b_e                      RV32B                        = RV32BNone,
+     parameter rv32zc_e                     RV32ZC                       = RV32ZcaZcbZcmp,
      parameter regfile_e                    RegFile                      = RegFileFF,
      parameter bit                          BranchTargetALU              = 1'b0,
      parameter bit                          WritebackStage               = 1'b0,
      parameter bit                          ICache                       = 1'b0,
      parameter bit                          ICacheECC                    = 1'b0,
      parameter bit                          BranchPredictor              = 1'b0,
-     parameter bit                          DbgTriggerEn                 = 1'b1,
+     parameter bit                          DbgTriggerEn                 = 1'b0,
      parameter int unsigned                 DbgHwBreakNum                = 1,
      parameter bit                          SecureIbex                   = 1'b0,
+     parameter int unsigned                 LockstepOffset               = 1,
+     parameter bit                          MemECC                       = SecureIbex,
+     parameter int unsigned                 MemDataWidth                 = MemECC ? 32 + 7 : 32,
      parameter bit                          ICacheScramble               = 1'b0,
      parameter int unsigned                 ICacheScrNumPrinceRoundsHalf = 2,
      parameter lfsr_seed_t                  RndCnstLfsrSeed              = RndCnstLfsrSeedDefault,
@@ -99,6 +103,9 @@ module wb_ibex_top
     output logic [31:0]                  rvfi_ext_mhpmcountersh [10],
     output logic                         rvfi_ext_ic_scr_key_valid,
     output logic                         rvfi_ext_irq_valid,
+    output logic                         rvfi_ext_expanded_insn_valid,
+    output logic [15:0]                  rvfi_ext_expanded_insn,
+    output logic                         rvfi_ext_expanded_insn_last,
 `endif
 
     /* CPU Control Signals */
@@ -109,7 +116,22 @@ module wb_ibex_top
     output logic                         core_sleep,
 
     /* DFT bypass controls */
-    input logic                          scan_rst_n);
+    input logic                          scan_rst_n,
+
+    // Lockstep signals
+    output ibex_mubi_t                   lockstep_cmp_en_o,
+
+    // Shadow core data interface outputs
+    output logic                         data_req_shadow_o,
+    output logic                         data_we_shadow_o,
+    output logic [3:0]                   data_be_shadow_o,
+    output logic [31:0]                  data_addr_shadow_o,
+    output logic [31:0]                  data_wdata_shadow_o,
+    output logic [6:0]                   data_wdata_intg_shadow_o,
+
+    // Shadow core instruction interface outputs
+    output logic                         instr_req_shadow_o,
+    output logic [31:0]                  instr_addr_shadow_o);
 
    core_if instr_core (.rst_n, .clk);
    core_if data_core  (.rst_n, .clk);
@@ -132,6 +154,7 @@ module wb_ibex_top
          .RV32E                        (RV32E),
          .RV32M                        (RV32M),
          .RV32B                        (RV32B),
+         .RV32ZC                       (RV32ZC),
          .RegFile                      (RegFile),
          .BranchTargetALU              (BranchTargetALU),
          .WritebackStage               (WritebackStage),
@@ -141,6 +164,9 @@ module wb_ibex_top
          .DbgTriggerEn                 (DbgTriggerEn),
          .DbgHwBreakNum                (DbgHwBreakNum),
          .SecureIbex                   (SecureIbex),
+         .LockstepOffset               (LockstepOffset),
+         .MemECC                       (MemECC),
+         .MemDataWidth                 (MemDataWidth),
          .ICacheScramble               (ICacheScramble),
 `ifndef USE_TRACER
          .ICacheScrNumPrinceRoundsHalf (ICacheScrNumPrinceRoundsHalf),
@@ -152,59 +178,74 @@ module wb_ibex_top
          .DmHaltAddr                   (DmHaltAddr),
          .DmExceptionAddr              (DmExceptionAddr))
    inst_ibex_top
-     (.clk_i                  (clk),
-      .rst_ni                 (rst_n),
+     (.clk_i                     (clk),
+      .rst_ni                    (rst_n),
 
-      .test_en_i              (test_en),
-      .ram_cfg_i              (ram_cfg),
+      .test_en_i                 (test_en),
+      .ram_cfg_icache_tag_i      (ram_cfg),
+      .ram_cfg_rsp_icache_tag_o  (),
+      .ram_cfg_icache_data_i     (ram_cfg),
+      .ram_cfg_rsp_icache_data_o (),
 
-      .hart_id_i              (hart_id),
-      .boot_addr_i            (boot_addr),
+      .hart_id_i                 (hart_id),
+      .boot_addr_i               (boot_addr),
 
-      .instr_req_o            (instr_core.req),    // Request valid, must stay high until instr_gnt is high for one cycle
-      .instr_gnt_i            (instr_core.gnt),    // The other side accepted the request. instr_req may be deasserted in the next cycle.
-      .instr_rvalid_i         (instr_core.rvalid), // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
-      .instr_addr_o           (instr_core.addr),   // Address, word aligned
-      .instr_rdata_i          (instr_core.rdata),  // Data read from memory
-      .instr_rdata_intg_i     ('0),
-      .instr_err_i            (instr_core.err),    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
+      .instr_req_o               (instr_core.req),    // Request valid, must stay high until instr_gnt is high for one cycle
+      .instr_gnt_i               (instr_core.gnt),    // The other side accepted the request. instr_req may be deasserted in the next cycle.
+      .instr_rvalid_i            (instr_core.rvalid), // instr_rdata holds valid data when instr_rvalid is high. This signal will be high for exactly one cycle per request.
+      .instr_addr_o              (instr_core.addr),   // Address, word aligned
+      .instr_rdata_i             (instr_core.rdata),  // Data read from memory
+      .instr_rdata_intg_i        ('0),
+      .instr_err_i               (instr_core.err),    // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
-      .data_req_o             (data_core.req),     // Request valid, must stay high until data_gnt is high for one cycle
-      .data_gnt_i             (data_core.gnt),     // The other side accepted the request. data_req may be deasserted in the next cycle.
-      .data_rvalid_i          (data_core.rvalid),  // data_rdata holds valid data when data_rvalid is high.
-      .data_we_o              (data_core.we),      // Write Enable, high for writes, low for reads. Sent together with data_req
-      .data_be_o              (data_core.be),      // Byte Enable. Is set for the bytes to write/read, sent together with data_req
-      .data_addr_o            (data_core.addr),    // Address, word aligned
-      .data_wdata_o           (data_core.wdata),   // Data to be written to memory, sent together with data_req
-      .data_wdata_intg_o      (),
-      .data_rdata_i           (data_core.rdata),   // Data read from memory
-      .data_rdata_intg_i      ('0),
-      .data_err_i             (data_core.err),     // Error response from the bus or the memory: request cannot be handled. High in case of an error.
+      .data_req_o                (data_core.req),     // Request valid, must stay high until data_gnt is high for one cycle
+      .data_gnt_i                (data_core.gnt),     // The other side accepted the request. data_req may be deasserted in the next cycle.
+      .data_rvalid_i             (data_core.rvalid),  // data_rdata holds valid data when data_rvalid is high.
+      .data_we_o                 (data_core.we),      // Write Enable, high for writes, low for reads. Sent together with data_req
+      .data_be_o                 (data_core.be),      // Byte Enable. Is set for the bytes to write/read, sent together with data_req
+      .data_addr_o               (data_core.addr),    // Address, word aligned
+      .data_wdata_o              (data_core.wdata),   // Data to be written to memory, sent together with data_req
+      .data_wdata_intg_o         (),
+      .data_rdata_i              (data_core.rdata),   // Data read from memory
+      .data_rdata_intg_i         ('0),
+      .data_err_i                (data_core.err),     // Error response from the bus or the memory: request cannot be handled. High in case of an error.
 
-      .irq_software_i         (irq_software),
-      .irq_timer_i            (irq_timer),
-      .irq_external_i         (irq_external),
-      .irq_fast_i             (irq_fast),
-      .irq_nm_i               (irq_nm),
+      .irq_software_i            (irq_software),
+      .irq_timer_i               (irq_timer),
+      .irq_external_i            (irq_external),
+      .irq_fast_i                (irq_fast),
+      .irq_nm_i                  (irq_nm),
 
-      .scramble_key_valid_i   (scramble_key_valid),
-      .scramble_key_i         (scramble_key),
-      .scramble_nonce_i       (scramble_nonce),
-      .scramble_req_o         (scramble_req),
+      .scramble_key_valid_i      (scramble_key_valid),
+      .scramble_key_i            (scramble_key),
+      .scramble_nonce_i          (scramble_nonce),
+      .scramble_req_o            (scramble_req),
 
-      .debug_req_i            (debug_req),
-      .crash_dump_o           (crash_dump),
-      .double_fault_seen_o    (double_fault_seen),
+      .debug_req_i               (debug_req),
+      .crash_dump_o              (crash_dump),
+      .double_fault_seen_o       (double_fault_seen),
 
-      .fetch_enable_i         (fetch_enable),
-      .alert_minor_o          (alert_minor),
-      .alert_major_internal_o (alert_major_internal),
-      .alert_major_bus_o      (alert_major_bus),
-      .core_sleep_o           (core_sleep)
+      .fetch_enable_i            (fetch_enable),
+      .alert_minor_o             (alert_minor),
+      .alert_major_internal_o    (alert_major_internal),
+      .alert_major_bus_o         (alert_major_bus),
+      .core_sleep_o              (core_sleep),
+
 `ifndef USE_TRACER
-      , .scan_rst_ni          (scan_rst_n)
+      .scan_rst_ni               (scan_rst_n),
 `endif
-);
+
+      .lockstep_cmp_en_o,
+
+      .data_req_shadow_o,
+      .data_we_shadow_o,
+      .data_be_shadow_o,
+      .data_addr_shadow_o,
+      .data_wdata_shadow_o,
+      .data_wdata_intg_shadow_o,
+
+      .instr_req_shadow_o,
+      .instr_addr_shadow_o);
 
    /* Wishbone */
    assign

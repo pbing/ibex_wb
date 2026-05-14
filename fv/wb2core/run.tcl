@@ -12,8 +12,7 @@ analyze -sv12 fv_wb2core.sv
 elaborate -top wb2core
 
 clock wb.clk
-#reset -expression wb.rst
-reset -none
+reset -expression wb.rst
 
 check_assumptions
 prove -all

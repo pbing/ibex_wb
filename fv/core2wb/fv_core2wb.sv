@@ -45,9 +45,7 @@ module fv_core2wb
 
    ASM_wb_no_err: assume property (!wb.cyc |-> !wb.err);
 
-   ASM_wb_ack_no_err: assume property ((wb.cyc && wb.ack) |-> !wb.err);
-
-   ASM_wb_err_no_ack: assume property ((wb.cyc && wb.err) |-> !wb.ack);
+   ASM_wb_exclusive_ack_err: assume property (not(wb.cyc && wb.ack && wb.err));
 
    // --------------------------------------------------------------------------
    // Covers

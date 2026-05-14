@@ -16,19 +16,16 @@
 
 +incdir+../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl
 +incdir+../../../../ibex/vendor/lowrisc_ip/dv/sv/dv_utils
-../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_ram_1p_pkg.sv
-../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_pkg.sv
 ../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_cipher_pkg.sv
 ../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_count_pkg.sv
-../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_util_pkg.sv
 ../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_mubi_pkg.sv
-../../../../ibex/dv/uvm/core_ibex/common/prim/prim_pkg.sv
-../../../../ibex/dv/uvm/core_ibex/common/prim/prim_clock_gating.sv
-../../../../ibex/dv/uvm/core_ibex/common/prim/prim_buf.sv
-../../../../ibex/dv/uvm/core_ibex/common/prim/prim_ram_1p.sv
-../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_clock_gating.sv
-../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_buf.sv
-../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_generic_ram_1p.sv
+../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_secded_pkg.sv
+../../../../ibex/vendor/lowrisc_ip/ip/prim/rtl/prim_util_pkg.sv
+../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_buf.sv
+../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_clock_gating.sv
+../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_pkg.sv
+../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_ram_1p_pkg.sv
+../../../../ibex/vendor/lowrisc_ip/ip/prim_generic/rtl/prim_ram_1p.sv
 ../../../../ibex/rtl/ibex_pkg.sv
 ../../../../ibex/rtl/ibex_alu.sv
 ../../../../ibex/rtl/ibex_branch_predict.sv
@@ -68,7 +65,8 @@
 ../../../../riscv-dbg/src/dm_top.sv
 ../../../../riscv-dbg/src/dmi_cdc.sv
 ../../../../riscv-dbg/src/dmi_intf.sv
-../../../../riscv-dbg/src/dmi_bscane_tap.sv
+//../../../../riscv-dbg/src/dmi_bscane_tap.sv
+../../../../riscv-dbg/src/dmi_jtag_tap.sv
 ../../../../riscv-dbg/src/dmi_jtag.sv
 ../../../../riscv-dbg/debug_rom/debug_rom_one_scratch.sv
 ../../../../riscv-dbg/debug_rom/debug_rom.sv
@@ -87,11 +85,11 @@
 
 ../../../../soc/common/rtl/wb_interconnect_sharedbus.sv
 ../../../../soc/common/rtl/wb_interconnect_xbar.sv
-../../../../soc/fpga/arty-a7-100/lib/verilog/clkgen_50mhz.sv
 ../../../../soc/fpga/arty-a7-100/lib/verilog/BSCANE2.sv
+../../../../soc/fpga/arty-a7-100/lib/verilog/clkgen_50mhz.sv
 ../../../../soc/fpga/arty-a7-100/rtl/crg.sv
 ../../../../soc/fpga/arty-a7-100/rtl/spramx32.sv
-../../../../soc/fpga/arty-a7-100/rtl/sync_reset.sv
 ../../../../soc/fpga/arty-a7-100/rtl/wb_led.sv
 ../../../../soc/fpga/arty-a7-100/rtl/wb_spramx32.sv
+../../../../soc/fpga/arty-a7-100/rtl/sync_reset.sv
 ../../../../soc/fpga/arty-a7-100/rtl/ibex_soc.sv

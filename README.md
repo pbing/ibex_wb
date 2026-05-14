@@ -6,12 +6,9 @@ The instruction and data memory interfaces are converted to Wishbone.
 
 ## Status
 - simulated with Verilator
-- implemented in Vivado
-- programmed on FPGA board
-- use debugger via BSCANE2
-
-To be done:
-- use debugger via JTAG
+- FPGA proven
+  - debugging via BSCANE2 (FPGA implementation)
+  - debugging via JTAG (simulation)
 
 ## Linting with Verilator
 ```shell
@@ -21,8 +18,8 @@ cd soc/fpga/arty-a7-100/lint
 
 ## Simulation with Verilator
 ```shell
-cd soc/fpga/arty-a7-100/sim
-./use.sh ../sw/nettle-aes/nettle-aes.vmem
+cd soc/fpga/arty-a7-100/sim/default
+./use.sh ../../sw/nettle-aes/nettle-aes.vmem
 ./build.sh
 ./sim.sh
 less trace_core_00000000.log

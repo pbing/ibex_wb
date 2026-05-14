@@ -5,6 +5,6 @@ verilator --cc \
           --top-module ibex_soc \
           -Wno-fatal -Wno-lint \
           -Wno-REDEFMACRO -Wno-UNOPTFLAT -Wno-WIDTHEXPAND -Wno-WIDTHCONCAT -Wno-MULTIDRIVEN \
-          -f verilator.f \
+          -F ../verilator.f \
           +define+USE_TRACER +define+RVFI \
-          sim_main.cpp
+          src/sim_main.cpp

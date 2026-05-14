@@ -7,7 +7,7 @@ module fv_wb2core
    default clocking defclk @(posedge wb.clk);
    endclocking
 
-   //default disable iff (wb.rst);
+   default disable iff (wb.rst);
 
    // --------------------------------------------------------------------------
    // CORE
@@ -45,9 +45,7 @@ module fv_wb2core
 
    AST_wb_no_err: assert property (!wb.cyc |-> !wb.err);
 
-   AST_wb_ack_no_err: assert property ((wb.cyc && wb.ack) |-> !wb.err);
-
-   AST_wb_err_no_ack: assert property ((wb.cyc && wb.err) |-> !wb.ack);
+   AST_wb_exclusive_ack_err: assert property (not(wb.cyc && wb.ack && wb.err));
 
    // --------------------------------------------------------------------------
    // Covers
