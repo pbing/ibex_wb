@@ -1,10 +1,10 @@
 /* SoC Toplevel */
 
 module ibex_soc
- #(parameter bit WBInterconnet = 1'b1, // 0:shared, 1:crossbar
-   parameter bit ICache        = 1'b1) // 0:prefetch buffer, 1:instruction cache
-  (input  wire       clk100mhz,
-   input  wire       ck_rst_n,
+  #(parameter bit WBInterconnet = 1'b1, // 0:shared, 1:crossbar
+    parameter bit ICache        = 1'b1) // 0:prefetch buffer, 1:instruction cache
+   (input  logic       clk100mhz,
+    input  logic       ck_rst_n,
 
     input  logic [3:0] sw,
     output logic [3:0] led,
@@ -20,15 +20,16 @@ module ibex_soc
     );
 
    import ibex_pkg::*;
+   import wb_pkg::adr_t;
 
-   localparam [31:0] ram_base_addr = 'h00000000;
-   localparam [31:0] ram_size      = 'h10000;
+   localparam adr_t ram_base_addr = 'h00000000;
+   localparam adr_t ram_size      = 'h10000;
 
-   localparam [31:0] led_base_addr = 'h10000000;
-   localparam [31:0] led_size      = 'h1000;
+   localparam adr_t led_base_addr = 'h10000000;
+   localparam adr_t led_size      = 'h1000;
 
-   localparam [31:0] dm_base_addr  = 'h1A110000;
-   localparam [31:0] dm_size       = 'h1000;
+   localparam adr_t dm_base_addr  = 'h1A110000;
+   localparam adr_t dm_size       = 'h1000;
 
    logic          clk;
    logic          rst, rst_n;
@@ -74,42 +75,56 @@ module ibex_soc
       .clk);
 
    wb_ibex_top
-     #(.RegFile (RegFileFPGA),
-       .ICache  (ICache))
+     #(.RegFile       (RegFileFPGA),
+       .ICache        (ICache),
+       .DbgTriggerEn  (1'b1),
+       .DbgHwBreakNum (4))
    u_wb_ibex_top
      (.clk,
       .rst_n,
-      .instr_wb             (wbm[2]),
-      .data_wb              (wbm[1]),
+      .instr_wb                 (wbm[2]),
+      .data_wb                  (wbm[1]),
 
-      .test_en              (1'b0),
-      .ram_cfg              ('0),
+      .test_en                  (1'b0),
+      .ram_cfg                  (prim_ram_1p_pkg::RAM_1P_CFG_DEFAULT),
 
-      .hart_id              (32'h00000000),
-      .boot_addr            (32'h00000000),
+      .hart_id                  (32'h00000000),
+      .boot_addr                (32'h00000000),
 
-      .irq_software         (1'b0),
-      .irq_timer            (1'b0),
-      .irq_external         (1'b0),
-      .irq_fast             (15'h0000),
-      .irq_nm               (1'b0),
+      .irq_software             (1'b0),
+      .irq_timer                (1'b0),
+      .irq_external             (1'b0),
+      .irq_fast                 (15'h0000),
+      .irq_nm                   (1'b0),
 
-      .scramble_key_valid   (1'b0),
-      .scramble_key         ('0),
-      .scramble_nonce       ('0),
-      .scramble_req         (),
+      .scramble_key_valid       (1'b0),
+      .scramble_key             ('0),
+      .scramble_nonce           ('0),
+      .scramble_req             (),
 
       .debug_req,
-      .crash_dump           (),
-      .double_fault_seen    (),
+      .crash_dump               (),
+      .double_fault_seen        (),
 
-      .fetch_enable         ('1),
-      .alert_minor          (),
-      .alert_major_internal (),
-      .alert_major_bus      (),
-      .core_sleep           (),
+      .fetch_enable             (ibex_pkg::IbexMuBiOn),
+      .alert_minor              (),
+      .alert_major_internal     (),
+      .alert_major_bus          (),
+      .core_sleep               (),
 
-      .scan_rst_n           (1'b0));
+      .scan_rst_n               (1'b1),
+
+      .lockstep_cmp_en_o        (),
+
+      .data_req_shadow_o        (),
+      .data_we_shadow_o         (),
+      .data_be_shadow_o         (),
+      .data_addr_shadow_o       (),
+      .data_wdata_shadow_o      (),
+      .data_wdata_intg_shadow_o (),
+
+      .instr_req_shadow_o       (),
+      .instr_addr_shadow_o      ());
 
    wb_dm_top u_dm_top
      (.clk,
@@ -157,22 +172,22 @@ module ibex_soc
       .td_o             (tdo_o),
       .tdo_oe_o         (tdo_oe));
 
-    if (WBInterconnet)
-       wb_interconnect_xbar
-         #(.numm      (3),
-           .nums      (3),
-           .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
-           .size      ('{dm_size, ram_size, led_size}))
-       u_wb_interconnect
-         (.wbm, .wbs);
-    else
-       wb_interconnect_sharedbus
-         #(.numm      (3),
-           .nums      (3),
-           .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
-           .size      ('{dm_size, ram_size, led_size}))
-       u_wb_interconnect
-         (.wbm, .wbs);
+   if (WBInterconnet)
+     wb_interconnect_xbar
+       #(.numm      (3),
+         .nums      (3),
+         .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
+         .size      ('{dm_size, ram_size, led_size}))
+   u_wb_interconnect
+     (.wbm, .wbs);
+   else
+     wb_interconnect_sharedbus
+       #(.numm      (3),
+         .nums      (3),
+         .base_addr ('{dm_base_addr, ram_base_addr, led_base_addr}),
+         .size      ('{dm_size, ram_size, led_size}))
+   u_wb_interconnect
+     (.wbm, .wbs);
 
    wb_spramx32 #(ram_size) u_spram(.wb(wbs[1]));
 
